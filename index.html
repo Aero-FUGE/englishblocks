@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>英语拼块 · EnglishBlocks</title>
+    <meta name="description" content="治愈系休闲益智英语学习拼块游戏，通过拖动、点击和重新排列英文单词积木，组装出符合中文目标含义的英语句子。" />
+    <meta property="og:title" content="英语拼块 · EnglishBlocks" />
+    <meta property="og:description" content="消消乐般轻快、可爱、治愈和即时反馈的英语拼句游戏" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600;1,700&family=Noto+Serif+SC:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>#eb-splash{z-index:9999;color:#45644c;background:radial-gradient(circle at 70% 25%,#e7f3d9,#fbf8e9 62%,#fff7ef);place-items:center;font-family:system-ui,sans-serif;display:grid;position:fixed;inset:0}.eb-splash-card{text-align:center}.eb-splash-card img{object-fit:contain;width:118px;height:118px;margin:auto}.eb-splash-card h1{letter-spacing:.13em;margin:12px 0 3px;font-size:28px;font-weight:750}.eb-splash-card p{letter-spacing:.2em;color:#91a38b;font-size:11px}.eb-splash-bar{background:#e0ead9;border-radius:20px;width:180px;height:5px;margin:25px auto 12px;overflow:hidden}.eb-splash-bar span{background:#91b990;border-radius:20px;width:42%;height:100%;animation:1.2s ease-in-out infinite alternate eb-load;display:block}.eb-splash-card small{color:#8fa18a}@keyframes eb-load{to{transform:translate(140%)}}</style>  <script type="module" crossorigin src="./assets/index-BNn1DQKd.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CODUXZun.css">
+</head>
+  <body class="bg-[#F3F7EF] text-slate-800 antialiased select-none font-sans overflow-x-hidden min-h-screen">
+    <div id="root"></div>
+    <script>
+      // Runs before the app module: restore prior disk snapshot, then mirror every
+      // localStorage mutation to AppData. In ordinary browsers this does nothing.
+      (() => {
+        const disk = window.englishBlocksDiskSave;
+        if (!disk || !window.localStorage) return;
+        try {
+          const saved = disk.read();
+          if (saved && typeof saved === 'object') {
+            for (const [key, value] of Object.entries(saved)) {
+              if (typeof value === 'string') localStorage.setItem(key, value);
+            }
+          }
+        } catch (err) { console.error('[save] Restore failed', err); }
+        const snapshot = () => {
+          const data = {};
+          for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key !== null) data[key] = localStorage.getItem(key);
+          }
+          if (!disk.write(data)) console.error('[save] Disk snapshot failed');
+        };
+        for (const name of ['setItem', 'removeItem', 'clear']) {
+          const original = Storage.prototype[name];
+          Storage.prototype[name] = function (...args) {
+            const result = original.apply(this, args);
+            if (this === localStorage) snapshot();
+            return result;
+          };
+        }
+        window.addEventListener('pagehide', snapshot);
+      })();
+    </script>
+  </body>
+</html>
+
