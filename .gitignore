@@ -1,0 +1,19 @@
+# Original Windows distribution and local deployment files
+/*
+!/.gitignore
+!/README.md
+!/resources/
+/resources/*
+!/resources/new/
+# Secrets, accounts, generated output and local test artifacts
+**/node_modules/
+**/.env*
+!**/.env.example
+**/*cloud-data*/
+**/sync-data/
+**/*.sqlite*
+**/dist/
+**/release/
+**/build/
+**/previews/
+**/*.log

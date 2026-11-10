@@ -1,0 +1,15 @@
+require('dotenv').config();
+const express=require('express');
+const path=require('node:path');
+const {createCloudService}=require('./cloud.cjs');
+const service=createCloudService();
+const app=express();
+app.disable('x-powered-by');
+if(process.env.CLOUD_TRUST_PROXY)app.set('trust proxy',process.env.CLOUD_TRUST_PROXY.split(','));
+app.use(service.middleware);
+app.use('/api',(_req,res)=>res.status(404).json({error:'找不到此接口'}));
+const dist=path.resolve(__dirname,'../dist');
+app.use(express.static(dist,{index:'index.html'}));
+app.get('*',(_req,res)=>res.sendFile(path.join(dist,'index.html')));
+const server=app.listen(Number(process.env.PORT)||3000,process.env.HOST||'0.0.0.0',()=>console.log('EnglishBlocks cloud listening on port',server.address().port));
+for(const signal of ['SIGTERM','SIGINT'])process.on(signal,()=>server.close(()=>{service.close();process.exit(0);}));

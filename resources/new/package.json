@@ -1,0 +1,77 @@
+{
+  "name": "englishblocks-desktop",
+  "private": true,
+  "version": "0.21.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist server.js",
+    "lint": "tsc --noEmit",
+    "test:rail": "node --experimental-strip-types tests/rail-state-regression.mjs",
+    "test:timing": "node --experimental-strip-types tests/timing-regression.mjs",
+    "desktop:dev": "electron .",
+    "desktop:build": "npm run build && electron-builder --win dir",
+    "desktop:package": "npm run build && electron-builder --win dir",
+    "start": "node server/start.cjs",
+    "test:cloud": "node --test tests/cloud-server.test.cjs tests/cloud-response.test.mjs",
+    "test:mimi": "node --test tests/mimi.test.cjs",
+    "prebuild": "node --experimental-strip-types tools/build-social-catalog.mjs",
+    "test:social": "node --experimental-strip-types --test tests/social.test.cjs tests/social-learning-regression.mjs",
+    "test:bgm": "node tests/bgm-regression.cjs"
+  },
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/canvas-confetti": "^1.9.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "canvas-confetti": "^1.9.4",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "vite": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.28.2",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.21.0",
+    "typescript": "^7.0.2",
+    "@types/express": "^4.17.21",
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "main": "electron/main.cjs",
+  "build": {
+    "appId": "com.englishblocks.wordcandy",
+    "productName": "英语拼块",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "asar": true,
+    "win": {
+      "icon": "electron/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "artifactName": "EnglishBlocks-V${version}-${arch}.${ext}"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

@@ -1,0 +1,14 @@
+import { strict as assert } from 'node:assert';
+import { resumeLevelIndex } from '../src/utils/progress.ts';
+const levels = Array.from({ length: 10 }, (_, i) => ({ id: i + 1 }));
+assert.equal(resumeLevelIndex({currentLevelIndex:0, completedLevelIds:[]}, levels),0,'new user starts from level 1');
+assert.equal(resumeLevelIndex({currentLevelIndex:0, completedLevelIds:[1,2,3]}, levels),3,'V7 old backup resumes level 4');
+assert.equal(resumeLevelIndex({currentLevelIndex:0, completedLevelIds:[1,2,5]}, levels),5,'old backup resumes after latest completed');
+assert.equal(resumeLevelIndex({currentLevelIndex:3, completedLevelIds:[1,2,3,4]}, levels),4,'old backup stale cursor is repaired');
+assert.equal(resumeLevelIndex({currentLevelIndex:7, completedLevelIds:[1,2,3]}, levels),7,'old manual cursor ahead is kept');
+assert.equal(resumeLevelIndex({currentLevelIndex:1, completedLevelIds:[1,2,3], progressVersion:2}, levels),3,'V8 stale completed cursor migrates to next');
+assert.equal(resumeLevelIndex({currentLevelIndex:1, completedLevelIds:[1,2,3], progressVersion:3}, levels),1,'V9 explicit manual cursor is trusted');
+assert.equal(resumeLevelIndex({currentLevelIndex:99, completedLevelIds:[1,2], progressVersion:2}, levels),2,'invalid V8 cursor recovers from completed progress');
+assert.equal(resumeLevelIndex({currentLevelIndex:99, completedLevelIds:[1,2], progressVersion:3}, levels),0,'invalid V9 cursor is clamped');
+assert.equal(resumeLevelIndex({currentLevelIndex:0, completedLevelIds:levels.map(l=>l.id)}, levels),9,'fully completed stays in range');
+console.log('PASS: 10 save/resume/migration cases');

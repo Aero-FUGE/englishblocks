@@ -1,0 +1,8 @@
+{
+  "pageWidth": 1440,
+  "sidebarWidth": 244,
+  "gap": 16,
+  "sidebar": { "x": 0, "y": 0, "scale": 100 },
+  "progress": { "x": 0, "y": 0, "scale": 100 },
+  "board": { "x": 0, "y": 0, "scale": 100 }
+}

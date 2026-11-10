@@ -1,0 +1,31 @@
+services:
+  game:
+    build: ..
+    restart: unless-stopped
+    environment:
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+      DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-flash}
+      MIMI_DAILY_LIMIT: ${MIMI_DAILY_LIMIT:-150}
+      CLOUD_DATA_DIR: /data
+      CLOUD_ALLOWED_ORIGINS: englishblocks://app
+      CLOUD_ALLOW_REGISTRATION: "true"
+    volumes:
+      - game-data:/data
+  https:
+    image: caddy:2
+    restart: unless-stopped
+    environment:
+      GAME_DOMAIN: ${GAME_DOMAIN:?Set GAME_DOMAIN to your real domain}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - game
+volumes:
+  game-data:
+  caddy-data:
+  caddy-config:

@@ -1,0 +1,47 @@
+export type CatId = 'mimi' | 'tuanzhang';
+export type OutfitSlot = 'hat' | 'glasses' | 'bow' | 'clothes' | 'accessory';
+export type ShopItem = { id:string; name:string; slot:OutfitSlot; price:number; unlockTier:number; cats:CatId[]; asset?:string; collection?:string; color:string; accent:string; icon:string };
+const both:CatId[]=['mimi','tuanzhang'];
+export const SHOP_ITEMS: ShopItem[] = [
+ {id:'green-beret',name:'格纹贝雷帽',slot:'hat',price:0,unlockTier:1,cats:both,collection:'academy',color:'#7C9B65',accent:'#F5E2A3',icon:'beret'},
+ {id:'garden-hat',name:'田园草帽',slot:'hat',price:120,unlockTier:1,cats:both,color:'#EAC989',accent:'#E9976B',icon:'straw'},
+ {id:'wizard-hat',name:'魔法尖帽',slot:'hat',price:180,unlockTier:1,cats:both,collection:'magic',color:'#63517F',accent:'#F3C66D',icon:'wizard'},
+ {id:'pirate-hat',name:'海盗三角帽',slot:'hat',price:200,unlockTier:1,cats:both,collection:'pirate',color:'#4A3D3B',accent:'#E6C077',icon:'pirate'},
+ {id:'princess-crown',name:'公主王冠',slot:'hat',price:300,unlockTier:1,cats:both,collection:'princess',color:'#E9B75E',accent:'#BA8CD3',icon:'crown'},
+ {id:'detective-hat',name:'侦探猎帽',slot:'hat',price:160,unlockTier:1,cats:both,color:'#B48B61',accent:'#6F563F',icon:'detective'},
+ {id:'pilot-hat',name:'飞行员帽',slot:'hat',price:180,unlockTier:1,cats:both,color:'#9B7654',accent:'#A8C6D2',icon:'pilot'},
+ {id:'steampunk-hat',name:'绅士礼帽',slot:'hat',price:200,unlockTier:1,cats:both,color:'#4E5155',accent:'#C9A86A',icon:'top'},
+ {id:'graduation-cap',name:'学士帽',slot:'hat',price:150,unlockTier:1,cats:both,collection:'academy',color:'#44454B',accent:'#D6AE55',icon:'grad'},
+ {id:'bear-hat',name:'小熊毛帽',slot:'hat',price:120,unlockTier:1,cats:both,color:'#F6EDE0',accent:'#D8B6A2',icon:'bear'},
+ {id:'royal-crown',name:'红宝石王冠',slot:'hat',price:260,unlockTier:1,cats:both,collection:'princess',color:'#C63945',accent:'#F2C66C',icon:'hat'},
+ {id:'rose-bonnet',name:'玫瑰蕾丝软帽',slot:'hat',price:175,unlockTier:1,cats:both,color:'#F4E6DC',accent:'#A06B85',icon:'hat'},
+ {id:'maid-headband',name:'蕾丝女仆发箍',slot:'hat',price:140,unlockTier:1,cats:both,color:'#E8E3E1',accent:'#494453',icon:'hat'},
+ {id:'sakura-crown',name:'樱花枝冠',slot:'hat',price:170,unlockTier:1,cats:both,collection:'travel',color:'#E9AFBE',accent:'#F8E6CC',icon:'hat'},
+ {id:'oriental-headdress',name:'金绣花冠',slot:'hat',price:240,unlockTier:1,cats:both,color:'#E9C25C',accent:'#C64A59',icon:'hat'},
+ {id:'kitsune-mask',name:'狐面头饰',slot:'hat',price:220,unlockTier:1,cats:both,collection:'magic',color:'#F7F2E8',accent:'#C74C5D',icon:'hat'},
+ {id:'antler-crown',name:'森林鹿角花冠',slot:'hat',price:220,unlockTier:1,cats:both,collection:'travel',color:'#B5946F',accent:'#A2B76D',icon:'hat'},
+ {id:'dark-veil',name:'暗夜纱帽',slot:'hat',price:260,unlockTier:1,cats:both,collection:'magic',color:'#37374D',accent:'#D8B777',icon:'hat'},
+ {id:'cat-ear-hood',name:'猫耳绒绒帽',slot:'hat',price:170,unlockTier:1,cats:both,color:'#EAC5B2',accent:'#FFE8DD',icon:'hat'},
+ {id:'frog-hood',name:'青蛙兜帽',slot:'hat',price:160,unlockTier:1,cats:both,collection:'travel',color:'#9DBE68',accent:'#E8F2B7',icon:'hat'},
+ {id:'panda-hood',name:'熊猫兜帽',slot:'hat',price:170,unlockTier:1,cats:both,color:'#E6E7E2',accent:'#454750',icon:'hat'},
+ {id:'shark-hood',name:'小鲨鱼兜帽',slot:'hat',price:210,unlockTier:1,cats:both,color:'#6C98BD',accent:'#E6F7FC',icon:'hat'},
+ {id:'bat-rose-headband',name:'蝙蝠玫瑰发箍',slot:'hat',price:230,unlockTier:1,cats:both,collection:'magic',color:'#404259',accent:'#B97584',icon:'hat'},
+ {id:'gold-glasses',name:'金丝圆眼镜',slot:'glasses',price:100,unlockTier:1,cats:both,collection:'academy',color:'#D4AC5E',accent:'#FFF7D9',icon:'glasses'},
+ {id:'silver-glasses',name:'银丝圆眼镜',slot:'glasses',price:100,unlockTier:1,cats:both,color:'#A9ADB6',accent:'#E6EDF0',icon:'glasses'},
+ {id:'heart-glasses',name:'爱心眼镜',slot:'glasses',price:140,unlockTier:1,cats:both,collection:'princess',color:'#E9A0A8',accent:'#FFE1DF',icon:'heart'},
+ {id:'green-bow',name:'青草绿领结',slot:'bow',price:0,unlockTier:1,cats:both,collection:'academy',color:'#7E9E6B',accent:'#E9BD61',icon:'bow'},
+ {id:'cream-bow',name:'奶油蝴蝶结',slot:'bow',price:90,unlockTier:1,cats:both,collection:'princess',color:'#E8CBAF',accent:'#FFF3D7',icon:'bow'},
+ {id:'ruby-bow',name:'宝石红领结',slot:'bow',price:120,unlockTier:1,cats:both,collection:'pirate',color:'#A65B62',accent:'#EAC37D',icon:'bow'},
+ {id:'star-bow',name:'星星领结',slot:'bow',price:140,unlockTier:1,cats:both,collection:'magic',color:'#5E527C',accent:'#F1CB78',icon:'bow'},
+ {id:'academy-cape',name:'学院格纹披肩',slot:'clothes',price:240,unlockTier:1,cats:both,collection:'academy',color:'#80966C',accent:'#F2E2B7',icon:'cape'},
+ {id:'lace-dress',name:'蕾丝公主裙',slot:'clothes',price:320,unlockTier:1,cats:both,collection:'princess',color:'#E8B7B5',accent:'#FFF3E9',icon:'dress'},
+ {id:'star-cape',name:'星光魔法斗篷',slot:'clothes',price:350,unlockTier:1,cats:both,collection:'magic',color:'#61517F',accent:'#E6C16D',icon:'cape'},
+ {id:'pirate-coat',name:'海盗船长外套',slot:'clothes',price:350,unlockTier:1,cats:both,collection:'pirate',color:'#4D505D',accent:'#E3C58B',icon:'cape'},
+ {id:'travel-coat',name:'秋日旅行风衣',slot:'clothes',price:260,unlockTier:1,cats:both,collection:'travel',color:'#C29A73',accent:'#F4E3BD',icon:'cape'},
+ {id:'garden-dress',name:'田园花园裙',slot:'clothes',price:280,unlockTier:1,cats:both,collection:'travel',color:'#9EB68A',accent:'#FFDFB9',icon:'dress'},
+ {id:'pearl-charm',name:'珍珠挂饰',slot:'accessory',price:100,unlockTier:1,cats:both,collection:'princess',color:'#E7D4C9',accent:'#FAF6E9',icon:'charm'},
+ {id:'star-charm',name:'魔法星星',slot:'accessory',price:120,unlockTier:1,cats:both,collection:'magic',color:'#D8BD70',accent:'#FFF0BB',icon:'star'},
+ {id:'compass-charm',name:'船长罗盘',slot:'accessory',price:120,unlockTier:1,cats:both,collection:'pirate',color:'#B48A52',accent:'#F6E5B3',icon:'charm'},
+];
+export const FISH_REWARDS=[10,9,7,4] as const;
+export const rewardForHints=(count:number)=>FISH_REWARDS[Math.min(Math.max(count,0),3)];

@@ -1,0 +1,11 @@
+node_modules
+cloud-data
+sync-data
+dist
+release
+.git
+.env
+.env.*
+previews
+
+*.before-ai
