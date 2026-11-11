@@ -1,3 +1,5 @@
+import {PlayerAvatar} from './PlayerAvatar';
+import {AvatarPicker} from './AvatarPicker';
 import { ModalOverlay } from './ModalOverlay';
 import React, { useState } from 'react';
 import { UserProfile, WordBlock, LevelData } from '../types/game';
@@ -15,6 +17,7 @@ interface ProfileModalProps {
   profile: UserProfile;
   wordsMasteredCount: number;
   totalWordsGoal: number;
+  onUpdateAvatar: (id:string)=>void;
   onUpdateProfileName: (newName: string) => void;
   onJumpToLevel: (levelId: number) => void;
   currentLevel: LevelData;
@@ -27,11 +30,13 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   profile,
   wordsMasteredCount,
   totalWordsGoal,
+  onUpdateAvatar,
   onUpdateProfileName,
   onJumpToLevel,
   currentLevel,
   fishCount,
 }) => {
+  const [avatarOpen,setAvatarOpen]=useState(false);
   const [activeTab, setActiveTab] = useState<'profile' | 'mistakes' | 'starred'>('profile');
   const [isEditingName, setIsEditingName] = useState(false);
   const [editNameValue, setEditNameValue] = useState('');
@@ -76,6 +81,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   };
 
   return (
+    <>
+    {avatarOpen&&<AvatarPicker value={profile.avatar} onSelect={onUpdateAvatar} onClose={()=>setAvatarOpen(false)}/>}
     <ModalOverlay className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-[var(--theme-text)]/45 backdrop-blur-[3px] animate-fade-in">
       <div role="dialog" aria-modal="true" aria-label="学习档案" className="eb-modal-panel eb-modal-profile relative w-full max-w-2xl bg-[var(--theme-surface)] rounded-[34px] p-5 sm:p-7 shadow-[0_27px_75px_rgb(var(--theme-shadow-rgb)/.24)] border-[5px] border-[var(--theme-border)] z-10 flex flex-col max-h-[90vh] animate-scale-up">
         {/* Learning profile: same mint/cream visual language as the stage map. */}
@@ -86,9 +93,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
         <div className="eb-modal-body"><div className="relative my-4 rounded-[26px] border border-[var(--theme-border)] bg-gradient-to-r from-[var(--theme-muted-surface)] via-[var(--theme-muted-surface)] to-[var(--theme-muted-surface)] p-4 sm:p-5 overflow-hidden">
           <div className="absolute top-[-42px] right-[-32px] w-40 h-40 rounded-full bg-white/35 pointer-events-none"/>
           <div className="relative flex flex-wrap items-center gap-3 sm:gap-4">
-            <div className="relative shrink-0 w-[72px] h-[72px] sm:w-[84px] sm:h-[84px] rounded-[26px] bg-white/85 border-[3px] border-white shadow-sm flex items-center justify-center">
-              <img src="./assets/mimi-golden.png" alt="咪咪学习头像" className="h-full w-full object-contain p-1"/>
-            </div>
+            <button type="button" className="eb-profile-avatar-edit" aria-label="修改头像" onClick={()=>setAvatarOpen(true)}><PlayerAvatar avatar={profile.avatar} size={80} label="我的头像"/><span>修改头像</span></button>
             <div className="flex-1 min-w-[160px]">
               <p className="text-[10px] tracking-widest text-[var(--theme-muted)] font-bold">MY LITTLE LEARNING GARDEN</p>
               {isEditingName ? <div className="flex items-center gap-2 mt-1"><input type="text" autoFocus maxLength={12} value={editNameValue} onChange={e=>setEditNameValue(e.target.value)} onKeyDown={e=>{if(e.key==='Enter')handleSaveName();}} className="w-full max-w-[190px] bg-white rounded-xl border-2 border-[var(--theme-border)] px-3 py-2 outline-none text-sm font-bold text-[var(--theme-text)]"/><button onClick={handleSaveName} className="px-3 py-2 bg-[var(--theme-primary)] text-white font-bold rounded-xl text-xs">保存</button></div>
@@ -319,5 +324,6 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
         </div>
       </div>
     </ModalOverlay>
+    </>
   );
 };

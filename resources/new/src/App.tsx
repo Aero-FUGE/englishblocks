@@ -692,6 +692,7 @@ export default function App() {
         profile={profile}
         wordsMasteredCount={masteredWordsCount}
         totalWordsGoal={profile.totalWordGoal}
+        onUpdateAvatar={avatar=>setProfile(p=>({...p,avatar}))}
         onUpdateProfileName={(newName) => {
           setProfile((p) => ({ ...p, name: newName }));
         }}
@@ -746,7 +747,7 @@ export default function App() {
         }}
       />
     </div>
-    {!inStudy&&!friendsOpen&&<LearningLobby name={profile.name} collection={collection} level={currentLevel.levelNumber} tier={currentTier} filled={slottedWords.filter(Boolean).length} expected={expectedCount} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
+    {!inStudy&&!friendsOpen&&<LearningLobby avatar={profile.avatar} name={profile.name} collection={collection} level={currentLevel.levelNumber} tier={currentTier} filled={slottedWords.filter(Boolean).length} expected={expectedCount} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
       {label:'关卡选择',icon:'▦',onClick:()=>setIsLevelSelectorOpen(true)},
       {label:'学习进度',icon:'🌿',onClick:()=>setIsProfileModalOpen(true)},
       {label:'好友小窝',icon:'🏡',onClick:openFriends,detail:social.pending?`${social.pending} 封小窝来信`:undefined},
@@ -755,7 +756,7 @@ export default function App() {
       {label:'云端存档',icon:'☁',onClick:()=>setIsCloudOpen(true),detail:cloud.user?cloud.status:'登录并同步'},
       {label:'游戏设置',icon:'⚙',onClick:()=>setIsSettingsOpen(true)}
     ]}/>}
-    {friendsOpen&&<FriendsPage userId={cloud.user?.id} onBack={closeFriends} onLogin={()=>setIsCloudOpen(true)}/>}
+    {friendsOpen&&<FriendsPage selfAvatar={profile.avatar} userId={cloud.user?.id} onBack={closeFriends} onLogin={()=>setIsCloudOpen(true)}/>}
     {!friendsOpen&&!inStudy&&<PrankToast key={cloud.user?.id||'local'} inbox={social.inbox} wallet={social.wallet} open={pranksOpen} onClose={()=>setPranksOpen(false)} onViewAll={openFriends}/>}
     </>
   );

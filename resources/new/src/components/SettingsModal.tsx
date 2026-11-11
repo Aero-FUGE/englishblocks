@@ -1,3 +1,4 @@
+import {PlayerAvatar} from './PlayerAvatar';
 import {SeasonPicker} from './SeasonPicker';
 import { ModalOverlay } from './ModalOverlay';
 import React, { useState, useEffect } from 'react';
@@ -146,8 +147,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
 
             <div className="flex items-center gap-3 rounded-2xl bg-[var(--theme-muted-surface)] border border-[var(--theme-border)] p-3">
-              <img src="./assets/mimi-golden.png" alt="专属小猫头像" className="w-20 h-20 rounded-2xl bg-white object-contain p-1" />
-              <div className="text-xs text-[var(--theme-muted)]">专属头像 · 咪咪<br/>和你一起慢慢成长</div>
+              <PlayerAvatar avatar={profile.avatar} size={80} label="我的头像" className="rounded-2xl"/>
+              <div className="text-xs text-[var(--theme-muted)]">我的学习头像<br/>可在学习档案中更换</div>
             </div>
           </div>
 

@@ -50,3 +50,11 @@ test('China midnight and Monday boundaries, attendance and expiry',async t=>{
   const normalize=s=>s.toLowerCase().replace(/[,.?!]|[’']$/g,'');
   for(const level of catalog.levels){const pool=[...level.words];for(const word of level.sequence){const index=pool.findIndex(w=>normalize(w.clean)===normalize(word));assert.ok(index>=0,'unmatchable lesson '+level.id);pool.splice(index,1);}}
  });
+
+ test('public avatars accept only built-in IDs and follow the latest cloud save',async t=>{
+ const f=fixture(t);await makeFriends(f);
+ const setAvatar=avatar=>f.db.prepare('INSERT INTO saves VALUES(?,?) ON CONFLICT(user_id) DO UPDATE SET snapshot=excluded.snapshot').run('bob',JSON.stringify({profile:{name:'妹妹',avatar},collection:{}}));
+ setAvatar('cat-avatar-24');assert.equal((await f.api('alice','/social/friends/bob')).player.avatar,'cat-avatar-24');
+ setAvatar('cat-avatar-01');assert.equal((await f.api('alice','/social')).friends[0].avatar,'cat-avatar-01');
+ for(const unsafe of ['https://example.com/private.png','javascript:alert(1)','cat-avatar-25','🐰']){setAvatar(unsafe);assert.equal((await f.api('alice','/social/friends/bob')).player.avatar,null);}
+ });

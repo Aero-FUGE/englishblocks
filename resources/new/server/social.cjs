@@ -1,3 +1,4 @@
+const {findAvatar}=require('../shared/avatars.mjs');
 const {randomBytes,randomUUID}=require('node:crypto');
 const catalog=require('./social-catalog.json');
 const levels=new Map(catalog.levels.map(l=>[l.id,l]));
@@ -42,12 +43,12 @@ function createSocial(db,{now=Date.now,minStudyMs=3000}={}){
   for(const [slot,id]of Object.entries(c.equipped?.[cat]||{}))if(owned.some(i=>i.id===id&&i.slot===slot&&i.cats.includes(cat)))equipped[slot]=id;
   const total=Number(get('SELECT COUNT(*) AS n FROM learning_completions WHERE user_id=?',id).n);
   const last=get('SELECT last_active FROM social_profiles WHERE user_id=?',id).last_active;
-  return {id,name:typeof p.name==='string'?p.name.slice(0,40):'学习小伙伴',cat,equipped,pose:['peek','half','stand','sit'].includes(c.poses?.[cat])?c.poses[cat]:'peek',expression:['smile','focus','proud','shy'].includes(c.expressions?.[cat])?c.expressions[cat]:'smile',level:1+Math.floor(total/10),stage:labels[Math.min(3,Math.max(0,selected.tier-1))],currentLevel:selected.levelNumber,completed:total,totalLevels:catalog.levels.length,today:count(id,dayAt(now()),dayAt(now())),week:count(id,weekAt(now()),dayAt(now())),online:now()-last<180000,owned:owned.map(i=>({id:i.id,name:i.name})),lastActive:last||null};
+  return {id,avatar:findAvatar(p.avatar)?.id||null,name:typeof p.name==='string'?p.name.slice(0,40):'学习小伙伴',cat,equipped,pose:['peek','half','stand','sit'].includes(c.poses?.[cat])?c.poses[cat]:'peek',expression:['smile','focus','proud','shy'].includes(c.expressions?.[cat])?c.expressions[cat]:'smile',level:1+Math.floor(total/10),stage:labels[Math.min(3,Math.max(0,selected.tier-1))],currentLevel:selected.levelNumber,completed:total,totalLevels:catalog.levels.length,today:count(id,dayAt(now()),dayAt(now())),week:count(id,weekAt(now()),dayAt(now())),online:now()-last<180000,owned:owned.map(i=>({id:i.id,name:i.name})),lastActive:last||null};
  }
  function incoming(id){return all('SELECT * FROM pranks WHERE receiver=? AND handled_at IS NULL ORDER BY created_at,id LIMIT 30',id).map(p=>({id:p.id,senderId:p.sender,senderName:publicProfile(p.sender).name,item:p.item,sentAt:p.created_at,seen:!!p.seen_at,handled:false,canCounter:friends(id,p.sender)}));}
  function dashboard(id){ensure(id);const ids=all('SELECT CASE WHEN low_id=? THEN high_id ELSE low_id END AS id FROM friendships WHERE low_id=? OR high_id=?',id,id,id);
   const pending=all("SELECT * FROM friend_requests WHERE (sender=? OR receiver=?) AND status='pending' ORDER BY created_at DESC",id,id);
-  return {self:publicProfile(id),code:get('SELECT friend_code FROM social_profiles WHERE user_id=?',id).friend_code,wallet:wallet(id),friends:ids.map(r=>publicProfile(r.id)),requests:pending.map(r=>{const p=publicProfile(r.sender===id?r.receiver:r.sender);return {id:r.id,incoming:r.receiver===id,player:{id:p.id,name:p.name,cat:p.cat},createdAt:r.created_at};}),inbox:incoming(id),pendingCount:Number(get('SELECT COUNT(*) AS n FROM pranks WHERE receiver=? AND handled_at IS NULL',id).n),weekStart:weekAt(now())};
+  return {self:publicProfile(id),code:get('SELECT friend_code FROM social_profiles WHERE user_id=?',id).friend_code,wallet:wallet(id),friends:ids.map(r=>publicProfile(r.id)),requests:pending.map(r=>{const p=publicProfile(r.sender===id?r.receiver:r.sender);return {id:r.id,incoming:r.receiver===id,player:{id:p.id,name:p.name,cat:p.cat,avatar:p.avatar},createdAt:r.created_at};}),inbox:incoming(id),pendingCount:Number(get('SELECT COUNT(*) AS n FROM pranks WHERE receiver=? AND handled_at IS NULL',id).n),weekStart:weekAt(now())};
  }
  function throwEgg(sender,receiver,key){
   if(typeof receiver!=='string'||receiver.length>100)throw bad('好友账号不正确');

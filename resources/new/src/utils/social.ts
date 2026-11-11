@@ -1,10 +1,10 @@
 import {cloudSync} from './cloudSync';
 import type {CatId,OutfitSlot} from '../data/catShop';
 import type {CatPose,CatExpression} from '../components/PoseDressedCat';
-export type FriendPlayer={id:string;name:string;cat:CatId;equipped:Partial<Record<OutfitSlot,string>>;pose:CatPose;expression:CatExpression;level:number;stage:string;currentLevel:number;completed:number;totalLevels:number;today:number;week:number;online:boolean;owned:{id:string;name:string}[]};
+export type FriendPlayer={avatar?:string|null;id:string;name:string;cat:CatId;equipped:Partial<Record<OutfitSlot,string>>;pose:CatPose;expression:CatExpression;level:number;stage:string;currentLevel:number;completed:number;totalLevels:number;today:number;week:number;online:boolean;owned:{id:string;name:string}[]};
 export type Wallet={balance:number;today:number;earnedToday:number;dailyMaximum:number;nextIn:number};
 export type PrankNotice={id:string;senderId:string;senderName:string;item:string;sentAt:number;seen:boolean;handled:boolean;canCounter:boolean};
-export type SocialData={self:FriendPlayer;code:string;wallet:Wallet;friends:FriendPlayer[];requests:{id:string;incoming:boolean;player:Pick<FriendPlayer,'id'|'name'|'cat'>;createdAt:number}[];inbox:PrankNotice[];pendingCount:number;weekStart:string};
+export type SocialData={self:FriendPlayer;code:string;wallet:Wallet;friends:FriendPlayer[];requests:{id:string;incoming:boolean;player:Pick<FriendPlayer,'id'|'name'|'cat'|'avatar'>;createdAt:number}[];inbox:PrankNotice[];pendingCount:number;weekStart:string};
 export type FriendSpace={player:FriendPlayer;events:{id:string;kind:string;title:string;createdAt:number}[]};
 export const socialRequest=<T,>(path:string,method='GET',body?:unknown)=>cloudSync.request<T>(path,method,body);
 const keys=new Map<string,string>();

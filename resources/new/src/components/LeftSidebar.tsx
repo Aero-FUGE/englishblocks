@@ -1,3 +1,4 @@
+import {PlayerAvatar} from './PlayerAvatar';
 import React from 'react';
 import { UserProfile } from '../types/game';
 import { LEARNING_STAGES } from '../utils/stages';
@@ -35,7 +36,7 @@ export const LeftSidebar: React.FC<LeftSidebarProps> = ({
     <div>
       <div className="flex gap-2 items-center px-1 pb-2 border-b border-[var(--theme-border)]"><BrandLogo size={46}/><div><h1 className="font-bold text-base tracking-widest text-[var(--theme-text)]">英语拼块</h1><p className="text-[10px] text-[var(--theme-muted)] tracking-[.08em]">WORD BLOCK GARDEN</p></div></div>
       <button onClick={onOpenStats} className="w-full text-left flex items-center gap-2 py-2 px-1 rounded-2xl hover:bg-white/80 transition-colors" title="查看我的学习档案">
-        <span className="h-9 w-9 shrink-0 rounded-[18px] bg-gradient-to-br from-[var(--theme-muted-surface)] to-[var(--theme-muted-surface)] border-[2px] border-white shadow-sm overflow-hidden grid place-items-center"><img src="./assets/mimi-golden.png" alt="学习头像" className="h-full w-full object-contain"/></span>
+        <span className="h-9 w-9 shrink-0 rounded-[18px] bg-gradient-to-br from-[var(--theme-muted-surface)] to-[var(--theme-muted-surface)] border-[2px] border-white shadow-sm overflow-hidden grid place-items-center"><PlayerAvatar avatar={profile.avatar} size={36} label="学习头像"/></span>
         <span className="flex-1 min-w-0"><span className="flex items-center gap-1 font-bold text-[13px] truncate text-[var(--theme-text)]">{profile.name||'学习者'} <ChevronRight className="w-3.5 h-3.5 text-[var(--theme-muted)]"/></span><span className="block text-[11px] text-[var(--theme-muted)] mt-0.5">{LEARNING_STAGES.find(s=>s.tier===currentTier)?.label} · LEVEL {currentLevelNumber}</span></span>
       </button>
       <p className="text-[10px] font-bold text-[var(--theme-muted)] px-2 pt-1 pb-1 tracking-widest">我的小屋 · MENU</p>

@@ -5,6 +5,7 @@ import { GameErrorBoundary } from './components/GameErrorBoundary';
 import './index.css';
 import './lobby.css';
 import './page-backgrounds.css';
+import './avatars.css';
 
 initializeSeason();
 

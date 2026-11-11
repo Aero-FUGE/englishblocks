@@ -1,3 +1,4 @@
+import {PlayerAvatar} from './PlayerAvatar';
 import {StageEmblem} from './StageEmblem';
 import React,{useState} from 'react';
 import {BookOpen,ChevronRight,ChevronDown,ChartNoAxesColumn,House,Music,Cloud,Settings,UserRound,Palette,Leaf,Layers,Check} from 'lucide-react';
@@ -10,7 +11,7 @@ import {LEARNING_STAGES} from '../utils/stages';
 type Action={label:string;icon:string;onClick:()=>void;detail?:string};
 const imageIcons:Record<string,string>={'小猫衣柜':'wardrobe','好友小窝':'prank'};
 const icons:Record<string,React.ElementType>={'学习进度':ChartNoAxesColumn,'好友小窝':House,'音乐设置':Music,'云端存档':Cloud,'游戏设置':Settings};
-export function LearningLobby({name,collection,level,tier,completed,total,words,filled,expected,onContinue,actions}:{name:string;collection:CatCollection;level:number;tier:number;completed:number;total:number;words:number;filled:number;expected:number;onContinue:()=>void;actions:Action[]}){
+export function LearningLobby({avatar,name,collection,level,tier,completed,total,words,filled,expected,onContinue,actions}:{avatar:string;name:string;collection:CatCollection;level:number;tier:number;completed:number;total:number;words:number;filled:number;expected:number;onContinue:()=>void;actions:Action[]}){
  const[season]=useSeasonTheme();const[showSeasons,setShowSeasons]=useState(false);
  const choose=actions.find(a=>a.label==='关卡选择')!;const stats=actions.find(a=>a.label==='学习进度')!;
  const stage=LEARNING_STAGES.find(s=>s.tier===tier)||LEARNING_STAGES[0];const catName=collection.activeCat==='mimi'?'咪咪':'团长';
@@ -18,7 +19,7 @@ export function LearningLobby({name,collection,level,tier,completed,total,words,
   <div className="eb-garden-content">
    <header className="eb-garden-header"><div className="eb-garden-brand"><img src="./apple-touch-icon.png" alt="英语拼块"/><div><h1>英语拼块 <Leaf size={15}/></h1><small>WORD BLOCK GARDEN</small></div></div><button onClick={choose.onClick} className="eb-garden-level"><StageEmblem tier={tier} size={32}/><span><small>{stage.label}</small><strong>第 {level} 关</strong></span><ChevronDown size={16}/></button></header>
    <section className="eb-garden-profile" aria-label="学习进度">
-    <div className="eb-garden-profile-top"><button className="eb-garden-avatar" aria-label="打开个人档案" onClick={stats.onClick}><DressedCat cat={collection.activeCat} emotion="happy" items={collection.equipped?.[collection.activeCat]||{}} pose={collection.poses?.[collection.activeCat]||'peek'} expression={collection.expressions?.[collection.activeCat]||'smile'} size={68}/></button><div className="eb-garden-person"><strong>{name}<span>学习花园的小主人</span></strong><progress max={total} value={completed}/><small>已走过 {completed} 关 · 每一步都算数</small></div><span className="eb-garden-fish">🐟 {collection.fish}</span></div>
+    <div className="eb-garden-profile-top"><button className="eb-garden-avatar" aria-label="打开个人档案" onClick={stats.onClick}><PlayerAvatar avatar={avatar} size={58} fallback={<DressedCat cat={collection.activeCat} emotion="happy" items={collection.equipped?.[collection.activeCat]||{}} pose={collection.poses?.[collection.activeCat]||'peek'} expression={collection.expressions?.[collection.activeCat]||'smile'} size={68}/>}/></button><div className="eb-garden-person"><strong>{name}<span>学习花园的小主人</span></strong><progress max={total} value={completed}/><small>已走过 {completed} 关 · 每一步都算数</small></div><span className="eb-garden-fish">🐟 {collection.fish}</span></div>
     <div className="eb-garden-stats"><div><BookOpen/><span>拼句通关</span><strong>{completed}<small> / {total} 句</small></strong></div><div><Leaf/><span>掌握词汇</span><strong>{words}<small> 词</small></strong></div><div><Layers/><span>当前拼放</span><strong>{filled}<small> / {expected} 块</small></strong></div></div>
    </section>
    <button className="eb-garden-save" onClick={onContinue}><span className="eb-garden-save-icon"><Check size={20}/></span><strong>学习现场已保留</strong><span>接着拼第 {level} 关</span><ChevronRight size={17}/></button>
