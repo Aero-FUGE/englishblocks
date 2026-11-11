@@ -13,3 +13,5 @@
 新增 UI 优先使用 `var(--theme-surface)`、`var(--theme-text)`、`var(--theme-muted)`、`var(--theme-primary)`、`var(--theme-on-primary)`、`var(--theme-border)` 和 `var(--theme-shadow)`，避免写入季节色值。切换不写学习记录、不修改好友数据、不调用 AI，也不重新加载应用。
 
 大厅布局现按用户提供的参考图调整为紧凑的角色名片、真实统计、场景、主按钮与功能网格。`src/lobby.css` 独立管理大厅布局；`public/assets/lobby/{spring,summer,autumn,winter}.png` 使用用户提供的四季背景，随主题切换。背景 URL 按 document.baseURI 生成，兼容 GitHub 项目子目录。主题面板收纳到四季入口，原有播放器保留在页脚。未创建参考图中缺乏数据基础的经验、日常任务或连续天数。
+
+大厅的四季入口现使用居中 Portal 弹窗，选择后自动关闭，支持背景点击、关闭按钮和 Escape；打开期间锁定背景滚动并约束键盘焦点，关闭后恢复触发按钮焦点。弹窗不增加大厅文档高度。设置面板继续复用同一组精简图标选项。春季主色调整为樱花粉，夏季主色调整为绿荫绿，秋冬 palette 未改动。顶部遮罩在背景图片起始处保持不透明，再渐变为透明，消除图片起始边界。

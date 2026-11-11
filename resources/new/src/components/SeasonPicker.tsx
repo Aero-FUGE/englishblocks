@@ -1,3 +1,12 @@
-import React from 'react';
+import React,{useEffect,useRef} from 'react';
+import {Check,X,Flower2,Sun,Leaf,Snowflake} from 'lucide-react';
+import {ModalOverlay} from './ModalOverlay';
 import {SEASONS,SEASON_LABELS,useSeasonTheme} from '../utils/seasonTheme';
-export function SeasonPicker(){const[season,setSeason]=useSeasonTheme();return <section className="eb-lobby-seasons" aria-label="四季主题"><strong>花园的四季</strong><div>{SEASONS.map(value=><button type="button" key={value} aria-pressed={season===value} onClick={()=>setSeason(value)}>{SEASON_LABELS[value]}</button>)}</div></section>;}
+const seasonIcons={spring:Flower2,summer:Sun,autumn:Leaf,winter:Snowflake};
+const descriptions={spring:'樱花轻语',summer:'绿荫晴日',autumn:'落叶暖阳',winter:'雪夜暖灯'};
+export function SeasonPicker({onSelect}:{onSelect?:()=>void}){const[season,setSeason]=useSeasonTheme();return <section className="eb-season-picker" aria-label="四季主题"><div className="eb-season-choices">{SEASONS.map(value=>{const Icon=seasonIcons[value];return <button type="button" key={value} className={`eb-season-choice eb-choice-${value}`} aria-label={SEASON_LABELS[value]} aria-pressed={season===value} onClick={()=>{setSeason(value);onSelect?.();}}><span className="eb-season-swatch"><Icon size={25} strokeWidth={1.6}/>{season===value&&<Check className="eb-season-check" size={12}/>}</span><strong>{SEASON_LABELS[value].split(' ')[1]}</strong><small>{descriptions[value]}</small></button>;})}</div></section>;}
+export function SeasonDialog({onClose}:{onClose:()=>void}){
+ const panel=useRef<HTMLDivElement>(null);
+ useEffect(()=>{const previous=document.activeElement as HTMLElement|null;panel.current?.querySelector<HTMLButtonElement>('[aria-pressed=true]')?.focus();const key=(event:KeyboardEvent)=>{if(event.key==='Escape'){event.preventDefault();onClose();}if(event.key==='Tab'){const buttons=Array.from(panel.current?.querySelectorAll<HTMLButtonElement>('button')||[]);const first=buttons[0],last=buttons[buttons.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}}};window.addEventListener('keydown',key);return()=>{window.removeEventListener('keydown',key);previous?.focus();};},[onClose]);
+ return <ModalOverlay className="eb-season-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose();}}><div ref={panel} role="dialog" aria-modal="true" aria-labelledby="eb-season-title" className="eb-season-dialog"><header><div><h2 id="eb-season-title">换一个季节，换一份心情</h2><p>选择你喜欢的花园风景</p></div><button type="button" aria-label="关闭四季主题" onClick={onClose}><X size={18}/></button></header><SeasonPicker onSelect={onClose}/><p className="eb-season-note">主题会自动保存，下次回来还是你的花园。</p></div></ModalOverlay>;
+}

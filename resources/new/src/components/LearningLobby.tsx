@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import {BookOpen,ChevronRight,ChevronDown,ChartNoAxesColumn,Cat,House,Music,Cloud,Settings,UserRound,Palette,Leaf,Layers,Check} from 'lucide-react';
-import {SeasonPicker} from './SeasonPicker';
+import {SeasonDialog} from './SeasonPicker';
 import {BgmPlayerWidget} from './BgmPlayerWidget';
 import {DressedCat} from './DressedCat';
 import type {CatCollection} from './CatWardrobeModal';
@@ -24,7 +24,7 @@ export function LearningLobby({name,collection,level,tier,completed,total,words,
    <div className="eb-garden-journey"><button className="eb-lobby-continue" onClick={onContinue}><BookOpen size={34}/><span><strong>继续学习 <ChevronRight size={23}/></strong><small>第 {level} 关 · {filled?'恢复刚才的拼法':'开始今天的小挑战'}</small></span></button><button className="eb-garden-choose" onClick={choose.onClick}><Layers size={20}/>关卡选择<ChevronRight size={18}/></button></div>
    <section className="eb-lobby-actions eb-garden-actions" aria-label="大厅功能">{['学习进度','小猫衣柜','好友小窝','音乐设置','云端存档','游戏设置'].map(label=>actions.find(a=>a.label===label)!).map(a=>{const Icon=icons[a.label]||House;return <button key={a.label} onClick={a.onClick} title={a.detail}><Icon size={28} strokeWidth={1.7}/><strong>{a.label}</strong>{a.detail?.includes('来信')&&<small>{a.detail}</small>}</button>;})}<button onClick={stats.onClick}><UserRound size={28} strokeWidth={1.7}/><strong>个人档案</strong></button><button aria-expanded={showSeasons} onClick={()=>setShowSeasons(v=>!v)}><Palette size={28} strokeWidth={1.7}/><strong>四季主题</strong></button></section>
    <footer className="eb-garden-footer"><span>{SEASON_LABELS[season]} · 学习大厅</span><BgmPlayerWidget/></footer>
-   {showSeasons&&<SeasonPicker/>}
+   {showSeasons&&<SeasonDialog onClose={()=>setShowSeasons(false)}/>}
   </div>
  </main>;
 }

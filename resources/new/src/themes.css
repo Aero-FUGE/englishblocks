@@ -1,33 +1,33 @@
 /* Central semantic palette. All UI inherits from the document root, including portals. */
 :root, :root[data-season="spring"] {
- --theme-bg:#f2f6e9;
- --theme-surface:#fffcf7;
- --theme-muted-surface:#edf3e5;
- --theme-text:#354b3b;
- --theme-muted:#65785f;
- --theme-primary:#648356;
- --theme-primary-strong:#4d6b43;
- --theme-accent:#d39aa6;
- --theme-border:#cfddc1;
- --theme-border-strong:#91ac7c;
+ --theme-bg:#fcf0f3;
+ --theme-surface:#fffafa;
+ --theme-muted-surface:#f9e8ee;
+ --theme-text:#603e4e;
+ --theme-muted:#896574;
+ --theme-primary:#a95b7b;
+ --theme-primary-strong:#914b68;
+ --theme-accent:#bf8e9e;
+ --theme-border:#ebcbd7;
+ --theme-border-strong:#cf99af;
  --theme-decoration:#f2d3dd;
  --theme-light:#fff0bd;
- --theme-shadow-rgb:65 83 53;
+ --theme-shadow-rgb:111 62 82;
 }
 :root[data-season="summer"] {
- --theme-bg:#e8f4f6;
- --theme-surface:#fffcf2;
- --theme-muted-surface:#e3f2f1;
- --theme-text:#294f5b;
- --theme-muted:#53757c;
- --theme-primary:#347c8c;
- --theme-primary-strong:#286477;
- --theme-accent:#68b4ac;
- --theme-border:#bedce0;
- --theme-border-strong:#76aeb9;
- --theme-decoration:#b1e0e6;
+ --theme-bg:#f0f6e8;
+ --theme-surface:#fffdf3;
+ --theme-muted-surface:#e8f1dc;
+ --theme-text:#3d5334;
+ --theme-muted:#687c55;
+ --theme-primary:#628340;
+ --theme-primary-strong:#4d6d31;
+ --theme-accent:#9bb65b;
+ --theme-border:#d2dfb9;
+ --theme-border-strong:#9ab471;
+ --theme-decoration:#dce8bb;
  --theme-light:#fff0b1;
- --theme-shadow-rgb:37 86 101;
+ --theme-shadow-rgb:66 87 42;
 }
 :root[data-season="autumn"] {
  --theme-bg:#faf0df;
