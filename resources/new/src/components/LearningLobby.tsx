@@ -27,7 +27,7 @@ export function LearningLobby({avatar,name,collection,level,tier,completed,total
    <section className="eb-lobby-actions eb-garden-actions" aria-label="大厅功能">{Object.entries(imageIcons).map(([label,icon])=>{
     const action=actions.find(a=>a.label===label);
     return <button key={label} className="eb-garden-art-button" onClick={label==='四季主题'?()=>setShowSeasons(v=>!v):label==='个人档案'?stats.onClick:action?.onClick} aria-expanded={label==='四季主题'?showSeasons:undefined} title={action?.detail}>
-     <img className="eb-garden-action-art" src={`./assets/season-icons/${season}/${icon}.png`} alt="" aria-hidden="true" draggable={false}/><strong>{label}</strong>{action?.detail?.includes('来信')&&<small>{action.detail}</small>}
+     <img className="eb-garden-action-art" src={`./assets/season-icons/${season}/${icon}.png?v=cutout-1`} alt="" aria-hidden="true" draggable={false}/><strong>{label}</strong>{action?.detail?.includes('来信')&&<small>{action.detail}</small>}
     </button>;
    })}</section>
    <footer className="eb-garden-footer"><span>{SEASON_LABELS[season]} · 学习大厅</span><BgmPlayerWidget/></footer>
