@@ -277,9 +277,9 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
       {/* Central Learning Board Card (Matching Screenshot) */}
       <div
         className={`
-          eb-board-card relative bg-[#FCFAF2]/95 backdrop-blur-md rounded-[28px] p-4 md:p-5 border border-white/90 shadow-sm
+          eb-board-card relative bg-[var(--theme-muted-surface)]/95 backdrop-blur-md rounded-[28px] p-4 md:p-5 border border-white/90 shadow-sm
           transition-all duration-300
-          ${isCorrect ? 'ring-2 ring-[#7BD399]/40' : ''}
+          ${isCorrect ? 'ring-2 ring-[var(--theme-border)]/40' : ''}
         `}
       >
         {/* TOP RIGHT: 咪咪陪伴 (Mimi Peeking Over the Border) */}
@@ -301,7 +301,7 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
               size={96}
               className="hover:scale-105 active:scale-95 transition-transform"
             />
-            <span className="block mx-auto mt-1 w-fit rounded-full border border-[#C8D8BA] bg-[#FFFDF7] px-2 py-1 text-[11px] font-bold text-[#4E7954]">问咪咪 ♡</span>
+            <span className="block mx-auto mt-1 w-fit rounded-full border border-[var(--theme-border)] bg-[var(--theme-surface)] px-2 py-1 text-[11px] font-bold text-[var(--theme-text)]">问咪咪 ♡</span>
           </div>
 
           <MimiChat key={`${level.id}:${currentPhaseIndex}`} level={level} phase={currentPhaseIndex} slots={slottedWords} matches={matchedSlots} correct={evaluation.isCorrect || isCorrect} onLogin={onOpenCloud}
@@ -310,7 +310,7 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
 
         {/* 1. TOP CATEGORY BADGE */}
         <div className="flex justify-center mb-3">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#E8F2E4] border border-[#CDE1C7] text-[#426637] text-xs font-semibold">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[var(--theme-muted-surface)] border border-[var(--theme-border)] text-[var(--theme-text)] text-xs font-semibold">
             <span>🍃</span>
             <span>{stageForLevel(level).label} · {stageForLevel(level).subtitle}</span>
           </div>
@@ -318,28 +318,28 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
 
         {/* 2. CHINESE TARGET SENTENCE */}
         <div data-eb-edit="target" className="text-center my-3">
-          <h2 className="eb-target-title font-target text-2xl md:text-3xl text-[#242921] font-medium tracking-wide leading-relaxed">
+          <h2 className="eb-target-title font-target text-2xl md:text-3xl text-[var(--theme-text)] font-medium tracking-wide leading-relaxed">
             {displayChinese}
           </h2>
 
           {/* Delicate Botanical Vine Divider (Matching Screenshot) */}
-          <div className="flex items-center justify-center gap-3 my-3 text-[#A4B69E] opacity-75 select-none">
-            <span className="w-12 h-[1px] bg-[#C9D6C4]" />
+          <div className="flex items-center justify-center gap-3 my-3 text-[var(--theme-muted)] opacity-75 select-none">
+            <span className="w-12 h-[1px] bg-[var(--theme-muted-surface)]" />
             <span className="text-xs tracking-widest font-serif">🌿 ❀ 🌿</span>
-            <span className="w-12 h-[1px] bg-[#C9D6C4]" />
+            <span className="w-12 h-[1px] bg-[var(--theme-muted-surface)]" />
           </div>
         </div>
 
         {/* 3. SENTENCE ASSEMBLY RAIL */}
         <div data-eb-edit="rail" className="eb-board-section mt-1 mb-1">
-          <div className="flex items-center justify-between text-xs font-semibold text-[#576352] mb-1 px-1">
+          <div className="flex items-center justify-between text-xs font-semibold text-[var(--theme-text)] mb-1 px-1">
             <div className="flex items-center gap-1.5">
               <span>🍃</span>
               <span>句子组装轨道</span>
-              <span className="text-[#8C9886] font-normal">
+              <span className="text-[var(--theme-muted)] font-normal">
                 ({slottedWords.filter(Boolean).length} / {expectedCount} 词)
               </span>
-              <span className="rounded-full border border-[#BDDAC2] bg-[#E7F4E8] text-[#37664A] px-2.5 py-0.5 text-[11px] font-bold" aria-live="polite">
+              <span className="rounded-full border border-[var(--theme-border)] bg-[var(--theme-muted-surface)] text-[var(--theme-text)] px-2.5 py-0.5 text-[11px] font-bold" aria-live="polite">
                 ✓ 对位 {matchedCount} / {expectedCount}
               </span>
             </div>
@@ -347,7 +347,7 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
             {slottedWords.some(Boolean) && (
               <button
                 onClick={onClearAll}
-                className="text-[11px] text-[#8C9886] hover:text-rose-600 flex items-center gap-1 transition-colors px-2 py-0.5 rounded-lg hover:bg-rose-50 cursor-pointer"
+                className="text-[11px] text-[var(--theme-muted)] hover:text-rose-600 flex items-center gap-1 transition-colors px-2 py-0.5 rounded-lg hover:bg-rose-50 cursor-pointer"
                 title="清空组装轨道"
               >
                 <RotateCcw className="w-3 h-3" />
@@ -357,7 +357,7 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
           </div>
 
           {/* Slots Track Container (Matching Screenshot rounded pills) */}
-          <div className="eb-rail flex flex-wrap items-center gap-1.5 min-h-[42px] p-1.5 bg-white/40 rounded-[28px] border border-[#E5E1D5]"
+          <div className="eb-rail flex flex-wrap items-center gap-1.5 min-h-[42px] p-1.5 bg-white/40 rounded-[28px] border border-[var(--theme-border)]"
             onDragOver={onRailDragOver}
             onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) clearHover(); }}
             onDrop={handleRailDrop}>
@@ -401,28 +401,28 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
                     slot-pill-empty transition-all duration-150
                   `}
                 >
-                  <span className="text-[11px] font-candy text-[#A8B5A3]">
+                  <span className="text-[11px] font-candy text-[var(--theme-muted)]">
                     {index + 1}
                   </span>
                 </div>
               );
             })}
           </div>
-          <p className="eb-rail-instructions hidden text-[11px] text-[#92A08D] mt-2 px-1 select-none">
+          <p className="eb-rail-instructions hidden text-[11px] text-[var(--theme-muted)] mt-2 px-1 select-none">
             拖到词块左侧／右侧可插入，其他词块会自动让位 · 放到空格可自由落位 · 点击词块可退回
           </p>
         </div>
 
         {/* 4. CANDIDATE WORD BANK */}
         <div data-eb-edit="bank" className="eb-board-section mb-3">
-          <div className="flex items-center justify-between text-xs font-semibold text-[#576352] mb-3 px-1">
+          <div className="flex items-center justify-between text-xs font-semibold text-[var(--theme-text)] mb-3 px-1">
             <div className="flex items-center gap-1.5">
               <span>🍃</span>
               <span>待选词块库</span>
             </div>
             <button
               onClick={onShuffle}
-              className="text-[11px] text-[#7A8A74] hover:text-[#3B4D36] font-medium transition-colors cursor-pointer"
+              className="text-[11px] text-[var(--theme-muted)] hover:text-[var(--theme-text)] font-medium transition-colors cursor-pointer"
               title="打乱待选词顺序"
             >
               重新排列
@@ -434,17 +434,17 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
             {(['全部', ...posGroups.map(([name]) => name)]).map(name => (
               <button key={name} type="button" onClick={() => setSelectedPos(name)}
                 aria-pressed={selectedPos === name}
-                className={`rounded-full px-2.5 py-1 text-[11px] border transition-colors ${selectedPos === name ? 'bg-[#789D6C] border-[#789D6C] text-white' : 'bg-white/65 border-[#DEE8D7] text-[#63775D] hover:bg-[#EAF3E5]'}`}>
+                className={`rounded-full px-2.5 py-1 text-[11px] border transition-colors ${selectedPos === name ? 'bg-[var(--theme-primary)] border-[var(--theme-border-strong)] text-white' : 'bg-white/65 border-[var(--theme-border)] text-[var(--theme-text)] hover:bg-[var(--theme-muted-surface)]'}`}>
                 {name}{name !== '全部' ? ` ${posGroups.find(([category]) => category === name)?.[1].length ?? 0}` : ` ${candidateWords.length}`}
               </button>
             ))}
           </div>
-          <div className="eb-word-bank-scroll max-h-[min(30vh,260px)] min-h-[72px] overflow-y-auto overscroll-contain rounded-2xl border border-[#E7EBDD] bg-white/25 p-2">
+          <div className="eb-word-bank-scroll max-h-[min(30vh,260px)] min-h-[72px] overflow-y-auto overscroll-contain rounded-2xl border border-[var(--theme-border)] bg-white/25 p-2">
             {candidateWords.length === 0
-              ? <div className="text-center py-3 text-xs text-[#8A9884]">所有词块均已填入轨道！</div>
+              ? <div className="text-center py-3 text-xs text-[var(--theme-muted)]">所有词块均已填入轨道！</div>
               : renderCandidates(selectedPos === '全部' ? candidateWords : (posGroups.find(([name]) => name === selectedPos)?.[1] ?? candidateWords))}
           </div>
-          <p className="eb-bank-instructions text-[10px] text-[#91A08A] mt-1 px-1">点击词性筛选；「全部」可查看所有待选词块。长句可滚动页面继续查看。</p>
+          <p className="eb-bank-instructions text-[10px] text-[var(--theme-muted)] mt-1 px-1">点击词性筛选；「全部」可查看所有待选词块。长句可滚动页面继续查看。</p>
         </div>
 
         {/* 5. BOTTOM ACTION CONTROLS (提示 + 检查句子) */}
@@ -452,10 +452,10 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
           {/* Hint Button (Matching Screenshot) */}
           <button
             onClick={onShowHint}
-            className="flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-[#FFFDF4] hover:bg-white active:scale-95 border border-[#E4DBC8] text-[#756A54] font-medium text-sm shadow-2xs transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-6 py-2.5 rounded-full bg-[var(--theme-surface)] hover:bg-white active:scale-95 border border-[var(--theme-border)] text-[var(--theme-text)] font-medium text-sm shadow-2xs transition-all cursor-pointer"
             title="查看语法结构提示"
           >
-            <Lightbulb className="w-4 h-4 text-[#D9A74A] fill-[#FDE68A]" />
+            <Lightbulb className="w-4 h-4 text-[var(--theme-muted)] fill-[var(--theme-primary)]" />
             <span>提示</span>
           </button>
 
@@ -467,8 +467,8 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
               flex items-center gap-2 px-7 py-2.5 rounded-full font-medium text-sm shadow-sm transition-all cursor-pointer
               ${
                 slottedWords.filter(Boolean).length >= expectedCount && !isCorrect
-                  ? 'bg-[#789D6C] hover:bg-[#688E5C] active:scale-95 text-white shadow-sm'
-                  : 'bg-[#EAE6DA] text-[#A6A090] cursor-not-allowed border border-[#DFD9CA]'
+                  ? 'bg-[var(--theme-primary)] hover:bg-[var(--theme-primary)] active:scale-95 text-white shadow-sm'
+                  : 'bg-[var(--theme-muted-surface)] text-[var(--theme-muted)] cursor-not-allowed border border-[var(--theme-border)]'
               }
             `}
             title={slottedWords.filter(Boolean).length >= expectedCount ? '点击检查句子' : '请先填满句子轨道'}

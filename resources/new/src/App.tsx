@@ -1,3 +1,4 @@
+import {SeasonAtmosphere} from './components/SeasonAtmosphere';
 import {LearningLobby} from './components/LearningLobby';
 import {persistBoard,restoreBoard} from './utils/boardDraft';
 import {cloudSync} from './utils/cloudSync';
@@ -84,8 +85,6 @@ export default function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isCloudOpen,setIsCloudOpen]=useState(false);
   const [inStudy,setInStudy]=useState(false);
-  const [season,setSeason]=useState(()=>{try{return localStorage.getItem('englishblocks_season')||document.documentElement.dataset.season||'spring';}catch{return 'spring';}});
-  useEffect(()=>{document.documentElement.dataset.season=season;try{localStorage.setItem('englishblocks_season',season);}catch{}},[season]);
   useEffect(()=>{document.documentElement.dataset.learningPage=inStudy?'study':'lobby';return()=>{delete document.documentElement.dataset.learningPage;};},[inStudy]);
   const [friendsOpen,setFriendsOpen]=useState(()=>location.hash==='#friends');
   const [pranksOpen,setPranksOpen]=useState(false);
@@ -594,6 +593,7 @@ export default function App() {
 
   return (
     <>
+    <SeasonAtmosphere/>
     <div style={friendsOpen||!inStudy?{display:'none'}:undefined} className="eb-game-shell min-h-screen cozy-window-bg relative flex flex-col justify-between overflow-x-hidden p-4 md:p-6 lg:p-7 selection:bg-amber-100 selection:text-amber-950" onClickCapture={(event) => playUiClickForTarget(event.target)}>
       {showSplash && <div id="eb-splash" role="status" aria-label="英语拼块正在启动"><div className="eb-splash-card"><img src="./assets/brand-mimi-a.png" alt="咪咪"/><h1>英语拼块</h1><p>WORD BLOCK GARDEN</p><div className="eb-splash-bar"><span /></div><small>正在准备你的学习花园…</small></div></div>}
       {developerMode && layoutEditorOpen && <LayoutEditor value={layoutDraft} onChange={setLayoutDraft} onClose={() => setLayoutEditorOpen(false)} />}
@@ -607,9 +607,9 @@ export default function App() {
         <div className="eb-game-main flex-1 flex flex-col justify-start">
           {/* TOP PROGRESS CAPSULES (Matching Screenshot) */}
           <header className="eb-study-heading"><button type="button" onClick={()=>{persistBoard(boardContext.current.owner,currentLevel.id,currentPhaseIndex,board);pauseClock();setInStudy(false);window.scrollTo({top:0});}}>← 返回大厅</button><div><strong>第 {currentLevel.levelNumber} 关</strong><span>已完成 {profile.completedLevelIds.length} / {SENTENCE_BANK.length} 关</span></div></header>
-          {completedView && <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#C6DCC7] bg-[#F0F8ED] px-4 py-3 text-sm text-[#426C50]"><span>已通关 · 这是你上次拼好的完整句子</span><button type="button" onClick={beginUnscoredReplay} className="rounded-full bg-white border border-[#AACBAF] px-4 py-2 font-bold hover:bg-[#E1F0E1]">重新拼一次（不计时、不积分）</button><button type="button" onClick={() => {setReplayCelebration(true);setLastFishReward(0);setLastSpeedReward(0);setLastCompletionMs(0);setLastPersonalBest(false);sound.playVictory();setIsSuccessModalOpen(true);}} className="rounded-full bg-white border border-[#AACBAF] px-4 py-2 font-bold hover:bg-[#E1F0E1]">重看通关庆祝</button></div>}
-          {reviewMode && <div className="mt-3 rounded-2xl border border-[#D6DCCB] bg-[#F8F8EE] px-4 py-2 text-sm text-[#63765B]">自由复习中 · 不计时、不积分、不覆盖原成绩</div>}
-          <div data-eb-edit="status" className="mt-3 flex flex-wrap justify-end gap-3 text-xs text-[#64785A]">
+          {completedView && <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-muted-surface)] px-4 py-3 text-sm text-[var(--theme-text)]"><span>已通关 · 这是你上次拼好的完整句子</span><button type="button" onClick={beginUnscoredReplay} className="rounded-full bg-white border border-[var(--theme-border)] px-4 py-2 font-bold hover:bg-[var(--theme-muted-surface)]">重新拼一次（不计时、不积分）</button><button type="button" onClick={() => {setReplayCelebration(true);setLastFishReward(0);setLastSpeedReward(0);setLastCompletionMs(0);setLastPersonalBest(false);sound.playVictory();setIsSuccessModalOpen(true);}} className="rounded-full bg-white border border-[var(--theme-border)] px-4 py-2 font-bold hover:bg-[var(--theme-muted-surface)]">重看通关庆祝</button></div>}
+          {reviewMode && <div className="mt-3 rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-muted-surface)] px-4 py-2 text-sm text-[var(--theme-text)]">自由复习中 · 不计时、不积分、不覆盖原成绩</div>}
+          <div data-eb-edit="status" className="mt-3 flex flex-wrap justify-end gap-3 text-xs text-[var(--theme-text)]">
             {social.learningError&&<span role="status">{social.learningError}<button className="underline" onClick={social.retryRecord}>重试确认</button></span>}
             <span>提示 {hintCount}/3 · 本关预计 +{completedView || reviewMode || answerRevealed ? 0 : rewardForHints(hintCount)} 🐟</span>
           </div>
@@ -744,7 +744,7 @@ export default function App() {
         }}
       />
     </div>
-    {!inStudy&&!friendsOpen&&<LearningLobby name={profile.name} collection={collection} level={currentLevel.levelNumber} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} season={season} onSeason={setSeason} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
+    {!inStudy&&!friendsOpen&&<LearningLobby name={profile.name} collection={collection} level={currentLevel.levelNumber} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
       {label:'关卡选择',icon:'▦',onClick:()=>setIsLevelSelectorOpen(true)},
       {label:'学习进度',icon:'🌿',onClick:()=>setIsProfileModalOpen(true)},
       {label:'好友小窝',icon:'🏡',onClick:openFriends,detail:social.pending?`${social.pending} 封小窝来信`:undefined},

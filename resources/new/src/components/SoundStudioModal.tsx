@@ -80,19 +80,19 @@ export const SoundStudioModal: React.FC<SoundStudioModalProps> = ({
         className="hidden"
       />
 
-      <div role="dialog" aria-modal="true" aria-label="音效工作室" className="eb-modal-panel eb-modal-sound relative w-full max-w-2xl bg-[#FCFAF5] rounded-[36px] p-6 md:p-8 shadow-2xl border-4 border-[#EAE3D2] z-10 flex flex-col max-h-[88vh] animate-scale-up">
+      <div role="dialog" aria-modal="true" aria-label="音效工作室" className="eb-modal-panel eb-modal-sound relative w-full max-w-2xl bg-[var(--theme-surface)] rounded-[36px] p-6 md:p-8 shadow-2xl border-4 border-[var(--theme-border)] z-10 flex flex-col max-h-[88vh] animate-scale-up">
         {/* Top Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-[#E8E2D5]">
+        <div className="flex items-center justify-between pb-4 border-b border-[var(--theme-border)]">
           <div className="flex items-center gap-2.5">
             <span className="text-2xl">🎵</span>
             <div>
-              <h3 className="font-candy text-xl font-bold text-[#2A3127] flex items-center gap-2">
+              <h3 className="font-candy text-xl font-bold text-[var(--theme-text)] flex items-center gap-2">
                 <span>音效工作室</span>
-                <span className="text-xs font-normal text-[#587F4D] bg-[#E8F2E4] px-2.5 py-0.5 rounded-full border border-[#CCE0C5]">
+                <span className="text-xs font-normal text-[var(--theme-text)] bg-[var(--theme-muted-surface)] px-2.5 py-0.5 rounded-full border border-[var(--theme-border)]">
                   小猫叫声系统 · 支持导入自定义音频
                 </span>
               </h3>
-              <p className="text-xs text-[#7A8675] mt-0.5">
+              <p className="text-xs text-[var(--theme-muted)] mt-0.5">
                 每个操作音效都能试听、更换。上传后自动保存，刷新页面不会丢失。
               </p>
             </div>
@@ -109,17 +109,17 @@ export const SoundStudioModal: React.FC<SoundStudioModalProps> = ({
 
         <div className="eb-modal-body">
         {/* Master Sound Switch */}
-        <div className="my-3.5 p-3.5 bg-white/90 rounded-2xl border border-[#E5E0D2] flex items-center justify-between">
+        <div className="my-3.5 p-3.5 bg-white/90 rounded-2xl border border-[var(--theme-border)] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Volume2 className="w-4 h-4 text-[#4B7943]" />
-            <span className="text-xs md:text-sm font-bold text-[#343D30]">游戏按键与猫咪叫声音效总开关</span>
+            <Volume2 className="w-4 h-4 text-[var(--theme-text)]" />
+            <span className="text-xs md:text-sm font-bold text-[var(--theme-text)]">游戏按键与猫咪叫声音效总开关</span>
           </div>
 
           <button
             onClick={handleToggleSoundMaster}
             className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
               soundEnabled
-                ? 'bg-[#789D6C] text-white shadow-2xs'
+                ? 'bg-[var(--theme-primary)] text-white shadow-2xs'
                 : 'bg-slate-200 text-slate-600'
             }`}
           >
@@ -130,9 +130,9 @@ export const SoundStudioModal: React.FC<SoundStudioModalProps> = ({
         {/* Independent persistent sound level controls */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
           {([['sfx','操作音效',sfxVolume,setSfxVolume],['cat','猫咪叫声',catVolume,setCatVolume]] as const).map(([kind,label,value,setter])=>(
-            <label key={kind} className="rounded-2xl border border-[#E5E0D2] bg-white/90 p-3 flex flex-col gap-2 text-xs font-bold text-[#343D30]">
+            <label key={kind} className="rounded-2xl border border-[var(--theme-border)] bg-white/90 p-3 flex flex-col gap-2 text-xs font-bold text-[var(--theme-text)]">
               <span className="flex justify-between"><span>{label}音量</span><span>{Math.round(value*100)}%</span></span>
-              <input aria-label={`${label}音量`} type="range" min="0" max="100" value={Math.round(value*100)} onChange={e=>{const v=Number(e.target.value)/100;setter(v);sound.setEffectsVolume(kind,v);}} className="w-full accent-[#789D6C]" />
+              <input aria-label={`${label}音量`} type="range" min="0" max="100" value={Math.round(value*100)} onChange={e=>{const v=Number(e.target.value)/100;setter(v);sound.setEffectsVolume(kind,v);}} className="w-full accent-[var(--theme-primary)]" />
             </label>
           ))}
         </div>
@@ -149,15 +149,15 @@ export const SoundStudioModal: React.FC<SoundStudioModalProps> = ({
                   p-3.5 rounded-2xl border transition-all flex flex-wrap items-center justify-between gap-3
                   ${
                     isCustom
-                      ? 'bg-[#FFF9EC] border-[#F6DEAC] shadow-2xs'
-                      : 'bg-white/80 hover:bg-white border-[#E8E4D8]'
+                      ? 'bg-[var(--theme-muted-surface)] border-[var(--theme-border)] shadow-2xs'
+                      : 'bg-white/80 hover:bg-white border-[var(--theme-border)]'
                   }
                 `}
               >
                 {/* Slot Details */}
                 <div className="flex-1 min-w-[200px]">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <span className="font-candy font-bold text-sm text-[#2D3329]">
+                    <span className="font-candy font-bold text-sm text-[var(--theme-text)]">
                       {slot.name}
                     </span>
                     {isCustom ? (
@@ -166,12 +166,12 @@ export const SoundStudioModal: React.FC<SoundStudioModalProps> = ({
                         <span>已自定义: {customName}</span>
                       </span>
                     ) : (
-                      <span className="text-[10px] text-[#55694D] bg-[#EAF3E7] border border-[#CCE0C5] px-2 py-0.5 rounded-full font-medium">
+                      <span className="text-[10px] text-[var(--theme-text)] bg-[var(--theme-muted-surface)] border border-[var(--theme-border)] px-2 py-0.5 rounded-full font-medium">
                         {slot.defaultLabel}
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-[#7A8675]">{slot.desc}</p>
+                  <p className="text-xs text-[var(--theme-muted)]">{slot.desc}</p>
                 </div>
 
                 {/* Actions: Test / Upload / Reset */}
@@ -179,18 +179,18 @@ export const SoundStudioModal: React.FC<SoundStudioModalProps> = ({
                   {/* Test Button */}
                   <button
                     data-sound-preview onClick={() => handleTestSlot(slot.id)}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-[#D7D2C4] text-xs font-bold text-[#444E40] shadow-2xs active:scale-95 transition-all cursor-pointer"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-[var(--theme-border)] text-xs font-bold text-[var(--theme-text)] shadow-2xs active:scale-95 transition-all cursor-pointer"
                     title="试听此音效"
                   >
-                    <Play className="w-3 h-3 fill-[#444E40] ml-0.5" />
+                    <Play className="w-3 h-3 fill-[var(--theme-primary)] ml-0.5" />
                     <span>试听</span>
                   </button>
 
-                  <button onClick={()=>{sound.setSlotMuted(slot.id,!sound.isSlotMuted(slot.id));setCustomVersion(v=>v+1)}} className={`px-3 py-1.5 rounded-xl border text-xs font-bold ${sound.isSlotMuted(slot.id)?'bg-rose-50 text-rose-700 border-rose-200':'bg-white text-[#68745F] border-[#D7D2C4]'}`}>{sound.isSlotMuted(slot.id)?'已静音 · 开启':'静音'}</button>
+                  <button onClick={()=>{sound.setSlotMuted(slot.id,!sound.isSlotMuted(slot.id));setCustomVersion(v=>v+1)}} className={`px-3 py-1.5 rounded-xl border text-xs font-bold ${sound.isSlotMuted(slot.id)?'bg-rose-50 text-rose-700 border-rose-200':'bg-white text-[var(--theme-text)] border-[var(--theme-border)]'}`}>{sound.isSlotMuted(slot.id)?'已静音 · 开启':'静音'}</button>
                   {/* Import Custom Audio Button */}
                   <button
                     onClick={() => handleTriggerUpload(slot.id)}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#789D6C] hover:bg-[#688E5C] text-white text-xs font-bold shadow-2xs active:scale-95 transition-all cursor-pointer"
+                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[var(--theme-primary)] hover:bg-[var(--theme-primary)] text-white text-xs font-bold shadow-2xs active:scale-95 transition-all cursor-pointer"
                     title="导入我的音频文件 (MP3/WAV/OGG...)"
                   >
                     <Upload className="w-3 h-3 stroke-[2.2]" />
@@ -215,7 +215,7 @@ export const SoundStudioModal: React.FC<SoundStudioModalProps> = ({
 
         </div>
         {/* Bottom Tip */}
-        <div className="mt-4 pt-3 border-t border-[#E8E2D5] flex items-center justify-between text-xs text-[#7A8675]">
+        <div className="mt-4 pt-3 border-t border-[var(--theme-border)] flex items-center justify-between text-xs text-[var(--theme-muted)]">
           <div className="flex items-center gap-1.5">
             <span>💡</span>
             <span>导入音效会自动保存在本浏览器。设置 → 导出备份，也能把音效一并带走。</span>
@@ -223,7 +223,7 @@ export const SoundStudioModal: React.FC<SoundStudioModalProps> = ({
 
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-2xl bg-[#789D6C] hover:bg-[#688E5C] active:scale-95 text-white font-bold text-xs shadow-sm transition-all cursor-pointer"
+            className="px-5 py-2 rounded-2xl bg-[var(--theme-primary)] hover:bg-[var(--theme-primary)] active:scale-95 text-white font-bold text-xs shadow-sm transition-all cursor-pointer"
           >
             完成设定
           </button>

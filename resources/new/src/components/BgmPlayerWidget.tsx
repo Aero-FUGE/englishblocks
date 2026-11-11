@@ -227,27 +227,27 @@ export const BgmPlayerWidget: React.FC<BgmPlayerWidgetProps> = ({ className = ''
           </div>
 
           {/* Playback mode and previous/next song, persisted with BGM settings. */}
-          <div className="rounded-2xl border border-[#E6D9BD] bg-[#FFFBF1] p-3 mb-3 space-y-2.5">
+          <div className="rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-surface)] p-3 mb-3 space-y-2.5">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-1.5">
                 <button type="button" aria-pressed={bgmMode==='single'} onClick={()=>sound.setBgmMode('single')} title="单曲循环"
-                  className={`rounded-full w-9 h-9 grid place-items-center border transition ${bgmMode==='single'?'bg-amber-400 border-amber-400 text-[#6C4A17] shadow-sm':'bg-white border-[#EADDC4] text-[#9A8B6F] hover:bg-amber-50'}`}>
+                  className={`rounded-full w-9 h-9 grid place-items-center border transition ${bgmMode==='single'?'bg-amber-400 border-amber-400 text-[var(--theme-text)] shadow-sm':'bg-white border-[var(--theme-border)] text-[var(--theme-muted)] hover:bg-amber-50'}`}>
                   <Repeat className="h-4 w-4"/>
                 </button>
                 <button type="button" aria-pressed={bgmMode==='list'} onClick={()=>sound.setBgmMode('list')} title="列表循环"
-                  className={`rounded-full w-9 h-9 grid place-items-center border transition ${bgmMode==='list'?'bg-amber-400 border-amber-400 text-[#6C4A17] shadow-sm':'bg-white border-[#EADDC4] text-[#9A8B6F] hover:bg-amber-50'}`}>
+                  className={`rounded-full w-9 h-9 grid place-items-center border transition ${bgmMode==='list'?'bg-amber-400 border-amber-400 text-[var(--theme-text)] shadow-sm':'bg-white border-[var(--theme-border)] text-[var(--theme-muted)] hover:bg-amber-50'}`}>
                   <ListMusic className="h-4 w-4"/>
                 </button>
               </div>
               <div className="flex items-center justify-center gap-3">
-                <button type="button" onClick={()=>sound.advanceBgm(-1)} title="上一首" aria-label="上一首" className="rounded-full w-9 h-9 grid place-items-center bg-white border border-amber-200 hover:bg-amber-50"><SkipBack className="w-4 h-4 text-[#98703D]"/></button>
-                <button type="button" onClick={()=>sound.toggleBgm()} title={isPlaying?'暂停':'播放'} aria-label={isPlaying?'暂停':'播放'} className="rounded-full w-12 h-12 grid place-items-center bg-amber-400 text-[#63431B] hover:bg-amber-500 shadow-sm">
-                  {isPlaying ? <Pause className="w-4 h-4 fill-[#63431B]" /> : <Play className="w-4 h-4 fill-[#63431B] ml-0.5" />}
+                <button type="button" onClick={()=>sound.advanceBgm(-1)} title="上一首" aria-label="上一首" className="rounded-full w-9 h-9 grid place-items-center bg-white border border-amber-200 hover:bg-amber-50"><SkipBack className="w-4 h-4 text-[var(--theme-text)]"/></button>
+                <button type="button" onClick={()=>sound.toggleBgm()} title={isPlaying?'暂停':'播放'} aria-label={isPlaying?'暂停':'播放'} className="rounded-full w-12 h-12 grid place-items-center bg-amber-400 text-[var(--theme-text)] hover:bg-amber-500 shadow-sm">
+                  {isPlaying ? <Pause className="w-4 h-4 fill-[var(--theme-primary)]" /> : <Play className="w-4 h-4 fill-[var(--theme-primary)] ml-0.5" />}
                 </button>
-                <button type="button" onClick={()=>sound.advanceBgm(1)} title="下一首" aria-label="下一首" className="rounded-full w-9 h-9 grid place-items-center bg-white border border-amber-200 hover:bg-amber-50"><SkipForward className="w-4 h-4 text-[#98703D]"/></button>
+                <button type="button" onClick={()=>sound.advanceBgm(1)} title="下一首" aria-label="下一首" className="rounded-full w-9 h-9 grid place-items-center bg-white border border-amber-200 hover:bg-amber-50"><SkipForward className="w-4 h-4 text-[var(--theme-text)]"/></button>
               </div>
             </div>
-            <p className="text-[11px] text-[#9B8D71] leading-snug">{bgmMode==='list'?'会按歌单顺序接着播放。':'当前歌曲会重复播放。'}</p>
+            <p className="text-[11px] text-[var(--theme-muted)] leading-snug">{bgmMode==='list'?'会按歌单顺序接着播放。':'当前歌曲会重复播放。'}</p>
           </div>
 
           {/* Playlist Section */}

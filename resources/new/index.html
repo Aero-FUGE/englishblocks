@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="zh-CN">
   <head>
+    <script>try{const s=localStorage.getItem('englishblocks_season');document.documentElement.dataset.season=['spring','summer','autumn','winter'].includes(s)?s:'spring';}catch{document.documentElement.dataset.season='spring';}</script>
     <link rel="icon" type="image/x-icon" href="./favicon.ico" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <meta charset="UTF-8" />
@@ -15,8 +16,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600;1,700&family=Noto+Serif+SC:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-#eb-splash{position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 70% 25%,#e7f3d9,#fbf8e9 62%,#fff7ef);display:grid;place-items:center;font-family:system-ui,sans-serif;color:#45644c}
-.eb-splash-card{text-align:center}.eb-splash-card img{width:118px;height:118px;object-fit:contain;margin:auto}.eb-splash-card h1{font-size:28px;font-weight:750;letter-spacing:.13em;margin:12px 0 3px}.eb-splash-card p{font-size:11px;letter-spacing:.2em;color:#91a38b}.eb-splash-bar{height:5px;width:180px;background:#e0ead9;border-radius:20px;margin:25px auto 12px;overflow:hidden}.eb-splash-bar span{display:block;width:42%;height:100%;background:#91b990;border-radius:20px;animation:eb-load 1.2s ease-in-out infinite alternate}.eb-splash-card small{color:#8fa18a}@keyframes eb-load{to{transform:translateX(140%)}}
+#eb-splash{position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 70% 25%,var(--theme-decoration,#edf3e5),var(--theme-bg,#f2f6e9) 62%,var(--theme-surface,#fffcf7));display:grid;place-items:center;font-family:system-ui,sans-serif;color:var(--theme-text,#354b3b)}
+.eb-splash-card{text-align:center}.eb-splash-card img{width:118px;height:118px;object-fit:contain;margin:auto}.eb-splash-card h1{font-size:28px;font-weight:750;letter-spacing:.13em;margin:12px 0 3px}.eb-splash-card p{font-size:11px;letter-spacing:.2em;color:var(--theme-muted,#65785f)}.eb-splash-bar{height:5px;width:180px;background:var(--theme-border,#cfddc1);border-radius:20px;margin:25px auto 12px;overflow:hidden}.eb-splash-bar span{display:block;width:42%;height:100%;background:var(--theme-primary,#648356);border-radius:20px;animation:eb-load 1.2s ease-in-out infinite alternate}.eb-splash-card small{color:var(--theme-muted,#65785f)}@keyframes eb-load{to{transform:translateX(140%)}}
 </style></head>
   <body class="bg-[#F3F7EF] text-slate-800 antialiased select-none font-sans overflow-x-hidden min-h-screen">
     <div id="root"></div>

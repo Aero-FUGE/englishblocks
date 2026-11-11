@@ -48,7 +48,7 @@ export const MascotBubble: React.FC<MascotBubbleProps> = ({
               isCorrect
                 ? 'bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-300'
                 : emotion === 'speechless' || emotion === 'shocked'
-                ? 'bg-[#FFF7F7] border-2 border-rose-200'
+                ? 'bg-[var(--theme-surface)] border-2 border-rose-200'
                 : 'bg-white border-2 border-sky-200/80'
             }
           `}
@@ -61,7 +61,7 @@ export const MascotBubble: React.FC<MascotBubbleProps> = ({
                 isCorrect
                   ? 'bg-teal-50 border-emerald-300'
                   : emotion === 'speechless' || emotion === 'shocked'
-                  ? 'bg-[#FFF7F7] border-rose-200'
+                  ? 'bg-[var(--theme-surface)] border-rose-200'
                   : 'bg-white border-sky-200/80'
               }
             `}

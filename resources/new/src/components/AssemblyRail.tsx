@@ -119,7 +119,7 @@ export const AssemblyRail: React.FC<AssemblyRailProps> = ({
         </div>
 
         {/* Word Slots & Slotted Word Blocks (wraps automatically for long sentences) */}
-        <div className="flex flex-wrap items-center gap-2.5 min-h-[64px] p-2 bg-[#FAF7F0] rounded-2xl border border-amber-100/70">
+        <div className="flex flex-wrap items-center gap-2.5 min-h-[64px] p-2 bg-[var(--theme-muted-surface)] rounded-2xl border border-amber-100/70">
           {Array.from({ length: slotCount }).map((_, index) => {
             const word = slottedWords[index];
             const isTargetDrop = dragOverIndex === index;

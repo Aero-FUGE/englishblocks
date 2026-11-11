@@ -89,7 +89,7 @@ export const WordCardModal: React.FC<WordCardModalProps> = ({
         </div>
 
         {/* Meaning sections */}
-        <div className="mt-4 space-y-3 bg-[#FFFDF7] rounded-2xl p-4 border border-amber-100/80">
+        <div className="mt-4 space-y-3 bg-[var(--theme-surface)] rounded-2xl p-4 border border-amber-100/80">
           <div>
             <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-800 mb-1">
               <BookOpen className="w-3.5 h-3.5 text-amber-600" />

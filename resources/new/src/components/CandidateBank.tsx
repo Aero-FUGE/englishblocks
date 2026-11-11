@@ -39,7 +39,7 @@ export const CandidateBank: React.FC<CandidateBankProps> = ({
   return (
     <div className="w-full">
       {/* Candidate Words Pool Container */}
-      <div className="bg-[#FAF7F0] border-2 border-amber-200/80 rounded-3xl p-5 md:p-6 shadow-sm mb-3.5 min-h-[130px] flex flex-col justify-between">
+      <div className="bg-[var(--theme-muted-surface)] border-2 border-amber-200/80 rounded-3xl p-5 md:p-6 shadow-sm mb-3.5 min-h-[130px] flex flex-col justify-between">
         <div className="flex items-center justify-between text-xs md:text-sm font-bold text-slate-500 mb-2 px-1">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-amber-400" />

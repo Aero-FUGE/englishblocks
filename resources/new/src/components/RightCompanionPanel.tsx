@@ -51,10 +51,10 @@ export const RightCompanionPanel: React.FC<RightCompanionPanelProps> = ({
           relative rounded-3xl p-5 border-3 transition-all duration-300 shadow-sm
           ${
             isCorrect
-              ? 'bg-gradient-to-b from-[#F0FDF4] to-[#DCFCE7]/70 border-emerald-300'
+              ? 'bg-gradient-to-b from-[var(--theme-muted-surface)] to-[var(--theme-muted-surface)]/70 border-emerald-300'
               : emotion === 'speechless' || emotion === 'shocked'
-              ? 'bg-gradient-to-b from-[#FFF7F7] to-[#FEE2E2]/60 border-rose-200'
-              : 'bg-gradient-to-b from-[#F0F9FF] to-[#E0F2FE]/60 border-sky-200'
+              ? 'bg-gradient-to-b from-[var(--theme-surface)] to-[var(--theme-muted-surface)]/60 border-rose-200'
+              : 'bg-gradient-to-b from-[var(--theme-surface)] to-[var(--theme-muted-surface)]/60 border-sky-200'
           }
         `}
       >
@@ -142,7 +142,7 @@ export const RightCompanionPanel: React.FC<RightCompanionPanelProps> = ({
       </div>
 
       {/* Current Level Vocabulary Mini-Reference */}
-      <div className="bg-[#FAF7F0] rounded-3xl p-4 border-2 border-amber-200/80 shadow-2xs">
+      <div className="bg-[var(--theme-muted-surface)] rounded-3xl p-4 border-2 border-amber-200/80 shadow-2xs">
         <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-2 px-1">
           <div className="flex items-center gap-1.5">
             <BookOpen className="w-3.5 h-3.5 text-amber-600" />

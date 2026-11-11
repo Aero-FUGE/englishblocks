@@ -76,28 +76,28 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   };
 
   return (
-    <ModalOverlay className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-[#263A2A]/45 backdrop-blur-[3px] animate-fade-in">
-      <div role="dialog" aria-modal="true" aria-label="学习档案" className="eb-modal-panel eb-modal-profile relative w-full max-w-2xl bg-[#FFFCF5] rounded-[34px] p-5 sm:p-7 shadow-[0_27px_75px_rgba(44,67,44,.24)] border-[5px] border-[#FFF7E6] z-10 flex flex-col max-h-[90vh] animate-scale-up">
+    <ModalOverlay className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-[var(--theme-text)]/45 backdrop-blur-[3px] animate-fade-in">
+      <div role="dialog" aria-modal="true" aria-label="学习档案" className="eb-modal-panel eb-modal-profile relative w-full max-w-2xl bg-[var(--theme-surface)] rounded-[34px] p-5 sm:p-7 shadow-[0_27px_75px_rgb(var(--theme-shadow-rgb)/.24)] border-[5px] border-[var(--theme-border)] z-10 flex flex-col max-h-[90vh] animate-scale-up">
         {/* Learning profile: same mint/cream visual language as the stage map. */}
-        <div className="flex items-center justify-between gap-3 pb-3 border-b border-[#E7EADD]">
-          <div className="flex items-center gap-3"><span className="h-10 w-10 rounded-2xl bg-[#EBF3E5] text-[#759B77] grid place-items-center text-xl">✦</span><div><h3 className="text-xl font-bold text-[#385540]">学习档案</h3><p className="text-[11px] text-[#8D9988]">英语拼块 · 记录你的每一步成长</p></div></div>
-          <button onClick={onClose} aria-label="关闭" className="w-9 h-9 rounded-full bg-white hover:bg-[#EFF4E9] text-[#7B8D7A] grid place-items-center border border-[#E4E9DE]"><X className="w-4 h-4"/></button>
+        <div className="flex items-center justify-between gap-3 pb-3 border-b border-[var(--theme-border)]">
+          <div className="flex items-center gap-3"><span className="h-10 w-10 rounded-2xl bg-[var(--theme-muted-surface)] text-[var(--theme-muted)] grid place-items-center text-xl">✦</span><div><h3 className="text-xl font-bold text-[var(--theme-text)]">学习档案</h3><p className="text-[11px] text-[var(--theme-muted)]">英语拼块 · 记录你的每一步成长</p></div></div>
+          <button onClick={onClose} aria-label="关闭" className="w-9 h-9 rounded-full bg-white hover:bg-[var(--theme-muted-surface)] text-[var(--theme-muted)] grid place-items-center border border-[var(--theme-border)]"><X className="w-4 h-4"/></button>
         </div>
-        <div className="eb-modal-body"><div className="relative my-4 rounded-[26px] border border-[#DAE9D5] bg-gradient-to-r from-[#E9F4E4] via-[#F8FAEF] to-[#FFF4E1] p-4 sm:p-5 overflow-hidden">
+        <div className="eb-modal-body"><div className="relative my-4 rounded-[26px] border border-[var(--theme-border)] bg-gradient-to-r from-[var(--theme-muted-surface)] via-[var(--theme-muted-surface)] to-[var(--theme-muted-surface)] p-4 sm:p-5 overflow-hidden">
           <div className="absolute top-[-42px] right-[-32px] w-40 h-40 rounded-full bg-white/35 pointer-events-none"/>
           <div className="relative flex flex-wrap items-center gap-3 sm:gap-4">
             <div className="relative shrink-0 w-[72px] h-[72px] sm:w-[84px] sm:h-[84px] rounded-[26px] bg-white/85 border-[3px] border-white shadow-sm flex items-center justify-center">
               <img src="./assets/mimi-golden.png" alt="咪咪学习头像" className="h-full w-full object-contain p-1"/>
             </div>
             <div className="flex-1 min-w-[160px]">
-              <p className="text-[10px] tracking-widest text-[#809784] font-bold">MY LITTLE LEARNING GARDEN</p>
-              {isEditingName ? <div className="flex items-center gap-2 mt-1"><input type="text" autoFocus maxLength={12} value={editNameValue} onChange={e=>setEditNameValue(e.target.value)} onKeyDown={e=>{if(e.key==='Enter')handleSaveName();}} className="w-full max-w-[190px] bg-white rounded-xl border-2 border-[#A6C5A0] px-3 py-2 outline-none text-sm font-bold text-[#3D5942]"/><button onClick={handleSaveName} className="px-3 py-2 bg-[#6E9F77] text-white font-bold rounded-xl text-xs">保存</button></div>
-              : <div className="flex items-center gap-2 mt-1"><h4 className="font-bold text-xl text-[#365842] truncate">{profile.name}</h4><button onClick={handleStartEditName} className="text-[11px] rounded-full border border-[#C8D9C6] px-2 py-1 bg-white/90 text-[#668B6B] font-bold hover:bg-white">✎ 修改</button></div>}
-              <div className="mt-2 flex flex-wrap gap-1.5"><span className="px-2.5 py-1 rounded-full bg-white/85 text-[11px] font-bold text-[#548263]">{stageForLevel(currentLevel).label}</span><span className="px-2.5 py-1 rounded-full bg-[#538B65] text-[11px] font-bold text-white">LEVEL {currentLevel.levelNumber}</span></div>
+              <p className="text-[10px] tracking-widest text-[var(--theme-muted)] font-bold">MY LITTLE LEARNING GARDEN</p>
+              {isEditingName ? <div className="flex items-center gap-2 mt-1"><input type="text" autoFocus maxLength={12} value={editNameValue} onChange={e=>setEditNameValue(e.target.value)} onKeyDown={e=>{if(e.key==='Enter')handleSaveName();}} className="w-full max-w-[190px] bg-white rounded-xl border-2 border-[var(--theme-border)] px-3 py-2 outline-none text-sm font-bold text-[var(--theme-text)]"/><button onClick={handleSaveName} className="px-3 py-2 bg-[var(--theme-primary)] text-white font-bold rounded-xl text-xs">保存</button></div>
+              : <div className="flex items-center gap-2 mt-1"><h4 className="font-bold text-xl text-[var(--theme-text)] truncate">{profile.name}</h4><button onClick={handleStartEditName} className="text-[11px] rounded-full border border-[var(--theme-border)] px-2 py-1 bg-white/90 text-[var(--theme-muted)] font-bold hover:bg-white">✎ 修改</button></div>}
+              <div className="mt-2 flex flex-wrap gap-1.5"><span className="px-2.5 py-1 rounded-full bg-white/85 text-[11px] font-bold text-[var(--theme-text)]">{stageForLevel(currentLevel).label}</span><span className="px-2.5 py-1 rounded-full bg-[var(--theme-primary)] text-[11px] font-bold text-white">LEVEL {currentLevel.levelNumber}</span></div>
             </div>
-            <div className="rounded-2xl border border-[#E4E8D8] bg-white/90 px-3 py-2 text-right shadow-sm"><div className="text-[10px] text-[#879887]">小鱼干余额</div><div className="font-bold text-xl text-[#A57C3D]">🐟 {fishCount}</div></div>
+            <div className="rounded-2xl border border-[var(--theme-border)] bg-white/90 px-3 py-2 text-right shadow-sm"><div className="text-[10px] text-[var(--theme-muted)]">小鱼干余额</div><div className="font-bold text-xl text-[var(--theme-muted)]">🐟 {fishCount}</div></div>
           </div>
-          <div className="relative mt-4 border-t border-[#DDE8D9] pt-3"><p className="text-[11px] text-[#708B72] font-bold mb-2">成长路线</p><div className="flex gap-1.5">{LEARNING_STAGES.map(stage=><div key={stage.tier} className={`flex-1 text-center px-1 py-2 rounded-xl text-[10px] sm:text-xs font-semibold ${currentLevel.tier===stage.tier?'bg-[#669B75] text-white shadow-sm':'bg-white/70 text-[#94A796]'}`}><div className="flex justify-center mb-1"><StageEmblem tier={stage.tier} size={36}/></div>{stage.label}</div>)}</div></div>
+          <div className="relative mt-4 border-t border-[var(--theme-border)] pt-3"><p className="text-[11px] text-[var(--theme-muted)] font-bold mb-2">成长路线</p><div className="flex gap-1.5">{LEARNING_STAGES.map(stage=><div key={stage.tier} className={`flex-1 text-center px-1 py-2 rounded-xl text-[10px] sm:text-xs font-semibold ${currentLevel.tier===stage.tier?'bg-[var(--theme-primary)] text-white shadow-sm':'bg-white/70 text-[var(--theme-muted)]'}`}><div className="flex justify-center mb-1"><StageEmblem tier={stage.tier} size={36}/></div>{stage.label}</div>)}</div></div>
         </div>
         {/* Mini Tabs */}
         <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl mb-3">
@@ -137,17 +137,17 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
         <div className="pr-1">
           {activeTab === 'profile' && (
             <div className="space-y-3">
-              <div className="rounded-[22px] border border-[#E6E4CE] bg-gradient-to-r from-[#FFF8E9] to-[#F0F7E9] p-4">
-                <div className="mb-3 flex items-center gap-2 text-[#6F7251] font-bold text-sm"><Trophy className="w-4 h-4 text-[#BD9657]"/> 计时挑战 · 个人纪录</div>
+              <div className="rounded-[22px] border border-[var(--theme-border)] bg-gradient-to-r from-[var(--theme-muted-surface)] to-[var(--theme-muted-surface)] p-4">
+                <div className="mb-3 flex items-center gap-2 text-[var(--theme-text)] font-bold text-sm"><Trophy className="w-4 h-4 text-[var(--theme-muted)]"/> 计时挑战 · 个人纪录</div>
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="bg-white/85 rounded-xl p-2 text-center border border-white"><div className="flex justify-center mb-1 text-[#659672]"><Clock3 className="w-4 h-4"/></div><div className="text-base sm:text-lg font-bold text-[#496D57]">{currentBest === undefined ? '—' : formatTime(currentBest)}</div><div className="text-[10px] text-[#889583]">当前关最佳</div></div>
-                  <div className="bg-white/85 rounded-xl p-2 text-center border border-white"><div className="flex justify-center mb-1 text-[#BD9A59]"><Trophy className="w-4 h-4"/></div><div className="text-base sm:text-lg font-bold text-[#796B4C]">{fastestRecord ? formatTime(fastestRecord[1].bestMs!) : '—'}</div><div className="text-[10px] text-[#889583]">全程最快单题</div></div>
-                  <div className="bg-white/85 rounded-xl p-2 text-center border border-white"><div className="flex justify-center mb-1 text-[#7999AA]"><TimerReset className="w-4 h-4"/></div><div className="text-base sm:text-lg font-bold text-[#5D798B]">{solvedTimedCount}</div><div className="text-[10px] text-[#889583]">有成绩的关卡</div></div>
+                  <div className="bg-white/85 rounded-xl p-2 text-center border border-white"><div className="flex justify-center mb-1 text-[var(--theme-muted)]"><Clock3 className="w-4 h-4"/></div><div className="text-base sm:text-lg font-bold text-[var(--theme-text)]">{currentBest === undefined ? '—' : formatTime(currentBest)}</div><div className="text-[10px] text-[var(--theme-muted)]">当前关最佳</div></div>
+                  <div className="bg-white/85 rounded-xl p-2 text-center border border-white"><div className="flex justify-center mb-1 text-[var(--theme-muted)]"><Trophy className="w-4 h-4"/></div><div className="text-base sm:text-lg font-bold text-[var(--theme-text)]">{fastestRecord ? formatTime(fastestRecord[1].bestMs!) : '—'}</div><div className="text-[10px] text-[var(--theme-muted)]">全程最快单题</div></div>
+                  <div className="bg-white/85 rounded-xl p-2 text-center border border-white"><div className="flex justify-center mb-1 text-[var(--theme-muted)]"><TimerReset className="w-4 h-4"/></div><div className="text-base sm:text-lg font-bold text-[var(--theme-muted)]">{solvedTimedCount}</div><div className="text-[10px] text-[var(--theme-muted)]">有成绩的关卡</div></div>
                 </div>
-                <p className="mt-2 text-[10px] text-[#8B907B]">独立拼出的最佳成绩会永久保存；完整答案不计入竞速榜。</p>
+                <p className="mt-2 text-[10px] text-[var(--theme-muted)]">独立拼出的最佳成绩会永久保存；完整答案不计入竞速榜。</p>
               </div>
               {/* Prominent Word Progress Box */}
-              <div className="p-4 bg-[#F4F8EF] rounded-[22px] border border-[#DCE9D5]">
+              <div className="p-4 bg-[var(--theme-muted-surface)] rounded-[22px] border border-[var(--theme-border)]">
                 <div className="flex items-center gap-2 mb-2 font-bold text-amber-900 text-sm">
                   <BookOpen className="w-4 h-4 text-amber-600" />
                   <span>单词背诵核心进度统计</span>
@@ -203,13 +203,13 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
                 </div>
               </div>
 
-              <div className="rounded-[18px] bg-white border border-[#E4E8DC] p-3 text-xs text-[#6D836F] flex flex-wrap items-center gap-2">
-                <span className="font-bold text-[#4D7656]">正在学习</span>
-                <span className="rounded-full bg-[#ECF5E7] px-2.5 py-1 font-bold">{stageForLevel(currentLevel).label} · LEVEL {currentLevel.levelNumber}</span>
-                <span className="text-[#91A08D]">下一步：拼出当前句子，向下一关前进</span>
+              <div className="rounded-[18px] bg-white border border-[var(--theme-border)] p-3 text-xs text-[var(--theme-muted)] flex flex-wrap items-center gap-2">
+                <span className="font-bold text-[var(--theme-text)]">正在学习</span>
+                <span className="rounded-full bg-[var(--theme-muted-surface)] px-2.5 py-1 font-bold">{stageForLevel(currentLevel).label} · LEVEL {currentLevel.levelNumber}</span>
+                <span className="text-[var(--theme-muted)]">下一步：拼出当前句子，向下一关前进</span>
               </div>
               {/* Sound & Speech Settings */}
-              <div className="bg-[#FFFDF7] p-3 rounded-2xl border border-amber-100 space-y-2">
+              <div className="bg-[var(--theme-surface)] p-3 rounded-2xl border border-amber-100 space-y-2">
                 <div className="text-xs font-bold text-slate-700">音效与语音设定</div>
                 <div className="flex items-center justify-between text-xs text-slate-600">
                   <span>糖果音效与角色叫声</span>

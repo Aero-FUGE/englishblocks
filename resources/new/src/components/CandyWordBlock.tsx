@@ -121,15 +121,15 @@ export const CandyWordBlock: React.FC<CandyWordBlockProps> = ({
       {tooltipPosition && createPortal(
         <div
           role="tooltip"
-          className="pointer-events-none fixed z-[99999] w-[350px] max-w-[calc(100vw-24px)] rounded-2xl border border-[#DCE8D7] bg-[#FFFEF8] px-4 py-3 text-left shadow-[0_12px_32px_rgba(57,79,54,0.16)]"
+          className="pointer-events-none fixed z-[99999] w-[350px] max-w-[calc(100vw-24px)] rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-surface)] px-4 py-3 text-left shadow-[0_12px_32px_rgb(var(--theme-shadow-rgb)/0.16)]"
           style={{ left: tooltipPosition.left, top: tooltipPosition.top, transform: tooltipPosition.below ? undefined : 'translateY(-100%)' }}
         >
-          <div className="mb-2 text-[10px] font-bold tracking-[0.12em] text-[#86A17D]">小猫词典 · 核心语义</div>
-          <div className="mb-1 text-sm font-bold text-[#405B42]">{block.text.replace(/[,.?!]+$/g, '')}</div>
-          <div className="break-words whitespace-normal text-sm font-semibold leading-relaxed text-[#405B42]">{meaning}</div>
-          {block.simpleEn && <div className="mt-2 border-t border-[#E6EDE0] pt-2 text-xs leading-relaxed text-[#607C76]">{block.simpleEn}</div>}
-          {block.senseNotes && <div className="mt-2 border-t border-[#E6EDE0] pt-2 text-xs leading-relaxed text-[#71816D]">{block.senseNotes}</div>}
-          {block.sentenceMeaning && <div className="mt-2 border-t border-[#E6EDE0] pt-2 text-xs leading-relaxed text-[#8A8F80]">{block.sentenceMeaning}</div>}
+          <div className="mb-2 text-[10px] font-bold tracking-[0.12em] text-[var(--theme-muted)]">小猫词典 · 核心语义</div>
+          <div className="mb-1 text-sm font-bold text-[var(--theme-text)]">{block.text.replace(/[,.?!]+$/g, '')}</div>
+          <div className="break-words whitespace-normal text-sm font-semibold leading-relaxed text-[var(--theme-text)]">{meaning}</div>
+          {block.simpleEn && <div className="mt-2 border-t border-[var(--theme-border)] pt-2 text-xs leading-relaxed text-[var(--theme-muted)]">{block.simpleEn}</div>}
+          {block.senseNotes && <div className="mt-2 border-t border-[var(--theme-border)] pt-2 text-xs leading-relaxed text-[var(--theme-muted)]">{block.senseNotes}</div>}
+          {block.sentenceMeaning && <div className="mt-2 border-t border-[var(--theme-border)] pt-2 text-xs leading-relaxed text-[var(--theme-muted)]">{block.sentenceMeaning}</div>}
         </div>,
         document.body
       )}

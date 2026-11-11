@@ -45,7 +45,8 @@ export const SuccessCelebrationModal: React.FC<SuccessCelebrationModalProps> = (
           zIndex: 220,
           spread: 70,
           origin: { y: 0.6 },
-          colors: ['#FBBF24', '#34D399', '#38BDF8', '#F472B6', '#A78BFA'],
+          colors: ['--theme-primary','--theme-accent','--theme-decoration','--theme-light'].map(token=>getComputedStyle(document.documentElement).getPropertyValue(token).trim()),
+          disableForReducedMotion: true,
         });
       } catch {}
 
@@ -76,9 +77,9 @@ export const SuccessCelebrationModal: React.FC<SuccessCelebrationModalProps> = (
           </div>
           <p className="text-sm font-bold text-amber-700">{isReview ? "复习完成 · 不计时、不积分" : usedFullAnswer ? "完整答案已解锁 · 本关小鱼干奖励为 0" : `本关获得 +${fishReward} 小鱼干`}</p>
           {!isReview && <div className="mt-1 mb-1 flex flex-wrap justify-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full border border-[#D5E7D5] bg-[#F0F8ED] text-[#50785B] px-3 py-1 text-xs font-bold"><Clock3 className="w-3.5 h-3.5"/> 用时 {formatTime(completedMs)}</span>
-            {!usedFullAnswer && speedReward > 0 && <span className="rounded-full border border-[#F2D7A3] bg-[#FFF5DC] text-[#AA7934] px-3 py-1 text-xs font-bold">速度奖励 +{speedReward} 小鱼干</span>}
-            {!usedFullAnswer && personalBest && <span className="inline-flex items-center gap-1 rounded-full border border-[#F2D7A3] bg-[#FFF9E5] text-[#AD853B] px-3 py-1 text-xs font-bold"><Trophy className="w-3.5 h-3.5"/> 刷新个人纪录！</span>}
+            <span className="inline-flex items-center gap-1 rounded-full border border-[var(--theme-border)] bg-[var(--theme-muted-surface)] text-[var(--theme-text)] px-3 py-1 text-xs font-bold"><Clock3 className="w-3.5 h-3.5"/> 用时 {formatTime(completedMs)}</span>
+            {!usedFullAnswer && speedReward > 0 && <span className="rounded-full border border-[var(--theme-border)] bg-[var(--theme-muted-surface)] text-[var(--theme-muted)] px-3 py-1 text-xs font-bold">速度奖励 +{speedReward} 小鱼干</span>}
+            {!usedFullAnswer && personalBest && <span className="inline-flex items-center gap-1 rounded-full border border-[var(--theme-border)] bg-[var(--theme-muted-surface)] text-[var(--theme-muted)] px-3 py-1 text-xs font-bold"><Trophy className="w-3.5 h-3.5"/> 刷新个人纪录！</span>}
           </div>}
           <h2 className="text-xl font-bold text-slate-800">
             又完成了一句话！
@@ -89,7 +90,7 @@ export const SuccessCelebrationModal: React.FC<SuccessCelebrationModalProps> = (
         </div>
 
         {/* Target sentence display with listen button */}
-        <div className="bg-[#F6FAF8] rounded-2xl p-3 border border-emerald-100 mb-3 text-left eb-success-sentence min-h-0 overflow-y-auto">
+        <div className="bg-[var(--theme-surface)] rounded-2xl p-3 border border-emerald-100 mb-3 text-left eb-success-sentence min-h-0 overflow-y-auto">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0 flex-1">
               <p className="font-candy text-base md:text-lg font-bold text-emerald-950 leading-snug">

@@ -67,7 +67,7 @@ export function MimiChat({level,phase,slots,matches,correct,onLogin,fallback}:{l
   {busy&&<p className="text-xs py-2" role="status">咪咪正在捋顺小胡须，想一想喵…</p>}
   {error&&<p className="text-xs py-2 text-amber-800" role="alert">{error} <button disabled={busy} onClick={()=>void ask('translate')} className="underline">重试</button></p>}
   <div className="space-y-2 pt-2 eb-mimi-content">
-   <p className="text-xs text-[#7C8975]">AI 会参考当前题目和拼法，可能说错。轻轻吐槽句子，也陪你进步喵！</p>
+   <p className="text-xs text-[var(--theme-muted)]">AI 会参考当前题目和拼法，可能说错。轻轻吐槽句子，也陪你进步喵！</p>
    {!cloud.user?<button className="eb-cloud-secondary" onClick={onLogin}>登录云账号，和咪咪聊天</button>:<>
     <div className="flex flex-wrap gap-2"><button disabled={busy} onClick={()=>void ask('translate')}>翻译我的拼法</button><button disabled={busy} onClick={()=>void ask('hint')}>给一点点提示</button><button disabled={busy} onClick={()=>void ask('chat','我有点卡住了，可以鼓励我一下吗？')}>求鼓励 ♡</button></div>
     <div className="eb-mimi-history" role="log" aria-label="与咪咪的对话">{messages.map((m,i)=><p key={i} className={m.role==='user'?'eb-mimi-user':'eb-mimi-reply'}><strong>{m.role==='user'?'我：':'咪咪：'}</strong>{m.content}</p>)}</div>

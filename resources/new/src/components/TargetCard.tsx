@@ -23,11 +23,11 @@ export const TargetCard: React.FC<TargetCardProps> = ({
 
   return (
     <div className="relative w-full">
-      <div className="relative bg-gradient-to-b from-[#FFFDF5] to-[#FFF9EB] border-3 border-amber-200/90 rounded-3xl p-6 md:p-8 shadow-sm text-center overflow-hidden">
+      <div className="relative bg-gradient-to-b from-[var(--theme-surface)] to-[var(--theme-muted-surface)] border-3 border-amber-200/90 rounded-3xl p-6 md:p-8 shadow-sm text-center overflow-hidden">
         {/* Soft whimsical decorative elements */}
         {/* Cloud top-left */}
         <div className="absolute top-2 left-3 opacity-30 pointer-events-none">
-          <svg width="38" height="24" viewBox="0 0 38 24" fill="#FDE68A">
+          <svg width="38" height="24" viewBox="0 0 38 24" fill="var(--theme-light)">
             <path d="M12 20h18a6 6 0 0 0 0-12 7.5 7.5 0 0 0-14.7-2A6 6 0 0 0 12 20z" />
           </svg>
         </div>
