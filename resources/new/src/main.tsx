@@ -4,6 +4,7 @@ import App from './App.tsx';
 import { GameErrorBoundary } from './components/GameErrorBoundary';
 import './index.css';
 import './lobby.css';
+import './page-backgrounds.css';
 
 initializeSeason();
 

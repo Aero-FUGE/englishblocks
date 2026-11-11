@@ -1,0 +1,8 @@
+/* The same seasonal scene serves study, the friend nest and friend rooms. */
+.eb-other-page-background {position:fixed;inset:0;z-index:0;background-color:var(--theme-bg);background-size:cover;background-position:center top;background-repeat:no-repeat;pointer-events:none;user-select:none;}
+html[data-learning-page=study] .eb-game-shell {background:transparent;}
+.eb-friends-page.cozy-window-bg {position:relative;z-index:1;background:transparent;}
+.eb-other-page-background~.eb-season-atmosphere .eb-season-light {display:none;}
+html[data-learning-page=study] .eb-game-shell>.absolute.pointer-events-none {display:none;}
+html[data-learning-page=study] .eb-study-heading,.eb-friends-top {background:color-mix(in srgb,var(--theme-surface) 93%,transparent);border:1px solid var(--theme-border);border-radius:22px;padding:10px 12px;box-shadow:0 3px 15px var(--theme-shadow);}
+.eb-friends-intro {background:color-mix(in srgb,var(--theme-surface) 92%,transparent);border-radius:18px;padding:10px 14px;margin-top:12px;}

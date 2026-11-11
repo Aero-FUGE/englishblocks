@@ -1,3 +1,4 @@
+import {SeasonPageBackground} from './components/SeasonPageBackground';
 import {SeasonAtmosphere} from './components/SeasonAtmosphere';
 import {LearningLobby} from './components/LearningLobby';
 import {persistBoard,restoreBoard} from './utils/boardDraft';
@@ -593,6 +594,7 @@ export default function App() {
 
   return (
     <>
+    {(inStudy||friendsOpen)&&<SeasonPageBackground/>}
     <SeasonAtmosphere/>
     <div style={friendsOpen||!inStudy?{display:'none'}:undefined} className="eb-game-shell min-h-screen cozy-window-bg relative flex flex-col justify-between overflow-x-hidden p-4 md:p-6 lg:p-7 selection:bg-amber-100 selection:text-amber-950" onClickCapture={(event) => playUiClickForTarget(event.target)}>
       {showSplash && <div id="eb-splash" role="status" aria-label="英语拼块正在启动"><div className="eb-splash-card"><img src="./assets/brand-mimi-a.png" alt="咪咪"/><h1>英语拼块</h1><p>WORD BLOCK GARDEN</p><div className="eb-splash-bar"><span /></div><small>正在准备你的学习花园…</small></div></div>}
