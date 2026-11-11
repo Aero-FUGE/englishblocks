@@ -744,7 +744,7 @@ export default function App() {
         }}
       />
     </div>
-    {!inStudy&&!friendsOpen&&<LearningLobby name={profile.name} collection={collection} level={currentLevel.levelNumber} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
+    {!inStudy&&!friendsOpen&&<LearningLobby name={profile.name} collection={collection} level={currentLevel.levelNumber} tier={currentTier} filled={slottedWords.filter(Boolean).length} expected={expectedCount} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
       {label:'关卡选择',icon:'▦',onClick:()=>setIsLevelSelectorOpen(true)},
       {label:'学习进度',icon:'🌿',onClick:()=>setIsProfileModalOpen(true)},
       {label:'好友小窝',icon:'🏡',onClick:openFriends,detail:social.pending?`${social.pending} 封小窝来信`:undefined},

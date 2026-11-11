@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import { GameErrorBoundary } from './components/GameErrorBoundary';
 import './index.css';
+import './lobby.css';
 
 initializeSeason();
 

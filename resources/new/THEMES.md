@@ -11,3 +11,5 @@
 验证：类型检查、生产构建、Chromium 手机四季循环（设置弹窗内切换、关卡选择、衣柜、好友页、音乐 Portal、拼句界面）、刷新保存、跨标签页同步、无横向溢出、减少动态效果、装饰层 pointer-events:none；另跑原手机单击/1秒长按/大厅往返/草稿恢复检查及轨道、存档回归。未把桌面模拟视为物理 iPhone 测试。
 
 新增 UI 优先使用 `var(--theme-surface)`、`var(--theme-text)`、`var(--theme-muted)`、`var(--theme-primary)`、`var(--theme-on-primary)`、`var(--theme-border)` 和 `var(--theme-shadow)`，避免写入季节色值。切换不写学习记录、不修改好友数据、不调用 AI，也不重新加载应用。
+
+大厅布局现按用户提供的参考图调整为紧凑的角色名片、真实统计、场景、主按钮与功能网格。`src/lobby.css` 独立管理大厅布局；`public/assets/lobby/{spring,summer,autumn,winter}.png` 使用用户提供的四季背景，随主题切换。背景 URL 按 document.baseURI 生成，兼容 GitHub 项目子目录。主题面板收纳到四季入口，原有播放器保留在页脚。未创建参考图中缺乏数据基础的经验、日常任务或连续天数。
