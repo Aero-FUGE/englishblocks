@@ -559,7 +559,7 @@ html[data-friends-open="true"] .eb-floating-cat,html[data-friends-open="true"] .
 :root[data-season="autumn"] { --word-season:#b67843; --word-season-soft:#fcf0df; --word-season-border:#e9ceaa; }
 :root[data-season="winter"] { --word-season:#7b83b0; --word-season-soft:#eef0fa; --word-season-border:#d0d5ee; }
 .eb-word-hold { position:absolute;inset:-3px;width:calc(100% + 6px);height:calc(100% + 6px);pointer-events:none;overflow:visible; }
-.eb-word-hold rect { fill:none;stroke:var(--word-season);stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:word-hold-fill 3s linear forwards; }
+.eb-word-hold rect { fill:none;stroke:var(--word-season);stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:word-hold-fill 1s linear forwards; }
 [data-word-block][data-pressing] { transform:scale(.96);box-shadow:0 0 0 3px var(--word-season-soft); }
 @keyframes word-hold-fill { to {stroke-dashoffset:0;} }
 .eb-modal-word {border-color:var(--word-season-border);background:linear-gradient(145deg,#fffefa,var(--word-season-soft));animation:word-card-arrive .2s ease-out;}
@@ -580,3 +580,40 @@ html[data-friends-open="true"] .eb-floating-cat,html[data-friends-open="true"] .
 [data-word-block][data-held] {animation:word-hold-rebound .22s ease-out;}
 @keyframes word-hold-rebound {0% {transform:scale(.96);}65% {transform:scale(1.03);}100% {transform:scale(1);}}
 @media (prefers-reduced-motion:reduce) {[data-word-block][data-held] {animation:none;}}
+
+/* The lobby owns navigation; study keeps its board mounted while hidden. */
+.eb-learning-lobby {min-height:100dvh;padding:clamp(18px,4vw,48px);max-width:1080px;margin:auto;color:#465d45;background:radial-gradient(ellipse at top,var(--word-season-soft),#fffdf5 70%);}
+body:has(.eb-learning-lobby) {background:var(--word-season-soft);}
+.eb-lobby-heading {display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.eb-lobby-heading small {font-size:11px;letter-spacing:.12em;color:var(--word-season);}
+.eb-lobby-heading h1 {font-size:28px;font-weight:800;margin:6px 0;}
+.eb-lobby-heading>span {border:1px solid var(--word-season-border);border-radius:20px;padding:8px 12px;background:#fffdf8;font-size:13px;}
+.eb-lobby-welcome {display:grid;grid-template-columns:minmax(180px,1fr) 1.3fr;align-items:center;gap:28px;padding:28px;margin-top:22px;border:1px solid var(--word-season-border);border-radius:32px;background:#fffdf8;}
+.eb-lobby-cat {display:flex;align-items:center;justify-content:center;background:var(--word-season-soft);border-radius:28px;min-height:220px;}
+.eb-lobby-welcome h2 {font-size:clamp(24px,4vw,36px);font-weight:800;line-height:1.5;margin:10px 0;}
+.eb-lobby-muted {font-size:13px;color:#7c8a76;}
+.eb-lobby-continue {margin-top:20px;min-height:50px;padding:12px 24px;background:var(--word-season);border-radius:18px;color:white;font-weight:750;width:100%;}
+.eb-lobby-progress {padding:20px 4px;}
+.eb-lobby-progress>div {display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;}
+.eb-lobby-progress progress {appearance:none;width:100%;height:10px;border:none;border-radius:10px;overflow:hidden;margin-top:12px;}
+.eb-lobby-progress progress::-webkit-progress-bar {background:#e5e9df;}
+.eb-lobby-progress progress::-webkit-progress-value {background:var(--word-season);}
+.eb-lobby-progress progress::-moz-progress-bar {background:var(--word-season);}
+.eb-lobby-actions {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.eb-lobby-actions>button {display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-height:108px;background:#fffdf8;border:1px solid var(--word-season-border);padding:18px;border-radius:22px;text-align:left;}
+.eb-lobby-actions>button>span {font-size:24px;color:var(--word-season);}
+.eb-lobby-actions small {color:#87927f;font-size:11px;}
+.eb-lobby-seasons {margin-top:24px;padding:20px;background:#fffdf8;border-radius:24px;border:1px solid var(--word-season-border);}
+.eb-lobby-seasons>div {display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.eb-lobby-seasons button {border:1px solid var(--word-season-border);border-radius:14px;min-height:44px;padding:8px 16px;}
+.eb-lobby-seasons button[aria-pressed=true] {background:var(--word-season);color:white;}
+html[data-learning-page=study] .eb-layout {display:block!important;max-width:1100px!important;}
+html[data-learning-page=study] .eb-game-main {display:block!important;width:100%;min-width:0;}
+html[data-learning-page=study] .eb-game-shell {background:linear-gradient(145deg,var(--word-season-soft),#fffdf5);padding-bottom:160px;}
+.eb-study-heading {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;}
+.eb-study-heading>button {min-height:44px;padding:10px 16px;border-radius:16px;border:1px solid var(--word-season-border);background:#fffdf8;color:var(--word-season);font-weight:700;}
+.eb-study-heading>div {display:flex;flex-direction:column;text-align:right;gap:3px;color:#5c7156;font-size:13px;}
+.eb-study-heading>div>span {font-size:11px;}
+@media(max-width:600px) {.eb-lobby-welcome {grid-template-columns:1fr;gap:16px;padding:18px;}.eb-lobby-cat {min-height:160px;}.eb-lobby-cat>div {max-width:170px;}.eb-lobby-welcome h2 br {display:none;}.eb-lobby-actions {grid-template-columns:repeat(2,minmax(0,1fr));}.eb-lobby-heading>span {font-size:11px;}.eb-lobby-seasons button {flex:1;padding:8px;}}
+
+.eb-lobby-music {margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 20px;background:#fffdf8;border:1px solid var(--word-season-border);border-radius:22px;}

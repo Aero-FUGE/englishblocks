@@ -1,3 +1,4 @@
+import {LearningLobby} from './components/LearningLobby';
 import {persistBoard,restoreBoard} from './utils/boardDraft';
 import {cloudSync} from './utils/cloudSync';
 import {FriendsPage} from './components/FriendsPage';
@@ -82,6 +83,10 @@ export default function App() {
   const [isSoundStudioOpen, setIsSoundStudioOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isCloudOpen,setIsCloudOpen]=useState(false);
+  const [inStudy,setInStudy]=useState(false);
+  const [season,setSeason]=useState(()=>{try{return localStorage.getItem('englishblocks_season')||document.documentElement.dataset.season||'spring';}catch{return 'spring';}});
+  useEffect(()=>{document.documentElement.dataset.season=season;try{localStorage.setItem('englishblocks_season',season);}catch{}},[season]);
+  useEffect(()=>{document.documentElement.dataset.learningPage=inStudy?'study':'lobby';return()=>{delete document.documentElement.dataset.learningPage;};},[inStudy]);
   const [friendsOpen,setFriendsOpen]=useState(()=>location.hash==='#friends');
   const [pranksOpen,setPranksOpen]=useState(false);
   const studyScroll=React.useRef(0);
@@ -153,7 +158,7 @@ export default function App() {
   }, [getClockMs]);
   // Background / settings / wardrobe should not consume an active challenge.
   const browsingMenu = wardrobeOpen || isWordModalOpen || isProfileModalOpen ||
-    isLevelSelectorOpen || isSoundStudioOpen || isSettingsOpen || isHintModalOpen || isCloudOpen || friendsOpen;
+    isLevelSelectorOpen || isSoundStudioOpen || isSettingsOpen || isHintModalOpen || isCloudOpen || friendsOpen || !inStudy;
   useEffect(() => {
     if (browsingMenu) pauseClock();
     else resumeClock();
@@ -499,6 +504,7 @@ export default function App() {
   const handleJumpToLevel = (levelId: number) => {
     const idx = SENTENCE_BANK.findIndex((l) => l.id === levelId);
     if (idx !== -1) {
+      setInStudy(true);
       replayLevelRef.current = null;
       resetClock();
       if (idx === currentLevelIndex) initLevel(currentLevel, 0);
@@ -588,7 +594,7 @@ export default function App() {
 
   return (
     <>
-    <div style={friendsOpen?{display:'none'}:undefined} className="eb-game-shell min-h-screen cozy-window-bg relative flex flex-col justify-between overflow-x-hidden p-4 md:p-6 lg:p-7 selection:bg-amber-100 selection:text-amber-950" onClickCapture={(event) => playUiClickForTarget(event.target)}>
+    <div style={friendsOpen||!inStudy?{display:'none'}:undefined} className="eb-game-shell min-h-screen cozy-window-bg relative flex flex-col justify-between overflow-x-hidden p-4 md:p-6 lg:p-7 selection:bg-amber-100 selection:text-amber-950" onClickCapture={(event) => playUiClickForTarget(event.target)}>
       {showSplash && <div id="eb-splash" role="status" aria-label="英语拼块正在启动"><div className="eb-splash-card"><img src="./assets/brand-mimi-a.png" alt="咪咪"/><h1>英语拼块</h1><p>WORD BLOCK GARDEN</p><div className="eb-splash-bar"><span /></div><small>正在准备你的学习花园…</small></div></div>}
       {developerMode && layoutEditorOpen && <LayoutEditor value={layoutDraft} onChange={setLayoutDraft} onClose={() => setLayoutEditorOpen(false)} />}
       {/* ATMOSPHERIC BACKGROUND DECORATIONS (Sunlit leaves & wooden window details) */}
@@ -597,61 +603,20 @@ export default function App() {
 
       {/* MAIN CONTAINER: SIDEBAR + MAIN CONTENT AREA */}
       <div className="eb-layout relative z-10 w-full mx-auto flex flex-col lg:flex-row items-stretch flex-1" style={{maxWidth: `${layoutDraft.pageWidth}px`, gap: `${layoutDraft.gap}px`}}>
-        {/* LEFT NAVIGATION SIDEBAR (Matching Screenshot) */}
-        <div data-eb-edit="sidebar" className="hidden lg:block shrink-0 eb-full-height-sidebar" style={{...layoutStyle('sidebar'), width: `${layoutDraft.sidebarWidth}px`, '--eb-sidebar-scale': layoutDraft.sidebar.scale / 100} as React.CSSProperties}><LeftSidebar
-          profile={profile}
-          currentTier={currentTier}
-          currentLevelNumber={currentLevel.levelNumber}
-          onSelectTier={handleSelectTier}
-          onOpenLevelSelector={() => setIsLevelSelectorOpen(true)}
-          onOpenStats={() => setIsProfileModalOpen(true)}
-          onOpenBgmStudio={() => setIsSoundStudioOpen(true)}
-          onOpenFriends={openFriends}
-          onOpenSettings={() => setIsSettingsOpen(true)}
-          onOpenWardrobe={() => setWardrobeOpen(true)}
-          activeCat={collection.activeCat}
-          onSelectCat={(cat) => setCollection(prev => ({...prev, activeCat: cat}))}
-          className="flex"
-        /></div>
-
-        {/* MOBILE QUICK NAV: desktop sidebar stays untouched. */}
-        <nav data-eb-edit="mobileNav" className="eb-mobile-nav lg:hidden" aria-label="手机游戏导航">
-          <button type="button" onClick={() => setIsLevelSelectorOpen(true)}>▦<span>选关</span></button>
-          <button type="button" onClick={() => setIsProfileModalOpen(true)}>▥<span>统计</span></button>
-          <button type="button" onClick={() => setWardrobeOpen(true)}>♡<span>猫咪</span></button>
-          <button type="button" onClick={() => setIsSoundStudioOpen(true)}>♫<span>音乐</span></button>
-          <button type="button" onClick={() => setIsSettingsOpen(true)}>⚙<span>设置</span></button>
-        </nav>
-
         {/* RIGHT PLAYGROUND COLUMN */}
         <div className="eb-game-main flex-1 flex flex-col justify-start">
           {/* TOP PROGRESS CAPSULES (Matching Screenshot) */}
-          <div data-eb-edit="progress" style={layoutStyle('progress')}><TopProgress
-            currentLevelNumber={currentLevel.levelNumber}
-            currentTier={currentTier}
-            completedSentencesCount={profile.completedLevelIds.length}
-            totalSentencesGoal={profile.totalSentenceGoal}
-            wordsMasteredCount={masteredWordsCount}
-            totalWordsGoal={profile.totalWordGoal}
-            onOpenLevelSelector={() => setIsLevelSelectorOpen(true)}
-            onOpenStats={() => setIsProfileModalOpen(true)}
-            soundEnabled={soundEnabled}
-            onToggleSound={handleToggleSound}
-          /></div>
-
+          <header className="eb-study-heading"><button type="button" onClick={()=>{persistBoard(boardContext.current.owner,currentLevel.id,currentPhaseIndex,board);pauseClock();setInStudy(false);window.scrollTo({top:0});}}>← 返回大厅</button><div><strong>第 {currentLevel.levelNumber} 关</strong><span>已完成 {profile.completedLevelIds.length} / {SENTENCE_BANK.length} 关</span></div></header>
           {completedView && <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#C6DCC7] bg-[#F0F8ED] px-4 py-3 text-sm text-[#426C50]"><span>已通关 · 这是你上次拼好的完整句子</span><button type="button" onClick={beginUnscoredReplay} className="rounded-full bg-white border border-[#AACBAF] px-4 py-2 font-bold hover:bg-[#E1F0E1]">重新拼一次（不计时、不积分）</button><button type="button" onClick={() => {setReplayCelebration(true);setLastFishReward(0);setLastSpeedReward(0);setLastCompletionMs(0);setLastPersonalBest(false);sound.playVictory();setIsSuccessModalOpen(true);}} className="rounded-full bg-white border border-[#AACBAF] px-4 py-2 font-bold hover:bg-[#E1F0E1]">重看通关庆祝</button></div>}
           {reviewMode && <div className="mt-3 rounded-2xl border border-[#D6DCCB] bg-[#F8F8EE] px-4 py-2 text-sm text-[#63765B]">自由复习中 · 不计时、不积分、不覆盖原成绩</div>}
-          <div data-eb-edit="status" className="mt-3 flex items-center justify-end gap-3 text-xs text-[#64785A]">
-            <button type="button" onClick={openFriends} className="eb-friends-entry">🏡 好友小窝</button>
-            {social.pending>0&&<button type="button" onClick={()=>setPranksOpen(v=>!v)} className="eb-friends-entry">🥚 小窝来信 {social.pending}</button>}
+          <div data-eb-edit="status" className="mt-3 flex flex-wrap justify-end gap-3 text-xs text-[#64785A]">
             {social.learningError&&<span role="status">{social.learningError}<button className="underline" onClick={social.retryRecord}>重试确认</button></span>}
-            <button type="button" onClick={()=>setIsCloudOpen(true)} className="eb-cloud-entry" aria-label="打开云同步">☁ {cloud.user?(cloud.needsReload?'请刷新':cloud.conflict?'同步待选择':cloud.error?'离线待同步':cloud.status==='已同步'?'已同步':'云同步'):'云账号与同步'}</button>
-            <span>提示 {hintCount}/3 · 本关预计 +{completedView || reviewMode || answerRevealed ? 0 : rewardForHints(hintCount)} 🐟 小鱼干</span>
-            <button onClick={()=>setWardrobeOpen(true)} className="rounded-full border border-[#C8D8BA] bg-[#EDF4E5] px-3 py-1.5 font-bold hover:bg-[#E1EDD5]">🐟 {collection.fish} 小鱼干</button>
+            <span>提示 {hintCount}/3 · 本关预计 +{completedView || reviewMode || answerRevealed ? 0 : rewardForHints(hintCount)} 🐟</span>
           </div>
           {/* MAIN STUDY BOARD CARD (Matching Screenshot with Mimi peeking) */}
           <div data-eb-edit="board" className="mt-2 eb-full-height-board" style={{...layoutStyle('board'), '--eb-board-scale': layoutDraft.board.scale / 100} as React.CSSProperties}>
             <MainStudyBoard
+              studyActive={inStudy&&!friendsOpen}
               onOpenCloud={()=>setIsCloudOpen(true)}
               activeCat={collection.activeCat}
               catOutfit={collection.equipped?.[collection.activeCat] || {}}
@@ -779,8 +744,17 @@ export default function App() {
         }}
       />
     </div>
+    {!inStudy&&!friendsOpen&&<LearningLobby name={profile.name} collection={collection} level={currentLevel.levelNumber} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} season={season} onSeason={setSeason} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
+      {label:'关卡选择',icon:'▦',onClick:()=>setIsLevelSelectorOpen(true)},
+      {label:'学习进度',icon:'🌿',onClick:()=>setIsProfileModalOpen(true)},
+      {label:'好友小窝',icon:'🏡',onClick:openFriends,detail:social.pending?`${social.pending} 封小窝来信`:undefined},
+      {label:'音乐设置',icon:'♫',onClick:()=>setIsSoundStudioOpen(true)},
+      {label:'小猫衣柜',icon:'🎀',onClick:()=>setWardrobeOpen(true)},
+      {label:'云端存档',icon:'☁',onClick:()=>setIsCloudOpen(true),detail:cloud.user?cloud.status:'登录并同步'},
+      {label:'游戏设置',icon:'⚙',onClick:()=>setIsSettingsOpen(true)}
+    ]}/>}
     {friendsOpen&&<FriendsPage userId={cloud.user?.id} onBack={closeFriends} onLogin={()=>setIsCloudOpen(true)}/>}
-    {!friendsOpen&&<PrankToast key={cloud.user?.id||'local'} inbox={social.inbox} wallet={social.wallet} open={pranksOpen} onClose={()=>setPranksOpen(false)} onViewAll={openFriends}/>}
+    {!friendsOpen&&!inStudy&&<PrankToast key={cloud.user?.id||'local'} inbox={social.inbox} wallet={social.wallet} open={pranksOpen} onClose={()=>setPranksOpen(false)} onViewAll={openFriends}/>}
     </>
   );
 }

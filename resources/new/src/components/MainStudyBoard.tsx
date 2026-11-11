@@ -13,6 +13,7 @@ import { stageForLevel } from '../utils/stages';
 import { Lightbulb, CheckCircle2, RotateCcw, Volume2, Sparkles, Heart } from 'lucide-react';
 
 interface MainStudyBoardProps {
+  studyActive?: boolean;
   level: LevelData;
   onOpenCloud: () => void;
   activeCat?: CatId;
@@ -45,6 +46,7 @@ interface MainStudyBoardProps {
 }
 
 export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
+  studyActive = true,
   level,
   onOpenCloud,
   activeCat = 'mimi',
@@ -281,7 +283,7 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
         `}
       >
         {/* TOP RIGHT: 咪咪陪伴 (Mimi Peeking Over the Border) */}
-        {createPortal(<div ref={companionRef} className="eb-floating-cat fixed flex items-end gap-2 z-[60] cursor-grab active:cursor-grabbing select-none max-w-[min(94vw,450px)] touch-none"
+        {studyActive&&createPortal(<div ref={companionRef} className="eb-floating-cat fixed flex items-end gap-2 z-[60] cursor-grab active:cursor-grabbing select-none max-w-[min(94vw,450px)] touch-none"
           style={companionPosition ? {left:companionPosition.x,top:companionPosition.y, right:'auto'} : {right:24,top:88}}
           onPointerDown={beginCompanionDrag}
           onPointerMove={moveCompanion}

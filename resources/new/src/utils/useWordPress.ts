@@ -1,6 +1,6 @@
 import {useEffect,useRef,useState} from 'react';
 import type {PointerEvent} from 'react';
-export const WORD_HOLD_MS=3000;
+export const WORD_HOLD_MS=1000;
 /** Native scrolling stays enabled; moving or scrolling cancels both hold and tap. */
 export function useWordPress(onHold:()=>void){
  const [pressing,setPressing]=useState(false);
