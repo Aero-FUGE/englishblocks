@@ -1,3 +1,4 @@
+import {useWordPress} from '../utils/useWordPress';
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { WordBlock } from '../types/game';
@@ -45,27 +46,10 @@ export const CandyWordBlock: React.FC<CandyWordBlockProps> = ({
     if (tooltipTimer.current) clearTimeout(tooltipTimer.current);
     tooltipTimer.current = setTimeout(() => setTooltipPosition(null), 6500);
   };
-  const handleBlockTap = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!onBlockClick) return;
-    // Narrow/mobile layout: first tap displays meaning, second tap moves the block.
-    // Delay only the first tap's tooltip so a fast double tap does not flash it.
-    if (window.matchMedia('(max-width: 767px)').matches) {
-      if (clickTimer.current) {
-        clearTimeout(clickTimer.current);
-        clickTimer.current = null;
-        if (tooltipTimer.current) clearTimeout(tooltipTimer.current);
-        setTooltipPosition(null);
-        onBlockClick(block);
-      } else {
-        const element = e.currentTarget;
-        clickTimer.current = setTimeout(() => {
-          clickTimer.current = null;
-          if (element.isConnected) showMeaning(element);
-        }, 320);
-      }
-    } else {
-      onBlockClick(block);
-    }
+  const infoButton = useRef<HTMLButtonElement>(null);
+  const press=useWordPress(()=>{setTooltipPosition(null);infoButton.current?.click();});
+  const handleBlockTap = () => {
+    if(!press.consumeClick()&&!draggingRef.current)onBlockClick?.(block);
   };
   useEffect(() => { const hide = () => { setTooltipPosition(null); if (tooltipTimer.current) clearTimeout(tooltipTimer.current); }; window.addEventListener('eb-word-drag-start', hide); window.addEventListener('dragstart', hide); window.addEventListener('drop', hide); return () => { window.removeEventListener('eb-word-drag-start', hide); window.removeEventListener('dragstart', hide); window.removeEventListener('drop', hide); }; }, []);
   const meaning = block.translation?.trim() || block.sentenceMeaning?.slice(0, 80) || '点击问号查看释义';
@@ -109,6 +93,13 @@ export const CandyWordBlock: React.FC<CandyWordBlockProps> = ({
   return (
     <div
       data-word-block
+      role="button" tabIndex={0} aria-label={block.text}
+      onKeyDown={e=>{if(e.target!==e.currentTarget)return;if(e.key==='Enter'||e.key===' '){e.preventDefault();onBlockClick?.(block);}}}
+      onPointerDown={e=>{if(e.pointerType==='touch'){e.currentTarget.draggable=false;const parent=e.currentTarget.closest<HTMLElement>('.rail-word-slot');if(parent)parent.draggable=false;}press.onPointerDown(e);}} onPointerMove={press.onPointerMove}
+      onPointerUp={press.onPointerUp} onPointerCancel={press.onPointerCancel} onPointerLeave={press.onPointerLeave}
+      onContextMenu={e=>{if(matchMedia('(max-width:767px)').matches)e.preventDefault();}}
+      data-pressing={press.pressing||undefined}
+      data-held={press.held||undefined}
       onMouseEnter={(e) => { if (!draggingRef.current && !window.matchMedia('(max-width: 767px)').matches) updateTooltip(e.currentTarget); }}
       onMouseLeave={() => { if (!window.matchMedia('(max-width: 767px)').matches) setTooltipPosition(null); }}
       onFocus={(e) => { if (!draggingRef.current && !window.matchMedia('(max-width: 767px)').matches) updateTooltip(e.currentTarget); }}
@@ -142,13 +133,14 @@ export const CandyWordBlock: React.FC<CandyWordBlockProps> = ({
         </div>,
         document.body
       )}
+      {press.pressing&&<svg className="eb-word-hold" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><rect x="2" y="2" width="96" height="36" rx="16" pathLength="100"/></svg>}
       {/* Word Text (Italic Serif font matching screenshot) */}
       <span className="font-word text-sm md:text-base font-semibold tracking-wide leading-none pt-0.5">
         {block.text}
       </span>
 
       {/* Audio Icon (matching screenshot speaker beside word) */}
-      <div className="flex items-center gap-1 opacity-70 hover:opacity-100 transition-opacity">
+      <div className="eb-word-tools flex items-center gap-1 opacity-70 hover:opacity-100 transition-opacity">
         <button
           type="button"
           onClick={handleSpeakerClick}
@@ -162,6 +154,7 @@ export const CandyWordBlock: React.FC<CandyWordBlockProps> = ({
         {/* Small info trigger for word details */}
         <button
           type="button"
+          ref={infoButton}
           onClick={handleInfoBtn}
           aria-label={`查看 ${block.cleanWord} 词义`}
           className="w-3.5 h-3.5 rounded-full flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity cursor-pointer"

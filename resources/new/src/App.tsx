@@ -1,3 +1,5 @@
+import {persistBoard,restoreBoard} from './utils/boardDraft';
+import {cloudSync} from './utils/cloudSync';
 import {FriendsPage} from './components/FriendsPage';
 import {PrankToast} from './components/PrankToast';
 import {useSocialActivity} from './utils/useSocialActivity';
@@ -189,7 +191,13 @@ export default function App() {
 
   // A single atomic board state: avoid separate, potentially inconsistent updates.
   // Every slot is explicit `null` until filled (never a sparse JS array).
-  const [board, setBoard] = useState<RailState>({slots: [], pool: []});
+  const [board, updateBoard] = useState<RailState>({slots: [], pool: []});
+  const boardContext = React.useRef({level:currentLevel.id,phase:0,owner:cloudSync.getState().user?.id||'local'});
+  const setBoard = useCallback((action:React.SetStateAction<RailState>) => {
+    const context={...boardContext.current};
+    updateBoard(previous=>{const next=typeof action==='function'?action(previous):action;
+      persistBoard(context.owner,context.level,context.phase,next);return next;});
+  },[]);
   const slottedWords = board.slots;
   const candidateWords = board.pool;
 
@@ -262,7 +270,10 @@ export default function App() {
 
       // Shuffle candidate bank
       const fresh = newRail(targetWords, shuffleArray);
-      setBoard(previouslyCompleted ? filledAnswerBoard(fresh, level, phaseIdx) : fresh);
+      const owner=cloudSync.getState().user?.id||'local';
+      boardContext.current={level:level.id,phase:phaseIdx,owner};
+      setBoard(previouslyCompleted ? filledAnswerBoard(fresh, level, phaseIdx) :
+        replaying ? fresh : restoreBoard(owner,level.id,phaseIdx,targetWords)||fresh);
     },
     // Completion list is intentionally read on level entry only.
     []
@@ -270,7 +281,7 @@ export default function App() {
 
   useEffect(() => {
     initLevel(currentLevel, currentPhaseIndex);
-  }, [currentLevel, currentPhaseIndex, initLevel]);
+  }, [currentLevel, currentPhaseIndex, initLevel, cloud.user?.id]);
   useEffect(() => { resetClock(); }, [currentLevel.id, resetClock]);
 
   // Expected words count for the current challenge

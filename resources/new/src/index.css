@@ -552,3 +552,31 @@ html[data-friends-open="true"] .eb-floating-cat,html[data-friends-open="true"] .
 @media(prefers-reduced-motion:reduce){.eb-egg-projectile{animation:none;opacity:0}.eb-egg-impact,.eb-egg-stink{animation:none}}
 @media(max-width:767px){.eb-friends-page{padding:16px 12px 32px}.eb-friends-top{gap:8px;align-items:flex-start}.eb-friends-top h1{font-size:22px}.eb-friends-top p{font-size:8px;letter-spacing:0}.eb-friends-top button{padding:8px;font-size:12px;white-space:nowrap}.eb-friends-overview,.eb-friend-grid{grid-template-columns:minmax(0,1fr);gap:0}.eb-friend-grid>.eb-friends-card{margin-bottom:14px}.eb-friends-card{padding:16px;border-radius:22px;margin-bottom:14px}.eb-friends-overview>.eb-friends-card{margin-bottom:14px}.eb-friend-add{flex-direction:column;gap:8px}.eb-friend-home{flex-direction:column;gap:12px}.eb-friend-home>div:last-child{width:100%}.eb-friend-stats{gap:5px}.eb-friend-stats>span{font-size:17px}.eb-friend-self{gap:8px}.eb-friend-requests article{flex-wrap:wrap}.eb-friend-duel strong{float:none;display:block;margin-top:4px}.eb-prank-toast{bottom:85px}.eb-friends-page button{min-height:44px}}
 .eb-friends-page progress{appearance:none;-webkit-appearance:none;border:0;border-radius:8px;background:#e8eddf;overflow:hidden}.eb-friends-page progress::-webkit-progress-bar{background:#e8eddf;border-radius:8px}.eb-friends-page progress::-webkit-progress-value{background:#88aa78;border-radius:8px}.eb-friends-page progress::-moz-progress-bar{background:#88aa78;border-radius:8px}
+
+/* Mobile word dictionary: seasonal tokens also support a future page theme picker. */
+:root { --word-season:#789d69; --word-season-soft:#edf5e7; --word-season-border:#c9ddba; }
+:root[data-season="summer"] { --word-season:#398f94; --word-season-soft:#e7f6f5; --word-season-border:#b9dedd; }
+:root[data-season="autumn"] { --word-season:#b67843; --word-season-soft:#fcf0df; --word-season-border:#e9ceaa; }
+:root[data-season="winter"] { --word-season:#7b83b0; --word-season-soft:#eef0fa; --word-season-border:#d0d5ee; }
+.eb-word-hold { position:absolute;inset:-3px;width:calc(100% + 6px);height:calc(100% + 6px);pointer-events:none;overflow:visible; }
+.eb-word-hold rect { fill:none;stroke:var(--word-season);stroke-width:2;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:word-hold-fill 3s linear forwards; }
+[data-word-block][data-pressing] { transform:scale(.96);box-shadow:0 0 0 3px var(--word-season-soft); }
+@keyframes word-hold-fill { to {stroke-dashoffset:0;} }
+.eb-modal-word {border-color:var(--word-season-border);background:linear-gradient(145deg,#fffefa,var(--word-season-soft));animation:word-card-arrive .2s ease-out;}
+.eb-modal-word button[aria-label="发音"],.eb-modal-word .candy-btn {background:var(--word-season);color:white;}
+@keyframes word-card-arrive {from {opacity:0;transform:scale(.95);}to {opacity:1;transform:scale(1);}}
+@media (max-width:767px), (hover:none) and (pointer:coarse) {
+  .eb-word-tools {display:none !important;}
+  [data-word-block] {-webkit-touch-callout:none;touch-action:manipulation;min-height:40px;}
+  [data-word-block]:active {transform:none;}
+  [data-word-block][data-pressing] {transform:scale(.96);}
+}
+@media (prefers-reduced-motion:reduce) {
+  [data-word-block][data-pressing] {transform:none;}
+  .eb-modal-word {animation:none;transition:none;}
+  .eb-word-hold rect {animation:none;stroke-dashoffset:0;}
+}
+
+[data-word-block][data-held] {animation:word-hold-rebound .22s ease-out;}
+@keyframes word-hold-rebound {0% {transform:scale(.96);}65% {transform:scale(1.03);}100% {transform:scale(1);}}
+@media (prefers-reduced-motion:reduce) {[data-word-block][data-held] {animation:none;}}

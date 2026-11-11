@@ -1,5 +1,5 @@
 import { ModalOverlay } from './ModalOverlay';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { WordBlock } from '../types/game';
 import { Volume2, Star, X, Sparkles, BookOpen } from 'lucide-react';
 import { sound } from '../utils/sound';
@@ -19,6 +19,7 @@ export const WordCardModal: React.FC<WordCardModalProps> = ({
   onToggleStar,
   onClose,
 }) => {
+  useEffect(()=>{if(!isOpen)return;const close=(e:KeyboardEvent)=>{if(e.key==='Escape')onClose();};window.addEventListener('keydown',close);return()=>window.removeEventListener('keydown',close);},[isOpen,onClose]);
   if (!isOpen || !word) return null;
 
   const handleSpeak = () => {
@@ -53,7 +54,7 @@ export const WordCardModal: React.FC<WordCardModalProps> = ({
           <button
             onClick={onClose}
             aria-label="关闭"
-            className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95 flex items-center justify-center transition-colors text-slate-500 hover:text-slate-800"
+            className="w-11 h-11 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95 flex items-center justify-center transition-colors text-slate-500 hover:text-slate-800"
           >
             <X className="w-4 h-4" />
           </button>
@@ -68,7 +69,7 @@ export const WordCardModal: React.FC<WordCardModalProps> = ({
             <button
               data-ui-sound="off" onClick={handleSpeak}
               aria-label="发音"
-              className="w-8 h-8 rounded-full bg-amber-400 hover:bg-amber-500 active:scale-95 text-white flex items-center justify-center shadow-sm transition-all"
+              className="w-11 h-11 rounded-full bg-amber-400 hover:bg-amber-500 active:scale-95 text-white flex items-center justify-center shadow-sm transition-all"
               title="点击播放标准发音"
             >
               <Volume2 className="w-4 h-4" />
