@@ -1,3 +1,4 @@
+import {StageEmblem} from './StageEmblem';
 import { MimiChat } from './MimiChat';
 import React from 'react';
 import { createPortal } from 'react-dom';
@@ -311,7 +312,7 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
         {/* 1. TOP CATEGORY BADGE */}
         <div className="flex justify-center mb-3">
           <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[var(--theme-muted-surface)] border border-[var(--theme-border)] text-[var(--theme-text)] text-xs font-semibold">
-            <span>🍃</span>
+            <StageEmblem tier={level.tier} size={26}/>
             <span>{stageForLevel(level).label} · {stageForLevel(level).subtitle}</span>
           </div>
         </div>
