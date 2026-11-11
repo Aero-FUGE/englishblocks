@@ -86,6 +86,7 @@ export default function App() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isCloudOpen,setIsCloudOpen]=useState(false);
   const [inStudy,setInStudy]=useState(false);
+  const [mimiVisible,setMimiVisible]=useState(true);
   useEffect(()=>{document.documentElement.dataset.learningPage=inStudy?'study':'lobby';return()=>{delete document.documentElement.dataset.learningPage;};},[inStudy]);
   const [friendsOpen,setFriendsOpen]=useState(()=>location.hash==='#friends');
   const [pranksOpen,setPranksOpen]=useState(false);
@@ -608,7 +609,7 @@ export default function App() {
         {/* RIGHT PLAYGROUND COLUMN */}
         <div className="eb-game-main flex-1 flex flex-col justify-start">
           {/* TOP PROGRESS CAPSULES (Matching Screenshot) */}
-          <header className="eb-study-heading"><button type="button" onClick={()=>{persistBoard(boardContext.current.owner,currentLevel.id,currentPhaseIndex,board);pauseClock();setInStudy(false);window.scrollTo({top:0});}}>← 返回大厅</button><div><strong>第 {currentLevel.levelNumber} 关</strong><span>已完成 {profile.completedLevelIds.length} / {SENTENCE_BANK.length} 关</span></div></header>
+          <header className="eb-study-heading"><button type="button" onClick={()=>{persistBoard(boardContext.current.owner,currentLevel.id,currentPhaseIndex,board);pauseClock();setInStudy(false);window.scrollTo({top:0});}}>← 返回大厅</button><div><strong>第 {currentLevel.levelNumber} 关</strong><span>已完成 {profile.completedLevelIds.length} / {SENTENCE_BANK.length} 关</span></div><button type="button" className="eb-mimi-toggle" aria-label={mimiVisible?'隐藏咪咪翻译官':'显示咪咪翻译官'} aria-pressed={mimiVisible} title={mimiVisible?'让咪咪休息一下':'叫咪咪回来'} onClick={()=>setMimiVisible(v=>!v)}><img src="./assets/mimi-translator/peek.png" alt=""/><span>{mimiVisible?'收起咪咪':'叫咪咪'}</span></button></header>
           {completedView && <div className="mt-3 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-muted-surface)] px-4 py-3 text-sm text-[var(--theme-text)]"><span>已通关 · 这是你上次拼好的完整句子</span><button type="button" onClick={beginUnscoredReplay} className="rounded-full bg-white border border-[var(--theme-border)] px-4 py-2 font-bold hover:bg-[var(--theme-muted-surface)]">重新拼一次（不计时、不积分）</button><button type="button" onClick={() => {setReplayCelebration(true);setLastFishReward(0);setLastSpeedReward(0);setLastCompletionMs(0);setLastPersonalBest(false);sound.playVictory();setIsSuccessModalOpen(true);}} className="rounded-full bg-white border border-[var(--theme-border)] px-4 py-2 font-bold hover:bg-[var(--theme-muted-surface)]">重看通关庆祝</button></div>}
           {reviewMode && <div className="mt-3 rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-muted-surface)] px-4 py-2 text-sm text-[var(--theme-text)]">自由复习中 · 不计时、不积分、不覆盖原成绩</div>}
           <div data-eb-edit="status" className="mt-3 flex flex-wrap justify-end gap-3 text-xs text-[var(--theme-text)]">
@@ -619,6 +620,7 @@ export default function App() {
           <div data-eb-edit="board" className="mt-2 eb-full-height-board" style={{...layoutStyle('board'), '--eb-board-scale': layoutDraft.board.scale / 100} as React.CSSProperties}>
             <MainStudyBoard
               studyActive={inStudy&&!friendsOpen}
+              mimiVisible={mimiVisible}
               onOpenCloud={()=>setIsCloudOpen(true)}
               activeCat={collection.activeCat}
               catOutfit={collection.equipped?.[collection.activeCat] || {}}

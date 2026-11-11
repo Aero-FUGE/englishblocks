@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),express=require('express');
+const{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+(async()=>{const app=express();app.use(express.static('dist'));const server=app.listen(0);await new Promise(r=>server.once('listening',r));const browser=await chromium.launch({args:['--no-sandbox']});try{
+ for(const width of[320,390,1360]){const page=await browser.newPage({viewport:{width,height:900},hasTouch:width<700,isMobile:width<700});const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('http://localhost:'+server.address().port);await page.getByRole('button',{name:/继续学习/}).click();const cat=page.locator('.eb-floating-cat');await cat.waitFor();await cat.locator('img').first().evaluate(i=>i.decode());assert.match(await cat.locator('img').first().getAttribute('src'),/mimi-translator\/peek/);
+ await page.locator('.eb-candidates [data-word-block]').first().click();const word=await page.locator('.eb-rail [data-word-block]').first().textContent();
+ await page.getByRole('button',{name:'点击小猫打开咪咪对话'}).press('Enter');await page.locator('#mimi-ai').waitFor();await page.getByRole('button',{name:'隐藏咪咪翻译官',exact:true}).click();await cat.waitFor({state:'hidden'});assert.equal(await page.locator('#mimi-ai').count(),0);assert.equal(await page.locator('.eb-rail [data-word-block]').first().textContent(),word);
+ await page.getByRole('button',{name:'显示咪咪翻译官',exact:true}).click();await cat.waitFor();await page.getByRole('button',{name:'点击小猫打开咪咪对话'}).press('Enter');await page.locator('#mimi-ai').waitFor();await page.getByRole('button',{name:'收起咪咪对话'}).click();
+ for(let i=0;i<5;i++){await page.getByRole('button',{name:'隐藏咪咪翻译官',exact:true}).click();await page.getByRole('button',{name:'显示咪咪翻译官',exact:true}).click();}
+ assert.equal(await page.locator('.eb-rail [data-word-block]').count(),1);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);assert.deepEqual(errors,[]);if(width===390)await page.screenshot({path:'previews/mimi-new-study-mobile.png',fullPage:true});await page.close();}
+ console.log('PASS: new mascot, 320/390/1360 layouts, hide closes portal, reopen works, repeated toggles preserve assembled words without errors.');
+ }finally{await browser.close();server.close();}})().catch(e=>{console.error(e);process.exitCode=1;});

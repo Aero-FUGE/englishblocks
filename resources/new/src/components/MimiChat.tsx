@@ -3,9 +3,10 @@ import {createPortal} from 'react-dom';
 import {cloudSync} from '../utils/cloudSync';
 import type {LevelData, WordBlock} from '../types/game';
 type Message={role:'user'|'assistant';content:string};
-export function MimiChat({level,phase,slots,matches,correct,onLogin,fallback}:{level:LevelData;phase:number;slots:(WordBlock|null)[];matches:boolean[];correct:boolean;onLogin:()=>void;fallback:string}){
+export function MimiChat({visible=true,level,phase,slots,matches,correct,onLogin,fallback}:{visible?:boolean;level:LevelData;phase:number;slots:(WordBlock|null)[];matches:boolean[];correct:boolean;onLogin:()=>void;fallback:string}){
  const cloud=useSyncExternalStore(cloudSync.subscribe,cloudSync.getState);
  const [open,setOpen]=useState(false),[auto,setAuto]=useState(()=>localStorage.getItem('englishblocks_mimi_auto')==='true');
+ useEffect(()=>{if(!visible)setOpen(false);},[visible]);
  const [messages,setMessages]=useState<Message[]>([]),[input,setInput]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState(''),[reply,setReply]=useState('');
  const signature=JSON.stringify(slots.map(w=>w?.id||null));
  const latest=useRef({slots,matches,correct,signature});latest.current={slots,matches,correct,signature};
@@ -17,7 +18,8 @@ export function MimiChat({level,phase,slots,matches,correct,onLogin,fallback}:{l
  const history=useRef<Message[]>([]),request=useRef(0),inFlight=useRef(false),last=useRef(0),failed=useRef(''),lastAuto=useRef('');
  const stalled=useRef(0),prior=useRef({signature,matches});
  const mounted=useRef(true),account=useRef(cloud.user?.id);account.current=cloud.user?.id;
- useEffect(()=>{mounted.current=true;const show=()=>{setOpen(v=>!v);};window.addEventListener('englishblocks-open-mimi',show);return()=>{mounted.current=false;request.current++;window.removeEventListener('englishblocks-open-mimi',show);};},[]);
+ useEffect(()=>{mounted.current=true;return()=>{mounted.current=false;request.current++;};},[]);
+ useEffect(()=>{const show=()=>{if(visible)setOpen(v=>!v);};window.addEventListener('englishblocks-open-mimi',show);return()=>window.removeEventListener('englishblocks-open-mimi',show);},[visible]);
  useEffect(()=>{request.current++;history.current=[];setMessages([]);setReply('');setError('');},[cloud.user?.id]);
  useEffect(()=>{
   if(prior.current.signature!==signature){
@@ -47,13 +49,14 @@ export function MimiChat({level,phase,slots,matches,correct,onLogin,fallback}:{l
   finally{inFlight.current=false;if(mounted.current){setBusy(false);}}
  }
  useEffect(()=>{
-  if(!auto||!cloud.user||busy||!slots.some(Boolean)||failed.current===signature||lastAuto.current===signature)return;
+  if(!visible||!auto||!cloud.user||busy||!slots.some(Boolean)||failed.current===signature||lastAuto.current===signature)return;
   const timer=setTimeout(()=>{void ask(correct?'celebrate':stalled.current>=3?'hint':'translate');},Math.max(2200,12000-(Date.now()-last.current)));
   return()=>clearTimeout(timer);
- },[auto,cloud.user?.id,signature,correct,busy]);
+ },[visible,auto,cloud.user?.id,signature,correct,busy]);
  const toggle=()=>{setAuto(v=>{localStorage.setItem('englishblocks_mimi_auto',String(!v));failed.current='';return !v;});};
  const speech=reply||fallback;
  const bubbleToken=busy?'thinking':error||speech;
+ if(!visible)return null;
  return <>
   {!open&&bubbleToken&&dismissed!==bubbleToken&&<aside className="eb-mimi-bubble" aria-label="咪咪陪聊气泡" onPointerDown={e=>e.stopPropagation()}>
    <div className="eb-mimi-header"><strong>咪咪翻译官</strong><button type="button" aria-label="收起咪咪气泡" onClick={()=>setDismissed(bubbleToken)}>×</button></div>

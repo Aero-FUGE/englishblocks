@@ -34,7 +34,7 @@ export const MimiCatCharacter: React.FC<MimiCatCharacterProps> = ({
         </div>
       )}
       <img
-        src="./assets/mimi-golden.png"
+        src="./assets/mimi-translator/peek.png"
         alt="金渐层咪咪翻译官"
         draggable={false}
         width={size}

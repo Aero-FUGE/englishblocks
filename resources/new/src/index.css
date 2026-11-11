@@ -618,3 +618,10 @@ html[data-learning-page=study] .eb-game-shell {background:linear-gradient(145deg
 @media(max-width:600px) {.eb-lobby-welcome {grid-template-columns:1fr;gap:16px;padding:18px;}.eb-lobby-cat {min-height:160px;}.eb-lobby-cat>div {max-width:170px;}.eb-lobby-welcome h2 br {display:none;}.eb-lobby-actions {grid-template-columns:repeat(2,minmax(0,1fr));}.eb-lobby-heading>span {font-size:11px;}.eb-lobby-seasons button {flex:1;padding:8px;}}
 
 .eb-lobby-music {margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 20px;background:var(--theme-surface);border:1px solid var(--word-season-border);border-radius:22px;}
+
+/* A quiet, touch-friendly control for the learning companion. */
+.eb-study-heading>.eb-mimi-toggle {display:inline-flex;align-items:center;justify-content:center;gap:4px;flex-shrink:0;min-height:40px;padding:4px 8px;border-radius:999px;font-size:11px;line-height:1.2;background:var(--theme-muted-surface);border-color:var(--theme-border);box-shadow:0 2px 7px var(--theme-shadow);}
+.eb-mimi-toggle img {width:25px;height:25px;object-fit:contain;pointer-events:none;}
+.eb-mimi-toggle[aria-pressed=false] {color:var(--theme-muted);background:var(--theme-surface);}
+.eb-mimi-toggle:focus-visible {outline:2px solid var(--theme-primary);outline-offset:3px;}
+@media(max-width:420px) {.eb-study-heading {gap:6px;}.eb-study-heading>button:first-child {padding:8px 10px;font-size:12px;}.eb-study-heading>div {font-size:12px;min-width:0;}.eb-study-heading>div>span {font-size:10px;}.eb-study-heading>.eb-mimi-toggle {padding:4px 7px;gap:2px;font-size:10px;}.eb-mimi-toggle img {width:22px;height:22px;}}

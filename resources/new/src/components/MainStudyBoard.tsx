@@ -15,6 +15,7 @@ import { Lightbulb, CheckCircle2, RotateCcw, Volume2, Sparkles, Heart } from 'lu
 
 interface MainStudyBoardProps {
   studyActive?: boolean;
+  mimiVisible?: boolean;
   level: LevelData;
   onOpenCloud: () => void;
   activeCat?: CatId;
@@ -48,6 +49,7 @@ interface MainStudyBoardProps {
 
 export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
   studyActive = true,
+  mimiVisible = true,
   level,
   onOpenCloud,
   activeCat = 'mimi',
@@ -285,7 +287,7 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
       >
         {/* TOP RIGHT: 咪咪陪伴 (Mimi Peeking Over the Border) */}
         {studyActive&&createPortal(<div ref={companionRef} className="eb-floating-cat fixed flex items-end gap-2 z-[60] cursor-grab active:cursor-grabbing select-none max-w-[min(94vw,450px)] touch-none"
-          style={companionPosition ? {left:companionPosition.x,top:companionPosition.y, right:'auto'} : {right:24,top:88}}
+          style={{...(companionPosition ? {left:companionPosition.x,top:companionPosition.y, right:'auto'} : {right:24,top:88}),display:mimiVisible?undefined:'none'}}
           onPointerDown={beginCompanionDrag}
           onPointerMove={moveCompanion}
           onPointerUp={endCompanionDrag}
@@ -294,6 +296,7 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
           {/* Mimi Cat Character Illustration */}
           <div ref={catHitRef} className="relative cursor-pointer" role="button" tabIndex={0} aria-label="点击小猫打开咪咪对话" onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();window.dispatchEvent(new Event('englishblocks-open-mimi'));}}}>
             <DressedCat
+              translator
               cat={activeCat}
               emotion={isCorrect ? 'celebrating' : evaluation.emotion}
               items={catOutfit}
@@ -305,7 +308,7 @@ export const MainStudyBoard: React.FC<MainStudyBoardProps> = ({
             <span className="block mx-auto mt-1 w-fit rounded-full border border-[var(--theme-border)] bg-[var(--theme-surface)] px-2 py-1 text-[11px] font-bold text-[var(--theme-text)]">问咪咪 ♡</span>
           </div>
 
-          <MimiChat key={`${level.id}:${currentPhaseIndex}`} level={level} phase={currentPhaseIndex} slots={slottedWords} matches={matchedSlots} correct={evaluation.isCorrect || isCorrect} onLogin={onOpenCloud}
+          <MimiChat visible={mimiVisible} key={`${level.id}:${currentPhaseIndex}`} level={level} phase={currentPhaseIndex} slots={slottedWords} matches={matchedSlots} correct={evaluation.isCorrect || isCorrect} onLogin={onOpenCloud}
             fallback={showElapsedOnTap ? `已经挑战 ${formatTime(challengeElapsedMs)} 啦！` : challengeBubble ? '计时开始啦！我悄悄帮你记着。' : isCorrect ? '太棒啦！这一关也被你拿下了！' : timeRoast ? '五分钟啦！慢慢想，我陪你。' : shouldRoast ? evaluation.comment : ''} />
         </div>, document.body)}
 

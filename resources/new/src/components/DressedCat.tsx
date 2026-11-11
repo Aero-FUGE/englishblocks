@@ -79,9 +79,10 @@ export const DressedCat: React.FC<{
   pose?: CatPose;
   expression?: CatExpression;
   showGround?: boolean;
-}> = ({cat, items={}, size=130, className='', emotion='happy', pose='peek', expression='smile', showGround=true}) => {
+  translator?: boolean;
+}> = ({cat, items={}, size=130, className='', emotion='happy', pose='peek', expression='smile', showGround=true, translator=false}) => {
   const safePose = pose === 'sit' ? 'half' : pose;
-  const base = `./assets/cat-poses/${cat}/${safePose}.png`;
+  const base = translator && cat==='mimi' ? `./assets/mimi-translator/${pose==='peek'?'peek':pose==='half'?'half':'full'}.png` : `./assets/cat-poses/${cat}/${safePose}.png`;
   const sprite = (id: string) => `./assets/wearables/${cat}/${safePose}/${id}.png?v=21`;
   const slotted = (slot: OutfitSlot) => {
     const id = items[slot];
