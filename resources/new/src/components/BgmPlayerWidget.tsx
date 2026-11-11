@@ -127,12 +127,12 @@ export const BgmPlayerWidget: React.FC<BgmPlayerWidgetProps> = ({ className = ''
       />
 
       {/* Compact Top Bar Trigger Button */}
-      <div className="flex w-full min-w-0 items-center gap-1.5 bg-white hover:bg-amber-50/80 border-2 border-amber-200/90 rounded-full px-3 py-1 shadow-xs transition-colors">
+      <div className="eb-bgm-pill flex w-full min-w-0 items-center gap-1.5 bg-white hover:bg-amber-50/80 border-2 border-amber-200/90 rounded-full px-3 py-1 shadow-xs transition-colors">
         {/* Play / Pause button */}
         <button
           onClick={handleTogglePlay}
           aria-label={isPlaying ? '暂停背景音乐' : isLoading ? '音乐加载中' : '播放背景音乐'}
-          className="w-6 h-6 rounded-full bg-amber-400 hover:bg-amber-500 active:scale-95 text-amber-950 flex items-center justify-center transition-all shadow-xs shrink-0 cursor-pointer"
+          className="eb-bgm-play w-6 h-6 rounded-full bg-amber-400 hover:bg-amber-500 active:scale-95 text-amber-950 flex items-center justify-center transition-all shadow-xs shrink-0 cursor-pointer"
           title={isPlaying ? '暂停背景音乐' : isLoading ? '音乐正在从存档恢复' : '播放背景音乐'}
         >
           {isPlaying ? (
