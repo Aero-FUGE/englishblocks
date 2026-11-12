@@ -1,3 +1,5 @@
+import {taskSummary} from '../utils/studyTasks';
+import {useStudyNow} from '../utils/useStudyNow';
 import {PlayerAvatar} from './PlayerAvatar';
 import {StageEmblem} from './StageEmblem';
 import React,{useState} from 'react';
@@ -11,6 +13,7 @@ import {LEARNING_STAGES} from '../utils/stages';
 type Action={label:string;icon:string;onClick:()=>void;detail?:string};
 const imageIcons:Record<string,string>={'学习进度':'progress','小猫衣柜':'wardrobe','好友小窝':'friends','音乐设置':'music','云端存档':'cloud','游戏设置':'settings','个人档案':'profile','四季主题':'season'};
 export function LearningLobby({avatar,name,collection,level,tier,completed,total,words,filled,expected,onContinue,actions}:{avatar:string;name:string;collection:CatCollection;level:number;tier:number;completed:number;total:number;words:number;filled:number;expected:number;onContinue:()=>void;actions:Action[]}){
+ const task=taskSummary(collection.studyTasks,useStudyNow());
  const[season]=useSeasonTheme();const[showSeasons,setShowSeasons]=useState(false);
  const choose=actions.find(a=>a.label==='关卡选择')!;const stats=actions.find(a=>a.label==='学习进度')!;
  const stage=LEARNING_STAGES.find(s=>s.tier===tier)||LEARNING_STAGES[0];const catName=collection.activeCat==='mimi'?'咪咪':'团长';
@@ -30,6 +33,7 @@ export function LearningLobby({avatar,name,collection,level,tier,completed,total
      <img className="eb-garden-action-art" src={`./assets/season-icons/${season}/${icon}.png?v=foreground-2`} alt="" aria-hidden="true" draggable={false}/><strong>{label}</strong>{action?.detail?.includes('来信')&&<small>{action.detail}</small>}
     </button>;
    })}</section>
+   <button aria-label="查看每日与每周任务" className="eb-lobby-task-strip" onClick={actions.find(a=>a.label==='每日任务')?.onClick}><BookOpen size={21}/><span><strong>今日已完成 {task.today} 句 · 本周 {task.weekly} 句</strong><small>每日任务 {task.daily.filter(t=>t.earned).length}/3 · 每周任务 {task.weeklyTasks.filter(t=>t.earned).length}/3 · 学习攒小鱼干</small></span><ChevronRight size={17}/></button>
    <footer className="eb-garden-footer"><span>{SEASON_LABELS[season]} · 学习大厅</span><BgmPlayerWidget/></footer>
    {showSeasons&&<SeasonDialog onClose={()=>setShowSeasons(false)}/>}
   </div>

@@ -19,7 +19,9 @@
     "test:mimi": "node --test tests/mimi.test.cjs",
     "prebuild": "node --experimental-strip-types tools/build-social-catalog.mjs",
     "test:social": "node --experimental-strip-types --test tests/social.test.cjs tests/social-learning-regression.mjs",
-    "test:bgm": "node tests/bgm-regression.cjs"
+    "test:bgm": "node tests/bgm-regression.cjs",
+    "test:tasks": "node --experimental-strip-types --test tests/study-tasks.test.mjs",
+    "test:tasks:ui": "node tests/study-tasks-ui.cjs"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

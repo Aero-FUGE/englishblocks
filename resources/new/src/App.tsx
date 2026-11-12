@@ -1,3 +1,5 @@
+import {StudyTasksModal} from './components/StudyTasksModal';
+import {recordStudyTask} from './utils/studyTasks';
 import {SeasonPageBackground} from './components/SeasonPageBackground';
 import {SeasonAtmosphere} from './components/SeasonAtmosphere';
 import {LearningLobby} from './components/LearningLobby';
@@ -15,7 +17,7 @@ import { evaluateCurrentAssembly } from './utils/translationEvaluator';
 import { sound } from './utils/sound';
 import { resumeLevelIndex } from './utils/progress';
 import { recordLevelTime } from './utils/timing';
-import { exactSlotMatches, filledAnswerBoard } from './utils/answer';
+import { exactSlotMatches, filledAnswerBoard, fillOneEmptyAnswer } from './utils/answer';
 import { playUiClickForTarget } from './utils/uiSounds';
 import { useCloudSync } from './utils/useCloudSync';
 import { CloudSyncModal } from './components/CloudSyncModal';
@@ -87,6 +89,8 @@ export default function App() {
   const [isCloudOpen,setIsCloudOpen]=useState(false);
   const [inStudy,setInStudy]=useState(false);
   const [mimiVisible,setMimiVisible]=useState(true);
+  const [tasksOpen,setTasksOpen]=useState(false);
+  const [hintFeedback,setHintFeedback]=useState('');
   useEffect(()=>{document.documentElement.dataset.learningPage=inStudy?'study':'lobby';return()=>{delete document.documentElement.dataset.learningPage;};},[inStudy]);
   const [friendsOpen,setFriendsOpen]=useState(()=>location.hash==='#friends');
   const [pranksOpen,setPranksOpen]=useState(false);
@@ -97,6 +101,7 @@ export default function App() {
   useEffect(()=>{document.documentElement.dataset.friendsOpen=String(friendsOpen);if(friendsOpen)window.scrollTo({top:0});return()=>{delete document.documentElement.dataset.friendsOpen;};},[friendsOpen]);
 
   const [lastFishReward,setLastFishReward] = useState(0);
+  const [lastTaskReward,setLastTaskReward]=useState(0);
   const [lastSpeedReward, setLastSpeedReward] = useState(0);
   const [lastCompletionMs, setLastCompletionMs] = useState(0);
   const [lastPersonalBest, setLastPersonalBest] = useState(false);
@@ -321,6 +326,7 @@ export default function App() {
   const matchedSlots = useMemo(() => exactSlotMatches(slottedWords, currentLevel, currentPhaseIndex), [slottedWords, currentLevel, currentPhaseIndex]);
   const matchedCount = matchedSlots.filter(Boolean).length;
 
+  useEffect(()=>setHintFeedback(''),[currentLevel.id,currentPhaseIndex]);
   const revealFullAnswer = () => {
     everRevealed.current = true;
     setHintCount(3);
@@ -330,6 +336,17 @@ export default function App() {
     everRevealed.current = true;
     setAnswerRevealed(true);
     setBoard(prev => filledAnswerBoard(prev, currentLevel, currentPhaseIndex));
+    setIsHintModalOpen(false);
+  };
+
+  const openHint = () => {sound.playSlot('hint');setHintCount(n=>Math.max(1,n));setHintFeedback('');setIsHintModalOpen(true);};
+  const nextHint = () => {
+    if(hintCount>=3)return;
+    const result=fillOneEmptyAnswer(board,currentLevel,currentPhaseIndex);
+    if(!result){setHintFeedback('轨道已经填满，先撤回一个需要调整的词块，再请咪咪帮忙吧。');return;}
+    if(!reviewMode&&!completedView)startClock();
+    setBoard(result.board);setHintCount(n=>Math.min(3,n+1));
+    setHintFeedback(`咪咪帮你补入了第 ${result.index+1} 格「${result.text}」，其余词块继续由你来拼 ♡`);
     setIsHintModalOpen(false);
   };
 
@@ -379,6 +396,7 @@ export default function App() {
   // Check sentence trigger
   const handleCheckSentence = () => {
     if (isCorrect || completedView || checkLocked.current) return;
+    const completedAt=Date.now();
     const isNowCorrect = evaluation.isCorrect;
     if(isNowCorrect) social.record(currentPhaseIndex,slottedWords);
     if (isNowCorrect) checkLocked.current = true;
@@ -455,10 +473,15 @@ export default function App() {
       // 只在首次通关或刷新该关最佳提示次数时发放差额，避免重复刷同一题无限领分。
       const reward=assisted ? 0 : previous===undefined?rewardForHints(hintCount):Math.max(0,rewardForHints(hintCount)-rewardForHints(previous));
       const speedReward = timing?.speedReward ?? 0;
-      setLastFishReward(reward+speedReward);
+      const taskBonus=!hasMorePhases&&!assisted?recordStudyTask(collection.studyTasks,currentLevel.id,completedAt).fish:0;
+      setLastTaskReward(taskBonus);
+      setLastFishReward(reward+speedReward+taskBonus);
       setLastSpeedReward(speedReward);
       if (timing) { setLastCompletionMs(finalElapsed); setLastPersonalBest(timing.isPersonalBest); }
-      setCollection(p=>({...p,fish:p.fish+reward+speedReward,bestHints: assisted ? p.bestHints : {...p.bestHints,[key]:Math.min(p.bestHints[key]??99,hintCount)}}));
+      setCollection(p=>{
+        const taskResult=!hasMorePhases&&!assisted?recordStudyTask(p.studyTasks,currentLevel.id,completedAt):null;
+        return {...p,fish:p.fish+reward+speedReward+(taskResult?.fish||0),studyTasks:taskResult?.progress||p.studyTasks,bestHints:assisted?p.bestHints:{...p.bestHints,[key]:Math.min(p.bestHints[key]??99,hintCount)}};
+      });
       setIsCorrect(true);
       sound.playVictory(); // Always play the celebration SFX, independent of BGM playback.
 
@@ -616,6 +639,7 @@ export default function App() {
             {social.learningError&&<span role="status">{social.learningError}<button className="underline" onClick={social.retryRecord}>重试确认</button></span>}
             <span>提示 {hintCount}/3 · 本关预计 +{completedView || reviewMode || answerRevealed ? 0 : rewardForHints(hintCount)} 🐟</span>
           </div>
+          {hintFeedback&&<p role="status" className="eb-study-hint-feedback">{hintFeedback}</p>}
           {/* MAIN STUDY BOARD CARD (Matching Screenshot with Mimi peeking) */}
           <div data-eb-edit="board" className="mt-2 eb-full-height-board" style={{...layoutStyle('board'), '--eb-board-scale': layoutDraft.board.scale / 100} as React.CSSProperties}>
             <MainStudyBoard
@@ -648,13 +672,14 @@ export default function App() {
               onClearAll={handleClearAll}
               onShuffle={handleShuffleCandidates}
               onCheckSentence={handleCheckSentence}
-              onShowHint={() => { sound.playSlot('hint'); setIsHintModalOpen(true); }}
+              onShowHint={openHint}
               onDragStartWord={() => { if (!reviewMode && !completedView) startClock(); /* drag itself starts a challenge */ }}
             />
           </div>
         </div>
       </div>
 
+      {tasksOpen&&<StudyTasksModal progress={collection.studyTasks} fish={collection.fish} onClose={()=>setTasksOpen(false)}/>}
       <CloudSyncModal open={isCloudOpen} onClose={()=>setIsCloudOpen(false)} local={{profile,collection}} />
       <CatWardrobeModal open={wardrobeOpen} onClose={()=>setWardrobeOpen(false)} collection={collection} setCollection={setCollection} unlockedTier={Math.max(currentTier,...SENTENCE_BANK.filter(l=>profile.completedLevelIds.includes(l.id)).map(l=>l.tier))} />
       {/* MODALS */}
@@ -680,6 +705,7 @@ export default function App() {
         onNextLevel={handleNextLevel}
         onReplay={handleReplayCurrent}
         fishReward={lastFishReward}
+        taskReward={replayCelebration?0:lastTaskReward}
         usedFullAnswer={replayCelebration || answerRevealed || everRevealed.current}
         isReview={replayCelebration}
         completedMs={lastCompletionMs}
@@ -701,6 +727,7 @@ export default function App() {
         onJumpToLevel={handleJumpToLevel}
         currentLevel={currentLevel}
         fishCount={collection.fish}
+        onOpenTasks={()=>{setIsProfileModalOpen(false);setTasksOpen(true);}}
       />
 
       {/* Level Selector Modal (Anti-spoiler: Hides English in Unfinished levels) */}
@@ -715,7 +742,8 @@ export default function App() {
       {/* Grammar Hint Modal */}
       <GrammarHintModal
         hintCount={hintCount}
-        onMoreHint={() => setHintCount(p=>Math.min(3,p+1))}
+        onMoreHint={nextHint}
+        feedback={hintFeedback}
         isOpen={isHintModalOpen}
         level={currentLevel}
         phaseIndex={currentPhaseIndex}
@@ -750,6 +778,7 @@ export default function App() {
       />
     </div>
     {!inStudy&&!friendsOpen&&<LearningLobby avatar={profile.avatar} name={profile.name} collection={collection} level={currentLevel.levelNumber} tier={currentTier} filled={slottedWords.filter(Boolean).length} expected={expectedCount} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
+      {label:'每日任务',icon:'gift',onClick:()=>setTasksOpen(true)},
       {label:'关卡选择',icon:'▦',onClick:()=>setIsLevelSelectorOpen(true)},
       {label:'学习进度',icon:'🌿',onClick:()=>setIsProfileModalOpen(true)},
       {label:'好友小窝',icon:'🏡',onClick:openFriends,detail:social.pending?`${social.pending} 封小窝来信`:undefined},

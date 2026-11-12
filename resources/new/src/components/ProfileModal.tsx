@@ -22,6 +22,7 @@ interface ProfileModalProps {
   onJumpToLevel: (levelId: number) => void;
   currentLevel: LevelData;
   fishCount: number;
+  onOpenTasks:()=>void;
 }
 
 export const ProfileModal: React.FC<ProfileModalProps> = ({
@@ -35,6 +36,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
   onJumpToLevel,
   currentLevel,
   fishCount,
+  onOpenTasks,
 }) => {
   const [avatarOpen,setAvatarOpen]=useState(false);
   const [activeTab, setActiveTab] = useState<'profile' | 'mistakes' | 'starred'>('profile');
@@ -140,6 +142,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
 
         {/* Tab Content */}
         <div className="pr-1">
+          {activeTab === 'profile' && (<button className="eb-task-profile-link" onClick={onOpenTasks}><span>🎁 每日与每周任务</span><span>查看每日进度 →</span></button>)}
           {activeTab === 'profile' && (
             <div className="space-y-3">
               <div className="rounded-[22px] border border-[var(--theme-border)] bg-gradient-to-r from-[var(--theme-muted-surface)] to-[var(--theme-muted-surface)] p-4">

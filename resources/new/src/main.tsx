@@ -6,6 +6,7 @@ import './index.css';
 import './lobby.css';
 import './page-backgrounds.css';
 import './avatars.css';
+import './study-tasks.css';
 
 initializeSeason();
 

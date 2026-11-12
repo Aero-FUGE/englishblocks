@@ -30,3 +30,14 @@ export function filledAnswerBoard(board: RailState, level: LevelData, phaseIndex
   if (slots.some(slot => slot === null) || slots.length !== board.slots.length) return board;
   return {slots, pool: [...unused.values()]};
 }
+
+/** Fill exactly one empty target; if its tile was misplaced, leave that source cell empty. */
+export function fillOneEmptyAnswer(board:RailState,level:LevelData,phaseIndex=0):{board:RailState;index:number;text:string}|null {
+ const index=board.slots.findIndex(word=>word===null);if(index<0)return null;
+ const text=expectedSequence(level,phaseIndex)[index];if(!text)return null;
+ const poolIndex=board.pool.findIndex(word=>normalized(word.text)===normalized(text));
+ const slots=board.slots.slice(),pool=board.pool.slice();
+ if(poolIndex>=0)slots[index]=pool.splice(poolIndex,1)[0];
+ else {const source=slots.findIndex((word,i)=>word&&normalized(word.text)===normalized(text)&&!exactSlotMatches(board.slots,level,phaseIndex)[i]);if(source<0)return null;slots[index]=slots[source];slots[source]=null;}
+ return {board:{slots,pool},index,text:slots[index]!.text};
+}

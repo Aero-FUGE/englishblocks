@@ -15,6 +15,7 @@ interface SuccessCelebrationModalProps {
   onNextLevel: () => void;
   onReplay: () => void;
   fishReward?: number;
+  taskReward?:number;
   usedFullAnswer?: boolean;
   completedMs?: number;
   speedReward?: number;
@@ -30,6 +31,7 @@ export const SuccessCelebrationModal: React.FC<SuccessCelebrationModalProps> = (
   onNextLevel,
   onReplay,
   fishReward=0,
+  taskReward=0,
   usedFullAnswer=false,
   completedMs=0,
   speedReward=0,
@@ -75,6 +77,7 @@ export const SuccessCelebrationModal: React.FC<SuccessCelebrationModalProps> = (
             <CheckCircle2 className="w-4 h-4" />
             <span>拼对啦！</span>
           </div>
+          {!isReview&&!usedFullAnswer&&taskReward>0&&<p className="mb-2 text-xs font-bold text-[var(--theme-primary)]">🎁 日常／周常达成 · 额外 +{taskReward} 小鱼干已到账</p>}
           <p className="text-sm font-bold text-amber-700">{isReview ? "复习完成 · 不计时、不积分" : usedFullAnswer ? "完整答案已解锁 · 本关小鱼干奖励为 0" : `本关获得 +${fishReward} 小鱼干`}</p>
           {!isReview && <div className="mt-1 mb-1 flex flex-wrap justify-center gap-2">
             <span className="inline-flex items-center gap-1 rounded-full border border-[var(--theme-border)] bg-[var(--theme-muted-surface)] text-[var(--theme-text)] px-3 py-1 text-xs font-bold"><Clock3 className="w-3.5 h-3.5"/> 用时 {formatTime(completedMs)}</span>

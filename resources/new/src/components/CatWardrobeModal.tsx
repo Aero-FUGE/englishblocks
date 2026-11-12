@@ -6,6 +6,7 @@ import { PoseDressedCat, type CatExpression, type CatPose, POSE_UNLOCK_TIER } fr
 
 export interface CatCollection {
   fish:number;
+  studyTasks?: import('../utils/studyTasks').StudyTaskProgress;
   activeCat:CatId;
   owned:string[];
   equipped:Record<CatId,Partial<Record<OutfitSlot,string>>>;
