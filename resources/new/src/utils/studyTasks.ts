@@ -1,13 +1,17 @@
 export type StudyTaskProgress={startedOn:string;days:Record<string,number[]>;grants:Record<string,number>};
 export const DAILY_TASKS=[{id:'daily-1',target:1,fish:5},{id:'daily-10',target:10,fish:20},{id:'daily-20',target:20,fish:35}] as const;
 export const WEEKLY_TASKS=[{id:'weekly-10',target:10,fish:25},{id:'weekly-50',target:50,fish:80},{id:'weekly-100',target:100,fish:160}] as const;
+export const KING_DAILY_TASKS=[{id:'king-daily-50',target:50,fish:120},{id:'king-daily-100',target:100,fish:350},{id:'king-daily-200',target:200,fish:900}] as const;
+export const KING_WEEKLY_TASKS=[{id:'king-weekly-100',target:100,fish:200},{id:'king-weekly-300',target:300,fish:800},{id:'king-weekly-500',target:500,fish:1600}] as const;
+export const ALL_TASKS=[...DAILY_TASKS,...WEEKLY_TASKS,...KING_DAILY_TASKS,...KING_WEEKLY_TASKS];
+export const taskTitle=(id:string)=>{const task=ALL_TASKS.find(t=>t.id===id);return task?`${id.startsWith('king')?'卷王 · ':''}${id.includes('daily')?'今日':'本周'}完成 ${task.target} 个句子`:'挑战达成';};
 export const studyDay=(time=Date.now())=>new Date(time+8*3600000).toISOString().slice(0,10);
 export function studyWeek(day:string){const date=new Date(day+'T00:00:00Z');date.setUTCDate(date.getUTCDate()-(date.getUTCDay()+6)%7);return date.toISOString().slice(0,10);}
 export function shiftStudyDay(day:string,offset:number){const d=new Date(day+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+offset);return d.toISOString().slice(0,10);}
 export function taskSummary(progress:StudyTaskProgress|undefined,time=Date.now()){
  const day=studyDay(time),week=studyWeek(day);const days=progress?.days||{};
  const today=days[day]?.length||0,weekly=Object.entries(days).filter(([d])=>d>=week&&d<=day).reduce((n,[,ids])=>n+ids.length,0);
- return {day,week,today,weekly,daily:DAILY_TASKS.map(t=>({...t,count:today,earned:!!progress?.grants[`${day}:${t.id}`]})),weeklyTasks:WEEKLY_TASKS.map(t=>({...t,count:weekly,earned:!!progress?.grants[`${week}:${t.id}`]}))};
+ return {day,week,today,weekly,daily:DAILY_TASKS.map(t=>({...t,count:today,earned:!!progress?.grants[`${day}:${t.id}`]})),kingDaily:KING_DAILY_TASKS.map(t=>({...t,count:today,earned:!!progress?.grants[`${day}:${t.id}`]})),kingWeekly:KING_WEEKLY_TASKS.map(t=>({...t,count:weekly,earned:!!progress?.grants[`${week}:${t.id}`]})),weeklyTasks:WEEKLY_TASKS.map(t=>({...t,count:weekly,earned:!!progress?.grants[`${week}:${t.id}`]}))};
 }
 /** Progress and granted fish are applied together in the collection's single state update. */
 export function recordStudyTask(previous:StudyTaskProgress|undefined,levelId:number,time=Date.now()){
@@ -15,6 +19,6 @@ export function recordStudyTask(previous:StudyTaskProgress|undefined,levelId:num
  if(current.days[day]?.includes(levelId))return {progress:current,fish:0,awards:[] as string[]};
  const progress:StudyTaskProgress={...current,days:{...current.days,[day]:[...(current.days[day]||[]),levelId]},grants:{...current.grants}};
  const summary=taskSummary(progress,time);let fish=0;const awards:string[]=[];
- for(const [period,tasks]of [[summary.day,summary.daily],[summary.week,summary.weeklyTasks]] as const)for(const task of tasks){const key=`${period}:${task.id}`;if(task.count>=task.target&&!progress.grants[key]){progress.grants[key]=task.fish;fish+=task.fish;awards.push(task.id);}}
+ for(const [period,tasks]of [[summary.day,summary.daily],[summary.week,summary.weeklyTasks],[summary.day,summary.kingDaily],[summary.week,summary.kingWeekly]] as const)for(const task of tasks){const key=`${period}:${task.id}`;if(task.count>=task.target&&!progress.grants[key]){progress.grants[key]=task.fish;fish+=task.fish;awards.push(task.id);}}
  return {progress,fish,awards};
 }

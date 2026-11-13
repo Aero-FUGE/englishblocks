@@ -11,7 +11,7 @@ test('daily/weekly awards stack once; duplicate submits, reload, day/week rollov
  assert.equal(fish,85);assert.equal(taskSummary(progress,monday).today,20);assert.equal(taskSummary(progress,monday).weekly,20);
  const restored=JSON.parse(JSON.stringify(progress));assert.equal(recordStudyTask(restored,20,monday).fish,0);
  for(let i=21;i<=100;i++){const r=recordStudyTask(progress,i,monday+86400000);progress=r.progress;fish+=r.fish;}
- assert.equal(fish,385);assert.equal(taskSummary(progress,monday+86400000).weekly,100);
+ assert.equal(fish,705);assert.equal(taskSummary(progress,monday+86400000).weekly,100);
  const nextWeek=monday+7*86400000;const next=recordStudyTask(progress,101,nextWeek);assert.equal(next.fish,5);assert.equal(taskSummary(next.progress,nextWeek).weekly,1);assert.equal(Object.keys(next.progress.days).length,3);
  assert.equal(studyDay(Date.parse('2026-11-09T15:59:59Z')),'2026-11-09');assert.equal(studyDay(Date.parse('2026-11-09T16:00:00Z')),'2026-11-10');assert.equal(studyWeek('2026-11-15'),'2026-11-09');assert.equal(studyWeek('2026-11-16'),'2026-11-16');
 });
@@ -30,4 +30,12 @@ test('every lesson has an actual matching phrase and Chinese meaning; phases do 
 test('task progress is compatible with cloud snapshots and malformed records are rejected',()=>{
  const p={id:'x',name:'猫',avatar:'cat-avatar-01',themeColor:'green',currentLevelIndex:0,totalAttempts:0,correctAttempts:0,streakDays:0,totalWordGoal:1200,totalSentenceGoal:500,completedLevelIds:[],masteredWordIds:[],starredWordIds:[],mistakeHistory:[]};const c={fish:5,activeCat:'mimi',owned:[],equipped:{mimi:{},tuanzhang:{}},bestHints:{},studyTasks:recordStudyTask(undefined,2001,monday).progress};
  assert(validSnapshot({profile:p,collection:c}));assert(validSnapshot({profile:p,collection:{...c,studyTasks:undefined}}));assert(!validSnapshot({profile:p,collection:{...c,studyTasks:{...c.studyTasks,days:{'2026-11-09':[1,1]}}}}));assert(!validSnapshot({profile:p,collection:{...c,studyTasks:{...c.studyTasks,grants:{fake:999}}}}));
+});
+
+test('king challenges have independent daily/weekly grants, stack with ordinary tasks and persist',()=>{
+ let progress,fish=0;
+ for(let i=1;i<=500;i++){const r=recordStudyTask(progress,i,monday);progress=r.progress;fish+=r.fish;}
+ assert.equal(fish,4295);assert.equal(Object.keys(progress.grants).length,12);assert.equal(progress.grants['2026-11-09:king-daily-100'],350);assert.equal(progress.grants['2026-11-09:king-weekly-100'],200);
+ const restored=JSON.parse(JSON.stringify(progress));assert.equal(recordStudyTask(restored,500,monday).fish,0);
+ const next=recordStudyTask(restored,501,monday+86400000);assert.equal(next.fish,5);assert.equal(taskSummary(next.progress,monday+86400000).kingDaily[0].earned,false);assert.equal(taskSummary(next.progress,monday+86400000).kingWeekly[2].earned,true);
 });

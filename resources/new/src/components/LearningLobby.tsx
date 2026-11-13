@@ -3,7 +3,7 @@ import {useStudyNow} from '../utils/useStudyNow';
 import {PlayerAvatar} from './PlayerAvatar';
 import {StageEmblem} from './StageEmblem';
 import React,{useState} from 'react';
-import {BookOpen,ChevronRight,ChevronDown,Leaf,Layers,Check} from 'lucide-react';
+import {BookOpen,ChevronRight,ChevronDown,Leaf,Layers,Sparkles} from 'lucide-react';
 import {SeasonDialog} from './SeasonPicker';
 import {BgmPlayerWidget} from './BgmPlayerWidget';
 import {DressedCat} from './DressedCat';
@@ -24,7 +24,7 @@ export function LearningLobby({avatar,name,collection,level,tier,completed,total
     <div className="eb-garden-profile-top"><button className="eb-garden-avatar" aria-label="打开个人档案" onClick={stats.onClick}><PlayerAvatar avatar={avatar} size={58} fallback={<DressedCat cat={collection.activeCat} emotion="happy" items={collection.equipped?.[collection.activeCat]||{}} pose={collection.poses?.[collection.activeCat]||'peek'} expression={collection.expressions?.[collection.activeCat]||'smile'} size={68}/>}/></button><div className="eb-garden-person"><strong>{name}<span>学习花园的小主人</span></strong><progress max={total} value={completed}/><small>已走过 {completed} 关 · 每一步都算数</small></div><span className="eb-garden-fish">🐟 {collection.fish}</span></div>
     <div className="eb-garden-stats"><div><BookOpen/><span>拼句通关</span><strong>{completed}<small> / {total} 句</small></strong></div><div><Leaf/><span>掌握词汇</span><strong>{words}<small> 词</small></strong></div><div><Layers/><span>当前拼放</span><strong>{filled}<small> / {expected} 块</small></strong></div></div>
    </section>
-   <button className="eb-garden-save" onClick={onContinue}><span className="eb-garden-save-icon"><Check size={20}/></span><strong>学习现场已保留</strong><span>接着拼第 {level} 关</span><ChevronRight size={17}/></button>
+   <button aria-label="查看每日挑战" className="eb-lobby-challenge" onClick={actions.find(a=>a.label==='每日任务')?.onClick}><span className="eb-lobby-challenge-medal" aria-hidden="true">🏆</span><span><strong>每日挑战 <Sparkles size={13}/></strong><small>今天拼了 {task.today} 句 · 去寻宝吧！</small></span><span className="eb-lobby-challenge-prize">🐟<small>{task.daily.filter(t=>t.earned).length}/3 已达成</small></span><ChevronRight size={17}/></button>
    <section className="eb-garden-scene" aria-label="小猫陪伴"><div className="eb-garden-bubble"><small>{catName}：</small><p>今天也来拼句子吧？<br/>我在花园里等你哦 ♡</p></div></section>
    <div className="eb-garden-journey"><button className="eb-lobby-continue" onClick={onContinue}><BookOpen size={34}/><span><strong>继续学习 <ChevronRight size={23}/></strong><small>第 {level} 关 · {filled?'恢复刚才的拼法':'开始今天的小挑战'}</small></span></button><button className="eb-garden-choose" onClick={choose.onClick}><Layers size={20}/>关卡选择<ChevronRight size={18}/></button></div>
    <section className="eb-lobby-actions eb-garden-actions" aria-label="大厅功能">{Object.entries(imageIcons).map(([label,icon])=>{
@@ -33,7 +33,7 @@ export function LearningLobby({avatar,name,collection,level,tier,completed,total
      <img className="eb-garden-action-art" src={`./assets/season-icons/${season}/${icon}.png?v=foreground-2`} alt="" aria-hidden="true" draggable={false}/><strong>{label}</strong>{action?.detail?.includes('来信')&&<small>{action.detail}</small>}
     </button>;
    })}</section>
-   <button aria-label="查看每日与每周任务" className="eb-lobby-task-strip" onClick={actions.find(a=>a.label==='每日任务')?.onClick}><BookOpen size={21}/><span><strong>今日已完成 {task.today} 句 · 本周 {task.weekly} 句</strong><small>每日任务 {task.daily.filter(t=>t.earned).length}/3 · 每周任务 {task.weeklyTasks.filter(t=>t.earned).length}/3 · 学习攒小鱼干</small></span><ChevronRight size={17}/></button>
+
    <footer className="eb-garden-footer"><span>{SEASON_LABELS[season]} · 学习大厅</span><BgmPlayerWidget/></footer>
    {showSeasons&&<SeasonDialog onClose={()=>setShowSeasons(false)}/>}
   </div>

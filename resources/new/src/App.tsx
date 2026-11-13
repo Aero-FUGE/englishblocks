@@ -1,3 +1,4 @@
+import {TaskCelebrationModal} from './components/TaskCelebrationModal';
 import {StudyTasksModal} from './components/StudyTasksModal';
 import {recordStudyTask} from './utils/studyTasks';
 import {SeasonPageBackground} from './components/SeasonPageBackground';
@@ -101,7 +102,9 @@ export default function App() {
   useEffect(()=>{document.documentElement.dataset.friendsOpen=String(friendsOpen);if(friendsOpen)window.scrollTo({top:0});return()=>{delete document.documentElement.dataset.friendsOpen;};},[friendsOpen]);
 
   const [lastFishReward,setLastFishReward] = useState(0);
-  const [lastTaskReward,setLastTaskReward]=useState(0);
+  const [pendingTaskAward,setPendingTaskAward]=useState<{fish:number;awards:string[]}|null>(null);
+  const [taskCelebrationOpen,setTaskCelebrationOpen]=useState(false);
+  const taskNextAction=React.useRef<'next'|'replay'>('next');
   const [lastSpeedReward, setLastSpeedReward] = useState(0);
   const [lastCompletionMs, setLastCompletionMs] = useState(0);
   const [lastPersonalBest, setLastPersonalBest] = useState(false);
@@ -235,7 +238,7 @@ export default function App() {
     setProfile({...DEFAULT_PROFILE,...snapshot.profile});
     setCollection({...EMPTY_COLLECTION,...snapshot.collection});
     setSoundEnabled(sound.enabled);
-    resetClock();setHintCount(0);setAnswerRevealed(false);setIsSuccessModalOpen(false);
+    resetClock();setHintCount(0);setAnswerRevealed(false);setIsSuccessModalOpen(false);setPendingTaskAward(null);setTaskCelebrationOpen(false);
     completedIdsRef.current=snapshot.profile.completedLevelIds;
     replayLevelRef.current=null;
     initLevel(SENTENCE_BANK[resumeLevelIndex(snapshot.profile,SENTENCE_BANK)]||SENTENCE_BANK[0],0);
@@ -474,8 +477,8 @@ export default function App() {
       const reward=assisted ? 0 : previous===undefined?rewardForHints(hintCount):Math.max(0,rewardForHints(hintCount)-rewardForHints(previous));
       const speedReward = timing?.speedReward ?? 0;
       const taskBonus=!hasMorePhases&&!assisted?recordStudyTask(collection.studyTasks,currentLevel.id,completedAt).fish:0;
-      setLastTaskReward(taskBonus);
-      setLastFishReward(reward+speedReward+taskBonus);
+      setPendingTaskAward(taskBonus>0?recordStudyTask(collection.studyTasks,currentLevel.id,completedAt):null);
+      setLastFishReward(reward+speedReward);
       setLastSpeedReward(speedReward);
       if (timing) { setLastCompletionMs(finalElapsed); setLastPersonalBest(timing.isPersonalBest); }
       setCollection(p=>{
@@ -486,7 +489,6 @@ export default function App() {
       sound.playVictory(); // Always play the celebration SFX, independent of BGM playback.
 
       if (hasMorePhases) {
-        sound.playVictory();
         setTimeout(() => {
           setCurrentPhaseIndex((prev) => prev + 1);
         }, 800);
@@ -508,7 +510,7 @@ export default function App() {
   };
 
   // Next level navigation
-  const handleNextLevel = () => {
+  const advanceLevel = () => {
     replayLevelRef.current = null;
     setIsSuccessModalOpen(false);
     setReplayCelebration(false);
@@ -518,12 +520,20 @@ export default function App() {
     setProfile(p => ({...p, currentLevelIndex: nextIdx, progressVersion: 3}));
   };
 
-  const handleReplayCurrent = () => {
+  const replayCurrent = () => {
     setReplayCelebration(false);
     setIsSuccessModalOpen(false);
     resetClock();
     beginUnscoredReplay();
   };
+
+  const leaveSuccess = (action:'next'|'replay') => {
+    if(pendingTaskAward&&!replayCelebration){taskNextAction.current=action;setIsSuccessModalOpen(false);setTaskCelebrationOpen(true);return;}
+    if(action==='next')advanceLevel();else replayCurrent();
+  };
+  const handleNextLevel=()=>leaveSuccess('next');
+  const handleReplayCurrent=()=>leaveSuccess('replay');
+  const finishTaskCelebration=()=>{setTaskCelebrationOpen(false);setPendingTaskAward(null);if(taskNextAction.current==='next')advanceLevel();else replayCurrent();};
 
   const handleJumpToLevel = (levelId: number) => {
     const idx = SENTENCE_BANK.findIndex((l) => l.id === levelId);
@@ -679,6 +689,7 @@ export default function App() {
         </div>
       </div>
 
+      {taskCelebrationOpen&&pendingTaskAward&&<TaskCelebrationModal fish={pendingTaskAward.fish} awards={pendingTaskAward.awards} onContinue={finishTaskCelebration}/>}
       {tasksOpen&&<StudyTasksModal progress={collection.studyTasks} fish={collection.fish} onClose={()=>setTasksOpen(false)}/>}
       <CloudSyncModal open={isCloudOpen} onClose={()=>setIsCloudOpen(false)} local={{profile,collection}} />
       <CatWardrobeModal open={wardrobeOpen} onClose={()=>setWardrobeOpen(false)} collection={collection} setCollection={setCollection} unlockedTier={Math.max(currentTier,...SENTENCE_BANK.filter(l=>profile.completedLevelIds.includes(l.id)).map(l=>l.tier))} />
@@ -705,7 +716,6 @@ export default function App() {
         onNextLevel={handleNextLevel}
         onReplay={handleReplayCurrent}
         fishReward={lastFishReward}
-        taskReward={replayCelebration?0:lastTaskReward}
         usedFullAnswer={replayCelebration || answerRevealed || everRevealed.current}
         isReview={replayCelebration}
         completedMs={lastCompletionMs}
