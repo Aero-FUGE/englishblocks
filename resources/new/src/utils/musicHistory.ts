@@ -1,5 +1,5 @@
 import type {WordBlock} from '../types/game';
-import {newRail,type RailState} from './railState.ts';
+import {newRail,insertFromPool,takeBack,type RailState} from './railState.ts';
 import {isMusicMovable} from '../../shared/music-history.mjs';
 export type MusicMode='organize'|'retrieve';
 export type MusicCategory='genres'|'composers'|'works';
@@ -19,3 +19,14 @@ export function restoreMusicBoards(q:MusicQuestion,mode:MusicMode,draft?:MusicDr
 export function musicParagraphCorrect(q:MusicQuestion,mode:MusicMode,paragraph:number,board:RailState){const target=musicWords(q,mode,paragraph);return board.slots.length===target.length&&target.every((word,i)=>board.slots[i]?.text===word.text);}
 export function musicAnswer(q:MusicQuestion,mode:MusicMode,boards:RailState[]){return q.paragraphs.map((paragraph,pi)=>{let slot=0;return paragraph.segments.map(s=>isMusicMovable(s,mode)?boards[pi]?.slots[slot++]?.text??'〔未填〕':s.text).join('');}).join('\n');}
 export function packMusicDraft(q:MusicQuestion,paragraph:number,boards:RailState[]):MusicDraft{return {version:q.version,paragraph,slots:boards.map(b=>b.slots.map(w=>w?.id??null))};}
+
+/** Fill the earliest empty slot; conserve IDs even if its answer was misplaced. */
+export function hintMusicBlock(q:MusicQuestion,mode:MusicMode,paragraph:number,board:RailState):RailState {
+ const index=board.slots.findIndex(word=>word===null);if(index<0)return board;
+ const expected=musicWords(q,mode,paragraph),text=expected[index]?.text;if(!text)return board;
+ const candidate=board.pool.find(word=>word.text===text);
+ if(candidate)return insertFromPool(board,index,candidate.id);
+ const from=board.slots.findIndex((word,i)=>word?.text===text&&word.text!==expected[i]?.text);
+ if(from<0)return board;
+ const word=board.slots[from]!;return insertFromPool(takeBack(board,from),index,word.id);
+}

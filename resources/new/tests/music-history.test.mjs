@@ -4,7 +4,7 @@ import {readFileSync,existsSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {parseMusicQuestion,importMusicQuestions,isMusicMovable,nextMusicMode,validMusicProgress} from '../shared/music-history.mjs';
-import {restoreMusicBoards,musicParagraphCorrect,musicAnswer,packMusicDraft,musicWords,emptyMusicRecord} from '../src/utils/musicHistory.ts';
+import {hintMusicBlock,restoreMusicBoards,musicParagraphCorrect,musicAnswer,packMusicDraft,musicWords,emptyMusicRecord} from '../src/utils/musicHistory.ts';
 import {insertFromPool,takeBack,moveByInsertion,emptyRail} from '../src/utils/railState.ts';
 const questions=JSON.parse(readFileSync(new URL('../src/data/musicHistory/genres.json',import.meta.url),'utf8'));
 test('37 annotated source questions preserve every paragraph, score point, character and punctuation',()=>{
@@ -35,3 +35,12 @@ test('both pools contain POS words without punctuation, isolated particles or se
 });
 
 test('reviewed anchors are short and distinctive, with unchanged original answers',()=>{for(const q of questions){assert.equal(q.sourceAnnotatedAnswer.replace(/[【】]/gu,''),q.rawAnswer);assert(q.scorePoints.every(s=>s.text.length<=9&&!/[\p{P}\p{S}\s]/u.test(s.text)));}const points=questions[0].scorePoints.map(s=>s.text);assert(points.includes('神意'));assert(points.includes('社会秩序'));assert(!points.includes('人与命运、神意及社会秩序之间的冲突'));});
+
+test('hint fills only the earliest empty slot in both modes and conserves misplaced/repeated blocks',()=>{
+ for(const q of questions)for(const mode of ['organize','retrieve'])for(let pi=0;pi<q.paragraphs.length;pi++){
+  const expected=musicWords(q,mode,pi);let board=restoreMusicBoards(q,mode)[pi];const ids=b=>[...b.pool,...b.slots.filter(Boolean)].map(w=>w.id).sort(),original=ids(board);
+  if(expected.length>1){board=insertFromPool(board,1,expected[0].id);const before=board;board=hintMusicBlock(q,mode,pi,board);assert.equal(board.slots[0].text,expected[0].text);assert.deepEqual(ids(board),original);assert.equal(before.slots[0],null);}
+  for(let count=0;count<=expected.length;count++){const empty=board.slots.findIndex(w=>w===null);if(empty<0)break;const before=board;board=hintMusicBlock(q,mode,pi,board);assert.equal(board.slots[empty].text,expected[empty].text);assert.deepEqual(ids(board),original);for(let i=0;i<before.slots.length;i++)if(before.slots[i]?.text===expected[i].text)assert.equal(board.slots[i],before.slots[i]);}
+  assert(musicParagraphCorrect(q,mode,pi,board));assert.equal(hintMusicBlock(q,mode,pi,board),board);
+ }
+});
