@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <script>try{const s=localStorage.getItem('englishblocks_season');document.documentElement.dataset.season=['spring','summer','autumn','winter'].includes(s)?s:'spring';}catch{document.documentElement.dataset.season='spring';}</script>
+    <script>try{const c=JSON.parse(localStorage.getItem('english_blocks_cat_collection_v1')||'{}'),s=c.selectedSeason;document.documentElement.dataset.season=['spring','summer','autumn','winter'].includes(s)&&(s==='summer'||c.unlockedThemes?.includes(s))?s:'summer';}catch{document.documentElement.dataset.season='summer';}</script>
     <link rel="icon" type="image/x-icon" href="./favicon.ico" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <meta charset="UTF-8" />
@@ -15,11 +15,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600;1,700&family=Noto+Serif+SC:wght@500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>#eb-splash{z-index:9999;background:radial-gradient(circle at 70% 25%,var(--theme-decoration,#edf3e5),var(--theme-bg,#f2f6e9) 62%,var(--theme-surface,#fffcf7));color:var(--theme-text,#354b3b);place-items:center;font-family:system-ui,sans-serif;display:grid;position:fixed;inset:0}.eb-splash-card{text-align:center}.eb-splash-card img{object-fit:contain;width:118px;height:118px;margin:auto}.eb-splash-card h1{letter-spacing:.13em;margin:12px 0 3px;font-size:28px;font-weight:750}.eb-splash-card p{letter-spacing:.2em;color:var(--theme-muted,#65785f);font-size:11px}.eb-splash-bar{background:var(--theme-border,#cfddc1);border-radius:20px;width:180px;height:5px;margin:25px auto 12px;overflow:hidden}.eb-splash-bar span{background:var(--theme-primary,#648356);border-radius:20px;width:42%;height:100%;animation:1.2s ease-in-out infinite alternate eb-load;display:block}.eb-splash-card small{color:var(--theme-muted,#65785f)}@keyframes eb-load{to{transform:translate(140%)}}</style>  <script type="module" crossorigin src="./assets/index-Bl_nD0XC.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-VzT6Ioqx.css">
+  <style>#eb-splash{z-index:9999;background:radial-gradient(circle at 70% 25%,var(--theme-decoration,#edf3e5),var(--theme-bg,#f2f6e9) 62%,var(--theme-surface,#fffcf7));color:var(--theme-text,#354b3b);place-items:center;font-family:system-ui,sans-serif;display:grid;position:fixed;inset:0}.eb-splash-card{text-align:center}.eb-splash-card img{object-fit:contain;width:118px;height:118px;margin:auto}.eb-splash-card h1{letter-spacing:.13em;margin:12px 0 3px;font-size:28px;font-weight:750}.eb-splash-card p{letter-spacing:.2em;color:var(--theme-muted,#65785f);font-size:11px}.eb-splash-bar{background:var(--theme-border,#cfddc1);border-radius:20px;width:180px;height:5px;margin:25px auto 12px;overflow:hidden}.eb-splash-bar span{background:var(--theme-primary,#648356);border-radius:20px;width:42%;height:100%;animation:1.2s ease-in-out infinite alternate eb-load;display:block}.eb-splash-card small{color:var(--theme-muted,#65785f)}@keyframes eb-load{to{transform:translate(140%)}}.eb-site-filing{padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));text-align:center;background:var(--theme-bg,#fffaf5);color:var(--theme-muted,#65785f);font:12px/1.7 system-ui,sans-serif}.eb-site-filing a{color:inherit;padding:8px;text-decoration:none;display:inline-block}.eb-site-filing a:hover{text-decoration:underline}.eb-site-filing a:focus-visible{outline:2px solid var(--theme-primary,#648356);outline-offset:2px;border-radius:6px}</style>  <script type="module" crossorigin src="./assets/index-DJSvTk4Y.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CrkcfDx5.css">
 </head>
   <body class="bg-[#F3F7EF] text-slate-800 antialiased select-none font-sans overflow-x-hidden min-h-screen">
     <div id="root"></div>
+    <footer class="eb-site-filing" aria-label="网站备案信息"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">宁ICP备2026004648号</a></footer>
     <script>
       // Runs before the app module: restore prior disk snapshot, then mirror every
       // localStorage mutation to AppData. In ordinary browsers this does nothing.
