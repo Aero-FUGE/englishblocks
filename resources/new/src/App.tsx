@@ -1,7 +1,7 @@
 import {MusicHistoryPage} from './components/MusicHistoryPage';
 import {emptyMusicProgress} from './utils/musicHistory';
 import {validMusicProgress} from '../shared/music-history.mjs';
-import {ModalOverlay} from './components/ModalOverlay';
+import {WardrobeLockedDialog} from './components/WardrobeLockedDialog';
 import {CosmeticsContext} from './components/CosmeticsContext';
 import {DEFAULT_AVATAR,ownsCosmetic} from './utils/cosmetics';
 import {setSeason} from './utils/seasonTheme';
@@ -644,7 +644,7 @@ export default function App() {
     <CosmeticsContext.Provider value={{collection,setCollection}}>
     {(inStudy||friendsOpen||musicOpen)&&<SeasonPageBackground/>}
     <SeasonAtmosphere/>
-    {wardrobeOpen && !wardrobeUnlocked && <ModalOverlay className="eb-season-overlay" onClick={e=>{if(e.target===e.currentTarget)setWardrobeOpen(false);}}><section className="eb-season-dialog" role="dialog" aria-modal="true" aria-label="衣柜尚未解锁"><h2>🔒 小猫衣柜</h2><p>完成高中阶段，升入大学后，小猫的衣柜就会打开啦！</p><button onClick={()=>setWardrobeOpen(false)}>继续努力学习 ♡</button></section></ModalOverlay>}
+    {wardrobeOpen && !wardrobeUnlocked && <WardrobeLockedDialog onClose={()=>setWardrobeOpen(false)}/>}
     <div style={musicOpen||friendsOpen||!inStudy?{display:'none'}:undefined} className="eb-game-shell min-h-screen cozy-window-bg relative flex flex-col justify-between overflow-x-hidden p-4 md:p-6 lg:p-7 selection:bg-amber-100 selection:text-amber-950" onClickCapture={(event) => playUiClickForTarget(event.target)}>
       {showSplash && <div id="eb-splash" role="status" aria-label="英语拼块正在启动"><div className="eb-splash-card"><img src="./assets/brand-mimi-a.png" alt="咪咪"/><h1>英语拼块</h1><p>WORD BLOCK GARDEN</p><div className="eb-splash-bar"><span /></div><small>正在准备你的学习花园…</small></div></div>}
       {developerMode && layoutEditorOpen && <LayoutEditor value={layoutDraft} onChange={setLayoutDraft} onClose={() => setLayoutEditorOpen(false)} />}
@@ -806,7 +806,6 @@ export default function App() {
     {!musicOpen&&!inStudy&&!friendsOpen&&<LearningLobby avatar={profile.avatar} name={profile.name} collection={collection} level={currentLevel.levelNumber} tier={currentTier} filled={slottedWords.filter(Boolean).length} expected={expectedCount} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
       {label:cloud.user?'账号管理':'登录 / 注册',icon:'user',onClick:()=>setIsCloudOpen(true)},
       {label:'每日任务',icon:'gift',onClick:()=>setTasksOpen(true)},
-      {label:'音乐史',icon:'music-history',onClick:openMusic},
       {label:'关卡选择',icon:'▦',onClick:()=>setIsLevelSelectorOpen(true)},
       {label:'学习进度',icon:'🌿',onClick:()=>setIsProfileModalOpen(true)},
       {label:'好友小窝',icon:'🏡',onClick:openFriends,detail:social.pending?`${social.pending} 封小窝来信`:undefined},

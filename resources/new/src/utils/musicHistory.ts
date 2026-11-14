@@ -3,7 +3,7 @@ import {newRail,type RailState} from './railState.ts';
 import {isMusicMovable} from '../../shared/music-history.mjs';
 export type MusicMode='organize'|'retrieve';
 export type MusicCategory='genres'|'composers'|'works';
-export interface MusicSegment {id:string;kind:'score'|'language';text:string}
+export interface MusicSegment {id:string;kind:'score'|'language'|'punctuation'|'anchor';text:string;pos?:string;sourceRole?:'score'|'language';pointId?:string;pointStart?:boolean;pointEnd?:boolean}
 export interface MusicQuestion {id:string;category:MusicCategory;title:string;annotatedAnswer:string;rawAnswer:string;version:string;paragraphs:{id:string;segments:MusicSegment[]}[];scorePoints:MusicSegment[];skeleton:MusicSegment[];correctOrder:string[]}
 export interface MusicDraft {version:string;paragraph:number;slots:(string|null)[][]}
 export interface MusicAttempt {at:number;mode:MusicMode;correct:boolean;answer:string;version:string;paragraph?:number}
@@ -11,7 +11,7 @@ export interface MusicQuestionProgress {organizeComplete:boolean;retrieveComplet
 export interface MusicHistoryProgress {version:1;questions:Record<string,MusicQuestionProgress>}
 export const emptyMusicProgress=():MusicHistoryProgress=>({version:1,questions:{}});
 export const emptyMusicRecord=():MusicQuestionProgress=>({organizeComplete:false,retrieveComplete:false,lastStudiedAt:0,attempts:[]});
-export const musicWords=(q:MusicQuestion,mode:MusicMode,paragraph:number):WordBlock[]=>q.paragraphs[paragraph].segments.filter(s=>isMusicMovable(s,mode)).map(s=>({id:s.id,text:s.text,cleanWord:s.text,pos:'音乐史词块',phonetic:'',translation:'',sentenceMeaning:'',colorTheme:s.kind==='score'?'pink':'green'}));
+export const musicWords=(q:MusicQuestion,mode:MusicMode,paragraph:number):WordBlock[]=>q.paragraphs[paragraph].segments.filter(s=>isMusicMovable(s,mode)).map(s=>({id:s.id,text:s.text,cleanWord:s.text,pos:s.pos||'短语',phonetic:'',translation:'',sentenceMeaning:'',colorTheme:s.kind==='score'?'pink':'green'}));
 export function shuffled<T>(items:T[]):T[]{const copy=[...items];for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}return copy;}
 export function restoreMusicBoards(q:MusicQuestion,mode:MusicMode,draft?:MusicDraft):RailState[]{return q.paragraphs.map((_,index)=>{const words=musicWords(q,mode,index),saved=draft?.version===q.version?draft.slots[index]:undefined;if(!saved||saved.length!==words.length)return newRail(words,shuffled);const ids=saved.filter((id):id is string=>id!==null),byId=new Map(words.map(w=>[w.id,w]));if(new Set(ids).size!==ids.length||ids.some(id=>!byId.has(id)))return newRail(words,shuffled);return {slots:saved.map(id=>id===null?null:byId.get(id)!),pool:shuffled(words.filter(w=>!ids.includes(w.id)))};});}
 // Compare text at each source position; identical repeated phrases are interchangeable,
