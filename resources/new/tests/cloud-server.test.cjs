@@ -79,3 +79,12 @@ test('auth requests are rate limited',async t=>{
  for(let i=0;i<15;i++)assert.equal((await call('/login','POST',{username:'none',password:'not-the-password'})).status,401);
  assert.equal((await call('/login','POST',{username:'none',password:'not-the-password'})).status,429);
 });
+
+test('music history cloud saves remain separate from English progress and other accounts',async t=>{
+ const {call,auth,reopen}=await fixture(t);const a=(await auth('music_player_a')).data,b=(await auth('music_player_b')).data;
+ const saved=snapshot(177),english=structuredClone(saved.profile);saved.collection.musicHistory={version:1,questions:{'music-genres-01':{organizeComplete:true,retrieveComplete:false,lastStudiedAt:100,attempts:[{at:100,mode:'organize',correct:true,answer:'测试答案',version:'v1'}],drafts:{retrieve:{version:'v1',paragraph:0,slots:[[null,'music-genres-01-p0-s1']]}}}}};
+ assert.equal((await call('/save','PUT',{expectedRevision:0,snapshot:saved},a.token)).status,200);reopen();const restored=(await call('/save','GET',undefined,a.token)).data.snapshot;assert.deepEqual(restored.profile,english);assert.deepEqual(restored.collection.musicHistory,saved.collection.musicHistory);assert.equal(restored.collection.fish,177);assert.equal((await call('/save','GET',undefined,b.token)).data.snapshot,null);
+ const malformed=structuredClone(saved);malformed.collection.musicHistory.questions['music-genres-01'].organizeComplete=false;malformed.collection.musicHistory.questions['music-genres-01'].retrieveComplete=true;assert.equal((await call('/save','PUT',{expectedRevision:1,snapshot:malformed},a.token)).status,400);
+ // Old saves without this optional field are still valid.
+ assert.equal((await call('/save','PUT',{expectedRevision:1,snapshot:snapshot(178)},a.token)).status,200);
+});

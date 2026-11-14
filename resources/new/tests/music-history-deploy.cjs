@@ -1,0 +1,20 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),os=require('node:os'),http=require('node:http');
+const {execFileSync,spawn}=require('node:child_process');
+const root=path.resolve(__dirname,'..'),release=process.env.EB_MUSIC_RELEASE_DIR||path.resolve(root,'../../deployment/ui-20261114-music-history');
+const docker=(...args)=>execFileSync('docker',args,{encoding:'utf8'}).trim();
+const name='eb-music-deploy-'+process.pid,volume=name+'-data',work=fs.mkdtempSync(path.join(os.tmpdir(),'eb-music-deploy-'));
+const delay=ms=>new Promise(r=>setTimeout(r,ms));
+async function wait(url){for(let i=0;i<30;i++){try{const r=await fetch(url);if(r.ok)return;}catch{}await delay(300);}throw Error('Fixture health timeout');}
+(async()=>{const server=http.createServer((req,res)=>{const file=path.join(release,path.basename(req.url));if(!fs.existsSync(file)){res.writeHead(404);return res.end();}fs.createReadStream(file).pipe(res);});await new Promise(r=>server.listen(0,'127.0.0.1',r));try{
+ const probe=http.createServer();await new Promise(r=>probe.listen(0,'127.0.0.1',r));const fixedPort=probe.address().port;await new Promise(r=>probe.close(r));
+ docker('volume','create',volume);docker('run','-d','--name',name,'-p','127.0.0.1:'+fixedPort+':3000','-v',volume+':/data','-e','CLOUD_DATA_DIR=/data','-e','CLOUD_MIMI_API_KEY=fake-test-key-only','englishblocks:server-20261113-bb5072f');
+ const port=JSON.parse(docker('inspect',name))[0].NetworkSettings.Ports['3000/tcp'][0].HostPort,base='http://127.0.0.1:'+port;await wait(base+'/api/cloud/health');
+ const request=async(route,method,body,token)=>{const r=await fetch(base+'/api/cloud'+route,{method,headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},body:body?JSON.stringify(body):undefined});assert.equal(r.status,200);return r.json();};
+ const account=await request('/register','POST',{username:'music_smoke',password:'test-password-only-123'});
+ const snapshot={profile:{id:'x',name:'测试玩家',avatar:'cat-avatar-05',themeColor:'green',currentLevelIndex:1,completedLevelIds:[1],masteredWordIds:[],starredWordIds:[],mistakeHistory:[],streakDays:1,totalAttempts:1,correctAttempts:1,totalWordGoal:2004,totalSentenceGoal:1190},collection:{fish:177,activeCat:'mimi',owned:[],equipped:{mimi:{},tuanzhang:{}},bestHints:{}}};
+ await request('/save','PUT',{expectedRevision:0,snapshot},account.token);
+ await new Promise((resolve,reject)=>{const child=spawn('bash',[path.join(root,'deploy/server-update/apply-music-history.sh')],{env:{...process.env,ENGLISHBLOCKS_CONTAINER:name,ENGLISHBLOCKS_PORT:port,ENGLISHBLOCKS_UI_UPDATE_DIR:work,ENGLISHBLOCKS_UI_UPDATE_URL:'http://127.0.0.1:'+server.address().port},stdio:['ignore','pipe','pipe']});let output='';child.stdout.on('data',v=>output+=v);child.stderr.on('data',v=>output+=v);child.on('exit',code=>code===0?resolve():reject(Error(output)));});
+ const restored=await request('/save','GET',undefined,account.token);assert.deepEqual(restored.snapshot,snapshot);const html=await(await fetch(base)).text();assert(html.includes('index-DJSvTk4Y.js'));assert(html.includes('宁ICP备2026004648号'));assert.equal(docker('exec',name,'node','-e','process.stdout.write(process.env.CLOUD_MIMI_API_KEY)'), 'fake-test-key-only');
+ snapshot.collection.musicHistory={version:1,questions:{'music-genres-01':{organizeComplete:true,retrieveComplete:true,lastStudiedAt:100,attempts:[]}}};await request('/save','PUT',{expectedRevision:1,snapshot},account.token);assert.deepEqual((await request('/save','GET',undefined,account.token)).snapshot.collection.musicHistory,snapshot.collection.musicHistory);
+ assert(fs.readdirSync(work).some(d=>fs.existsSync(path.join(work,d,'backup/index.html'))));console.log('PASS: real Docker patch installation, backend restart, original account/session/save/API environment, new music progress, filing footer and backup.');
+ }finally{await new Promise(r=>server.close(r));try{docker('rm','-f',name);}catch{}try{docker('volume','rm',volume);}catch{}fs.rmSync(work,{recursive:true,force:true});}})().catch(e=>{console.error(e);process.exit(1)});

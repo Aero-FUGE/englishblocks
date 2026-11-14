@@ -17,11 +17,14 @@
     "start": "node server/start.cjs",
     "test:cloud": "node --test tests/cloud-server.test.cjs tests/cloud-response.test.mjs",
     "test:mimi": "node --test tests/mimi.test.cjs",
-    "prebuild": "node --experimental-strip-types tools/build-social-catalog.mjs",
+    "prebuild": "node --experimental-strip-types tools/build-social-catalog.mjs && node tools/validate-music-history.mjs",
     "test:social": "node --experimental-strip-types --test tests/social.test.cjs tests/social-learning-regression.mjs",
     "test:bgm": "node tests/bgm-regression.cjs",
     "test:tasks": "node --experimental-strip-types --test tests/study-tasks.test.mjs",
-    "test:tasks:ui": "node tests/study-tasks-ui.cjs"
+    "test:tasks:ui": "node tests/study-tasks-ui.cjs",
+    "test:music": "node --experimental-strip-types --test tests/music-history.test.mjs",
+    "test:music:ui": "node tests/music-history-ui.cjs",
+    "import:music": "node tools/import-music-history.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

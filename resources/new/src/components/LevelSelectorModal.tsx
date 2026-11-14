@@ -11,9 +11,10 @@ interface LevelSelectorModalProps {
   completedLevelIds: number[];
   onSelectLevel: (levelId: number) => void;
   onClose: () => void;
+  onOpenMusic?: () => void;
 }
 const PAGE_SIZE = 24;
-export const LevelSelectorModal: React.FC<LevelSelectorModalProps> = ({isOpen, currentLevelId, completedLevelIds, onSelectLevel, onClose}) => {
+export const LevelSelectorModal: React.FC<LevelSelectorModalProps> = ({isOpen, currentLevelId, completedLevelIds, onSelectLevel, onClose,onOpenMusic}) => {
   const current = SENTENCE_BANK.find(l => l.id === currentLevelId) ?? SENTENCE_BANK[0];
   const currentStage = stageForLevel(current);
   const [selectedTier, setSelectedTier] = useState<number>(current.tier);
@@ -42,6 +43,7 @@ export const LevelSelectorModal: React.FC<LevelSelectorModalProps> = ({isOpen, c
         <button aria-label="关闭关卡目录" onClick={onClose} className="h-9 w-9 rounded-full grid place-items-center bg-[var(--theme-muted-surface)] text-[var(--theme-text)] hover:bg-[var(--theme-muted-surface)]"><X className="w-5 h-5"/></button>
       </header>
       <div ref={scrollArea} className="eb-modal-body eb-levels-body overflow-y-auto min-h-0 flex-1 p-4 sm:p-7 space-y-5">
+        <nav className="eb-level-domain-choices" aria-label="学习领域选择"><button type="button" aria-pressed="true"><BookOpenText size={22}/>英语学习 · 四大学习阶段</button><button type="button" onClick={()=>{onClose();onOpenMusic?.();}}><img src="./assets/music-history/entrance.png" alt=""/>音乐史 →</button></nav>
         <div className="eb-levels-summary rounded-[26px] border border-[var(--theme-border)] bg-gradient-to-r from-[var(--theme-muted-surface)] via-[var(--theme-muted-surface)] to-[var(--theme-muted-surface)] px-5 py-5 sm:py-6 shadow-sm relative overflow-hidden">
           <div className="absolute -right-8 -top-10 h-32 w-32 bg-white/35 rounded-full pointer-events-none"/>
           <div className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -49,7 +51,7 @@ export const LevelSelectorModal: React.FC<LevelSelectorModalProps> = ({isOpen, c
             <div className="rounded-2xl border border-[var(--theme-border)] bg-white/90 px-5 py-3 min-w-[178px] shadow-sm"><p className="text-xs text-[var(--theme-muted)]">本阶段已通关</p><div className="mt-1 text-xl font-bold text-[var(--theme-text)]">{currentStageCompleted} <span className="text-sm text-[var(--theme-muted)]">/ {currentStageTotal.length}</span></div><div className="h-2 bg-[var(--theme-muted-surface)] rounded-full mt-2 overflow-hidden"><div className="h-full bg-gradient-to-r from-[var(--theme-primary)] to-[var(--theme-primary)] rounded-full" style={{width:`${currentPercent}%`}}/></div></div>
           </div>
         </div>
-        <div><div className="flex items-center justify-between mb-3"><h3 className="font-bold text-[var(--theme-text)] flex items-center gap-2"><Sparkles className="w-4 h-4 text-[var(--theme-muted)]"/> 四大学习阶段</h3><span className="text-[11px] text-[var(--theme-muted)]">选择阶段查看关卡</span></div>
+        <div><div className="flex items-center justify-between mb-3"><h3 className="font-bold text-[var(--theme-text)] flex items-center gap-2"><Sparkles className="w-4 h-4 text-[var(--theme-muted)]"/> 英语学习 · 四大学习阶段</h3><span className="text-[11px] text-[var(--theme-muted)]">选择阶段查看关卡</span></div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">{LEARNING_STAGES.map(stage=>{const lvls=SENTENCE_BANK.filter(l=>l.tier===stage.tier);const count=lvls.filter(l=>completed.has(l.id)).length;const active=selectedTier===stage.tier;return <button key={stage.tier} onClick={()=>{setSelectedTier(stage.tier);setPage(0);}} aria-pressed={active} className={`stage-card stage-card-${stage.tone} text-left rounded-[22px] p-3 sm:p-4 border-2 transition-transform hover:-translate-y-0.5 ${active?'stage-card-selected shadow-md':'shadow-sm'}`}>
             <div className="eb-stage-heading flex items-center gap-2"><StageEmblem tier={stage.tier} size={32}/><div className="min-w-0"><div className="font-bold text-[13px] text-[var(--theme-text)]">{stage.label}</div><div className="text-[10px] text-[var(--theme-muted)]">{stage.subtitle}</div></div></div>
             <div className="flex justify-between items-center mt-2 text-[10px] font-medium text-[var(--theme-muted)]"><span>{count} / {lvls.length} 关</span><span>{lvls.length?Math.round(count/lvls.length*100):0}%</span></div><div className="h-1.5 rounded-full bg-white/75 overflow-hidden mt-1"><div className="h-full rounded-full bg-[var(--theme-primary)]" style={{width:`${lvls.length?count/lvls.length*100:0}%`}}/></div>
