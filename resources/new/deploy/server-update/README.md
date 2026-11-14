@@ -1,3 +1,17 @@
+## 最新增量更新：音乐史与主页布局（2026-11-14）
+
+适用于已经运行的 `englishblocks` 游戏容器，无需重建镜像或重新输入密钥。约 3.5MB，包含最新正常／反向音乐史题库、提示、个人修改入口、紧凑词块和每日挑战布局。执行：
+
+```bash
+curl --http1.1 -fL --retry 5 --retry-all-errors https://github.com/Aero-FUGE/englishblocks/releases/download/ui-20261114-music-reverse/apply-music-reverse.sh -o /home/ubuntu/update-englishblocks-ui.sh && bash /home/ubuntu/update-englishblocks-ui.sh
+```
+
+脚本校验 SHA256，备份当前首页和共享模块，安装新资源后短暂重启同一容器，健康检查通过才切换首页；失败自动恢复旧首页与模块。账号数据库、存档卷、实际运行容器的 API 环境变量及 Caddy 均不修改。备份目录在服务器 `/home/ubuntu/englishblocks-ui-updates/music-reverse-*/backup/`。本次仅修改当前容器文件；未来重新构建镜像时，请使用仓库最新源代码，避免恢复旧网页。
+
+成功后打开 https://englishblocks.cn/?v=music-reverse1 。测试页与正式域名的本机存档各自独立，个人改题需通过完整备份导入，或由已有云账号同步。
+
+已使用 `tests/music-history-deploy.cjs` 和独立 Docker 容器验证安装、账号会话及存档保留、API 环境变量保留、新版音乐史记录与个人编辑、备案页脚和备份生成。
+
 # 更新已经运行的腾讯云单容器部署
 
 适用于现有 `englishblocks` 容器、Node 24、持久挂载 `/data`、主机回环端口 3000。已有 Caddy 域名入口保持不变。
