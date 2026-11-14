@@ -1,0 +1,236 @@
+/* Window-side friend nest. Art comes from the supplied UI sheet; colors inherit the active season. */
+.eb-nest-page{padding:18px 20px 150px;isolation:isolate;background:linear-gradient(180deg,color-mix(in srgb,var(--theme-accent) 12%,transparent),transparent)!important}
+.eb-nest-shell{position:relative;max-width:1120px;margin:auto}
+.eb-nest-page button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px}
+.eb-nest-art{object-fit:contain;pointer-events:none;user-select:none;flex-shrink:0}
+.eb-nest-page .eb-nest-header{background:transparent;border:0;box-shadow:none;padding:0 0 10px;margin:0;position:relative;z-index:2}
+.eb-nest-header>div:nth-child(2){text-align:center;min-width:0}
+.eb-nest-header h1{font-size:32px;font-weight:850;letter-spacing:.08em;color:var(--theme-text)}
+.eb-nest-header>button{background:var(--theme-surface);border-radius:999px;padding:9px 20px;white-space:nowrap;box-shadow:0 3px 0 var(--theme-border)}
+.eb-nest-header-actions{display:flex;gap:9px;align-items:center}
+.eb-nest-bell{position:relative;border-radius:50%!important;width:46px;padding:0!important;color:var(--theme-primary)}
+.eb-nest-bell>span{position:absolute;right:-4px;top:-6px;min-width:19px;height:19px;border-radius:20px;background:var(--theme-primary);color:var(--theme-on-primary);font-size:10px;border:2px solid var(--theme-surface)}
+.eb-nest-header-actions .eb-nest-refresh{position:relative;border-radius:999px;padding:0 12px 0 0;background:var(--theme-surface)}
+.eb-nest-refresh img{width:41px;height:41px}
+.eb-nest-refresh span{font-size:12px}
+.eb-nest-welcome{height:254px;position:relative;display:flex;align-items:center;justify-content:center;margin:0 0 20px;overflow:hidden;border-radius:30px;border:1px solid var(--theme-border);background:linear-gradient(180deg,var(--theme-surface),var(--theme-muted-surface));box-shadow:0 6px 22px var(--theme-shadow)}
+.eb-nest-window{position:absolute;inset:-15px 0 0;width:100%;height:110%;object-fit:fill;opacity:.74}
+.eb-nest-host{position:absolute;left:4%;bottom:9px;width:24%;max-height:205px;filter:drop-shadow(0 6px 3px var(--theme-shadow))}
+.eb-nest-branch{position:absolute;left:-15px;top:-18px;width:210px}
+.eb-nest-speech{position:relative;z-index:1;margin-left:-5%;max-width:42%;padding:22px 27px;border:1.5px solid var(--theme-border-strong);border-radius:46px 46px 46px 14px;background:color-mix(in srgb,var(--theme-surface) 96%,transparent);box-shadow:0 4px 12px var(--theme-shadow);transform:rotate(-2deg)}
+.eb-nest-speech strong{font-size:18px;font-weight:750;line-height:1.6}
+.eb-nest-speech p{font-size:15px;margin-top:7px}
+.eb-nest-sign{position:absolute;right:3%;bottom:10px;width:18%;height:205px}
+.eb-nest-sign>img{width:100%;height:100%}
+.eb-nest-sign>div{position:absolute;inset:28px 15px 24px 22px;display:flex;flex-direction:column;justify-content:center;gap:7px;transform:rotate(3deg)}
+.eb-nest-sign button{background:transparent!important;border:0!important;box-shadow:none;font-size:13px;min-height:30px;padding:4px;white-space:nowrap}
+.eb-nest-lantern{position:absolute;right:20%;bottom:12px;height:112px;max-width:10%}
+.eb-nest-page .eb-friends-card{border:1.5px solid var(--theme-border-strong);border-radius:30px;background:linear-gradient(120deg,color-mix(in srgb,var(--theme-surface) 97%,var(--theme-accent)),var(--theme-surface));padding:22px 26px;margin:0 0 20px;box-shadow:0 4px 0 color-mix(in srgb,var(--theme-border) 45%,transparent),0 10px 28px var(--theme-shadow)}
+.eb-nest-page h2.eb-nest-section-title{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:800;margin:0 0 17px}
+.eb-nest-section-title>.eb-nest-art{width:36px;height:36px}
+.eb-nest-self-body{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}
+.eb-nest-self-card .eb-friend-self{gap:17px}
+.eb-nest-self-card .eb-friend-self>div:last-child>strong{font-size:19px}
+.eb-nest-self-card .eb-friend-self p{font-size:13px;margin:3px 0 8px}
+.eb-nest-code{display:flex;align-items:center;gap:3px}
+.eb-nest-code input{color:var(--theme-text);background:transparent;border:0;max-width:240px;min-width:0;letter-spacing:.08em;font-size:18px;margin:3px 0}
+.eb-nest-code button{padding:0;width:38px;min-width:38px;min-height:38px;border-radius:50%}
+.eb-nest-page .eb-friend-stats{gap:9px;margin:0}
+.eb-nest-page .eb-friend-stats>span{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:10px 5px;border:1px solid var(--theme-border);border-radius:20px;background:color-mix(in srgb,var(--theme-muted-surface) 70%,var(--theme-surface))}
+.eb-nest-page .eb-friend-stats .eb-nest-art{width:29px;height:29px;border-radius:8px}
+.eb-nest-page .eb-friend-stats strong{font-size:20px;font-weight:800;white-space:nowrap}
+.eb-nest-page .eb-friend-stats small{font-size:10px;white-space:nowrap}
+.eb-nest-profile-edit{display:flex!important;margin:12px 0 0 auto;border-radius:999px!important;padding:6px 14px!important;font-size:12px!important;min-height:36px!important}
+.eb-nest-card-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.eb-nest-card-heading>button{border-radius:999px;font-size:12px;white-space:nowrap;padding:7px 13px}
+.eb-nest-card-heading select{min-width:0;max-width:160px;padding:8px 12px;border:1px solid var(--theme-border);border-radius:999px;background:var(--theme-surface);color:var(--theme-text);font-size:12px}
+.eb-nest-duel-players{display:grid;grid-template-columns:1fr 80px 1fr;align-items:center;gap:15px}
+.eb-nest-duel-players>div,.eb-nest-duel-players>button{display:flex;align-items:center;gap:12px;min-width:0}
+.eb-nest-duel-players>button{justify-content:flex-end;background:transparent!important;border:0!important;padding:0;text-align:right}
+.eb-nest-duel-players>img{width:80px;height:70px}
+.eb-nest-duel-players span{display:flex;flex-direction:column;min-width:0;gap:3px}
+.eb-nest-duel-players strong{font-size:17px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.eb-nest-duel-players b{font-size:21px}
+.eb-nest-duel-players small{font-weight:400}
+.eb-nest-duel-bar{height:17px;overflow:hidden;border-radius:999px;border:1px solid var(--theme-border-strong);background:var(--theme-muted-surface);margin:12px 0 8px}
+.eb-nest-duel-bar>span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--theme-primary),var(--theme-accent))}
+.eb-nest-duel-caption{text-align:center;color:var(--theme-muted);font-size:12px}
+.eb-nest-page .eb-friend-grid{grid-template-columns:1fr;gap:14px;margin:0}
+.eb-nest-friend-card{display:grid;grid-template-columns:160px minmax(0,1fr) 160px;gap:18px;padding:14px;border:1px solid var(--theme-border);border-radius:25px;background:color-mix(in srgb,var(--theme-surface) 80%,var(--theme-muted-surface));align-items:center;min-width:0}
+.eb-nest-page button.eb-nest-friend-scene{position:relative;overflow:hidden;border-radius:20px;padding:0;width:160px;height:160px;background-image:var(--nest-window-art);background-size:cover;background-position:center;border:1px solid var(--theme-border-strong)}
+.eb-nest-status-dot{position:absolute;width:15px;height:15px;top:8px;right:8px;border-radius:50%;background:var(--theme-muted);border:2px solid var(--theme-surface)}
+.eb-nest-status-dot.is-online{background:#67b56d}
+.eb-nest-mini-avatar{position:absolute;right:6px;bottom:5px;border-radius:12px;background:var(--theme-surface);padding:2px}
+.eb-nest-friend-info{min-width:0}
+.eb-nest-friend-name{justify-content:flex-start!important;border:0!important;background:transparent!important;padding:0!important;min-height:30px!important;width:100%;color:var(--theme-text);gap:8px!important}
+.eb-nest-friend-name h3{font-size:18px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.eb-nest-friend-info>p{font-size:11px;color:var(--theme-muted);margin:2px 0 9px}
+.eb-nest-friend-info .eb-friend-stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.eb-nest-friend-info .eb-friend-stats>span{padding:6px 3px;border-radius:15px}
+.eb-nest-friend-info>small{display:block;margin-top:8px;font-size:10px}
+.eb-nest-page .eb-nest-friend-buttons{flex-direction:column;gap:6px;margin:0}
+.eb-nest-friend-buttons button{width:100%;padding:6px 8px;border-radius:999px;font-size:12px}
+.eb-nest-friend-buttons img{width:24px;height:24px}
+.eb-nest-friend-buttons .eb-friend-primary{min-height:44px}
+.eb-nest-friend-buttons .eb-nest-remove{font-size:10px;min-height:28px;padding:3px 8px;color:var(--theme-muted);border:0;background:transparent}
+.eb-nest-remove-confirm{grid-column:1/-1;margin:0}
+.eb-nest-empty{text-align:center;padding:15px}
+.eb-nest-empty>img{width:130px;height:110px;margin:auto}
+.eb-nest-empty p{font-size:13px;color:var(--theme-muted);margin:12px 0}
+.eb-nest-empty button{border-radius:999px}
+.eb-nest-page .eb-friend-requests article{gap:10px}
+.eb-nest-page .eb-friend-requests article>span:nth-child(2){flex:1}
+.eb-nest-page .eb-friend-requests article:first-child{border-top:0;padding-top:0}
+.eb-nest-diary-row{display:flex!important;width:100%;justify-content:flex-start!important;border:0!important;border-top:1px solid var(--theme-border)!important;border-radius:0!important;padding:12px 0!important;background:transparent!important;text-align:left;gap:12px!important}
+.eb-nest-diary-row>span:nth-child(2){flex:1;display:flex;flex-direction:column}
+.eb-nest-diary-row>span:last-child{font-size:11px;color:var(--theme-muted)}
+.eb-nest-diary-row small{font-size:11px}
+.eb-nest-wallet{display:flex;align-items:center;gap:20px}
+.eb-nest-wallet>img{width:110px;height:110px}
+.eb-nest-wallet>div{flex:1;min-width:0}
+.eb-nest-wallet .eb-egg-balance{font-size:28px}
+.eb-nest-wallet p,.eb-nest-wallet small{font-size:12px}
+.eb-nest-online{font-size:11px;color:var(--theme-muted);white-space:nowrap}
+.eb-nest-online.is-online{color:var(--theme-primary)}
+.eb-nest-room-cat{flex-shrink:0;width:250px;height:250px;display:grid;place-items:center;background:var(--nest-window-art) center/cover no-repeat;border-radius:26px}
+.eb-nest-room-name{display:flex;align-items:center;gap:10px}
+.eb-nest-room .eb-friend-stats{margin:14px 0}
+.eb-nest-room .eb-friend-actions img{width:24px;height:24px}
+.eb-nest-room small{display:block;font-size:11px;margin-top:9px}
+.eb-nest-room p{font-size:13px}
+.eb-nest-room .eb-friend-actions{margin-bottom:8px}
+.eb-nest-flowers-left,.eb-nest-flowers-right{position:absolute;bottom:-35px;width:110px;z-index:-1}
+.eb-nest-flowers-left{left:-25px}
+.eb-nest-flowers-right{right:-22px}
+.eb-nest-page .eb-friends-footnote{padding:10px 0 15px;font-size:11px;position:relative;z-index:1}
+.eb-nest-page .eb-friends-footnote summary{cursor:pointer}
+.eb-nest-page .eb-friends-footnote p{font-size:11px;margin-top:8px}
+.eb-nest-nav{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:max(12px,env(safe-area-inset-bottom));width:min(780px,calc(100% - 24px));display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:8px 12px;border:1px solid var(--theme-border-strong);border-radius:27px;background:color-mix(in srgb,var(--theme-surface) 94%,transparent);box-shadow:0 5px 30px var(--theme-shadow);backdrop-filter:blur(12px)}
+.eb-nest-page .eb-nest-nav button{display:flex;flex-direction:column;gap:0;padding:0 3px;min-width:0;border:0;border-radius:16px;background:transparent;font-size:11px;color:var(--theme-text)}
+.eb-nest-nav img{width:60px;height:48px}
+.eb-nest-login{text-align:center}
+.eb-nest-login>img{width:140px;height:120px;margin:auto auto 12px}
+.eb-nest-login p{font-size:13px;max-width:430px;margin:0 auto 15px}
+.eb-nest-loading{text-align:center;padding:20px;color:var(--theme-muted)}
+.eb-nest-invite-dialog{width:min(430px,100%);padding:24px;border:1px solid var(--theme-border-strong);border-radius:28px;background:var(--theme-surface);color:var(--theme-text);box-shadow:0 10px 40px var(--theme-shadow);max-height:88dvh;overflow-y:auto}
+.eb-nest-invite-dialog header{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.eb-nest-invite-dialog h2{font-size:19px;font-weight:750}
+.eb-nest-invite-dialog header button{display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--theme-border);border-radius:50%;background:var(--theme-muted-surface)}
+.eb-nest-invite-dialog p{font-size:13px;line-height:1.8;margin:14px 0;color:var(--theme-muted)}
+.eb-nest-invite-dialog label{display:block;font-size:12px}
+.eb-nest-invite-dialog input{display:block;width:100%;margin:8px 0 16px;min-height:46px;padding:10px 12px;font-size:16px;border:1px solid var(--theme-border-strong);border-radius:15px;background:var(--theme-muted-surface);color:var(--theme-text)}
+.eb-nest-invite-dialog form>button{width:100%;min-height:44px;border:1px solid var(--theme-border);border-radius:16px}
+.eb-nest-invite-dialog button:disabled{opacity:.5;cursor:default}
+.eb-nest-page :is(button,input,select):focus-visible,.eb-nest-invite-dialog :is(button,input):focus-visible{outline:3px solid var(--theme-primary);outline-offset:3px}
+
+@media(max-width:760px){.eb-nest-page{padding:12px 12px 130px}
+.eb-nest-header{gap:8px;flex-wrap:wrap}
+.eb-nest-header>button{padding:7px 11px;font-size:11px;min-height:40px}
+.eb-nest-header h1{font-size:23px;letter-spacing:.03em}
+.eb-nest-header p{font-size:7px!important;letter-spacing:.03em!important}
+.eb-nest-header-actions{gap:5px}
+.eb-nest-header-actions .eb-nest-bell{width:36px;min-height:38px}
+.eb-nest-header-actions .eb-nest-refresh{padding:0;width:38px;min-height:38px;border:0;background:transparent}
+.eb-nest-header-actions .eb-nest-refresh>span{display:none}
+.eb-nest-refresh img{width:38px;height:38px}
+.eb-nest-welcome{height:190px;border-radius:24px;margin-bottom:14px}
+.eb-nest-window{inset:0;width:100%;height:100%;opacity:.68}
+.eb-nest-host{width:40%;left:0;bottom:7px;max-height:120px}
+.eb-nest-branch{width:120px;top:-7px;left:-6px}
+.eb-nest-sign,.eb-nest-lantern{display:none}
+.eb-nest-speech{margin:0 0 10px 34%;max-width:62%;padding:15px 13px;border-radius:28px 28px 28px 8px;transform:rotate(-2deg)}
+.eb-nest-speech strong{font-size:13px}
+.eb-nest-speech p{font-size:12px;margin-top:5px}
+.eb-nest-page .eb-friends-card{padding:17px 14px;border-radius:25px;margin-bottom:14px}
+.eb-nest-page h2.eb-nest-section-title{font-size:18px;gap:7px;margin-bottom:12px}
+.eb-nest-section-title>.eb-nest-art{width:30px;height:30px}
+.eb-nest-self-body{grid-template-columns:1fr;gap:14px}
+.eb-nest-self-card .eb-friend-self{gap:12px}
+.eb-nest-self-card .eb-friend-self>.eb-player-avatar{width:78px!important;height:78px!important;flex-shrink:0}
+.eb-nest-self-card .eb-friend-self>div:last-child>strong{font-size:16px}
+.eb-nest-self-card .eb-friend-self p{font-size:12px}
+.eb-nest-code input{font-size:16px;max-width:190px;letter-spacing:.04em}
+.eb-nest-code button{width:34px;min-width:34px;min-height:34px}
+.eb-nest-page .eb-friend-stats{gap:6px}
+.eb-nest-page .eb-friend-stats>span{padding:8px 3px;border-radius:16px}
+.eb-nest-page .eb-friend-stats strong{font-size:17px}
+.eb-nest-page .eb-friend-stats small{font-size:9px}
+.eb-nest-page .eb-friend-stats img{width:25px;height:25px}
+.eb-nest-profile-edit{margin-top:10px}
+.eb-nest-duel-players{grid-template-columns:1fr 44px 1fr;gap:5px}
+.eb-nest-duel-players>div,.eb-nest-duel-players>button{gap:7px}
+.eb-nest-duel-players .eb-player-avatar{width:45px!important;height:45px!important;flex-shrink:0}
+.eb-nest-duel-players>img{width:44px;height:48px}
+.eb-nest-duel-players strong{font-size:12px;max-width:82px}
+.eb-nest-duel-players b{font-size:17px}
+.eb-nest-duel-players small{font-size:10px}
+.eb-nest-duel-caption{font-size:11px}
+.eb-nest-card-heading{gap:7px;flex-wrap:wrap;margin-bottom:3px}
+.eb-nest-card-heading h2{margin-bottom:3px!important}
+.eb-nest-card-heading>button{padding:5px 9px;min-height:36px;font-size:11px}
+.eb-nest-card-heading select{font-size:11px;max-width:130px}
+.eb-nest-friend-card{grid-template-columns:85px minmax(0,1fr);gap:10px;padding:11px;border-radius:20px}
+.eb-nest-page button.eb-nest-friend-scene{width:85px;height:110px;border-radius:15px}
+.eb-nest-friend-scene>div{transform:scale(.7);flex-shrink:0}
+.eb-nest-mini-avatar .eb-player-avatar{width:26px!important;height:26px!important}
+.eb-nest-status-dot{width:12px;height:12px;top:6px;right:6px}
+.eb-nest-mini-avatar{right:3px;bottom:3px}
+.eb-nest-friend-name h3{font-size:14px!important}
+.eb-nest-friend-info>p{font-size:10px;margin-bottom:6px}
+.eb-nest-friend-info .eb-friend-stats{gap:4px}
+.eb-nest-friend-info .eb-friend-stats>span{padding:5px 2px;border-radius:12px}
+.eb-nest-friend-info .eb-friend-stats img{width:22px;height:22px}
+.eb-nest-friend-info .eb-friend-stats strong{font-size:15px}
+.eb-nest-friend-info .eb-friend-stats small{font-size:8px}
+.eb-nest-friend-info>small{font-size:9px;margin-top:5px}
+.eb-nest-page .eb-nest-friend-buttons{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.eb-nest-friend-buttons button{font-size:11px;min-height:38px}
+.eb-nest-friend-buttons .eb-nest-remove{min-height:32px;border:1px dashed var(--theme-border)}
+.eb-nest-friend-buttons img{width:21px;height:21px}
+.eb-nest-nav{gap:2px;padding:6px 6px 7px;border-radius:22px}
+.eb-nest-nav img{width:47px;height:40px}
+.eb-nest-page .eb-nest-nav button{font-size:9px;gap:1px;min-height:58px}
+.eb-nest-wallet{gap:12px}
+.eb-nest-wallet>img{width:65px;height:70px}
+.eb-nest-wallet .eb-egg-balance{font-size:24px}
+.eb-nest-wallet p,.eb-nest-wallet small{font-size:11px}
+.eb-nest-room-cat{width:220px;height:210px}
+.eb-nest-room .eb-friend-stats{width:100%}
+.eb-nest-room .eb-nest-room-name{gap:7px}
+.eb-nest-flowers-left,.eb-nest-flowers-right{width:75px;bottom:-25px}
+.eb-nest-flowers-left{left:-10px}
+.eb-nest-flowers-right{right:-8px}
+.eb-nest-invite-dialog{padding:20px}
+.eb-nest-invite-dialog h2{font-size:17px}
+}
+
+@media(max-width:360px){.eb-nest-header h1{font-size:20px}
+.eb-nest-header>button{font-size:10px;padding:6px 8px}
+.eb-nest-header-actions .eb-nest-bell{width:32px}
+.eb-nest-header-actions .eb-nest-refresh{width:32px}
+.eb-nest-refresh img{width:32px;height:34px}
+.eb-nest-friend-card{grid-template-columns:72px minmax(0,1fr);padding:9px;gap:7px}
+.eb-nest-page button.eb-nest-friend-scene{width:72px}
+.eb-nest-code input{font-size:14px}
+.eb-nest-page .eb-friend-stats small{font-size:8px}
+.eb-nest-page .eb-nest-nav button{font-size:8px}
+}
+
+@media(prefers-reduced-motion:reduce){.eb-nest-page *{scroll-behavior:auto!important;transition:none!important}
+}
+
+
+/* Keep the compact dock independent from the general friends button styles. */
+.eb-nest-page .eb-nest-nav button{border:0!important;background:transparent!important;box-shadow:none;white-space:nowrap;padding:2px;font-weight:650}
+.eb-nest-nav button>span{white-space:nowrap}
+.eb-nest-code button svg{width:16px;height:16px;flex-shrink:0}
+.eb-nest-page .eb-nest-code button{padding:0!important}
+.eb-nest-page .eb-friend-stats small{font-size:11px}
+@media(max-width:760px){.eb-nest-page .eb-nest-nav button{font-size:10px}
+.eb-nest-page .eb-friend-stats small{font-size:10px}
+.eb-nest-friend-info .eb-friend-stats small{font-size:9px}
+}
+@media(max-width:360px){.eb-nest-page .eb-nest-nav button{font-size:9px}
+.eb-nest-friend-info .eb-friend-stats small{font-size:8px}
+}
+

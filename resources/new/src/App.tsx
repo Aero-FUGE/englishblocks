@@ -814,7 +814,7 @@ export default function App() {
       {label:'账号同步',icon:'☁',onClick:()=>setIsCloudOpen(true),detail:cloud.user?cloud.status:'登录并同步'},
       {label:'游戏设置',icon:'⚙',onClick:()=>setIsSettingsOpen(true)}
     ]}/>}
-    {!musicOpen&&friendsOpen&&<FriendsPage selfAvatar={profile.avatar} userId={cloud.user?.id} onBack={closeFriends} onLogin={()=>setIsCloudOpen(true)}/>}
+    {!musicOpen&&friendsOpen&&<FriendsPage onEditProfile={()=>setIsProfileModalOpen(true)} selfAvatar={profile.avatar} userId={cloud.user?.id} onBack={closeFriends} onLogin={()=>setIsCloudOpen(true)}/>}
     {!musicOpen&&!friendsOpen&&!inStudy&&<PrankToast key={cloud.user?.id||'local'} inbox={social.inbox} wallet={social.wallet} open={pranksOpen} onClose={()=>setPranksOpen(false)} onViewAll={openFriends}/>}
     {musicOpen&&<MusicHistoryPage key={cloud.user?.id||'local'} progress={collection.musicHistory||emptyMusicProgress()} onProgressChange={update=>setCollection(c=>({...c,musicHistory:update(c.musicHistory||emptyMusicProgress())}))} onBack={()=>{setMusicOpen(false);window.scrollTo({top:0});}}/>}
     </CosmeticsContext.Provider>

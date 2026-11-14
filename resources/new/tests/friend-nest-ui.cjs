@@ -1,0 +1,17 @@
+// Run against tools/preview-friend-nest.cjs: this uses real isolated accounts and API data.
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright'),assert=require('node:assert/strict');
+const base=process.env.EB_UI_URL||'http://127.0.0.1:4174';
+(async()=>{const browser=await chromium.launch({args:['--no-sandbox']});try{
+ for(const width of [320,390,1366]){
+  const p=await browser.newPage({viewport:{width,height:900},reducedMotion:'reduce'}),errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto(base+'/preview/friends');await p.locator('.eb-nest-friend-card').waitFor();
+  assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'overview overflow '+width);
+  for(const name of ['window','cat-scholar','nav-home'])assert(await p.locator(`img[src$="/${name}.webp"]`).first().evaluate(i=>i.complete&&i.naturalWidth>0));
+  await p.getByRole('button',{name:'添加好友',exact:true}).click();const modal=p.getByRole('dialog',{name:'添加好友'});await modal.waitFor();assert(await modal.getByRole('button',{name:'发送好友申请'}).isDisabled());await modal.getByLabel('输入好友码').fill('BADCODE00000');await modal.getByRole('button',{name:'发送好友申请'}).click();await modal.getByRole('alert').waitFor();await modal.getByRole('button',{name:'关闭添加好友'}).click();assert.equal(await modal.count(),0);
+  await p.getByRole('button',{name:'查看资料',exact:true}).first().click();await p.getByText('这是好友的展示空间，角色、衣柜和进度均只能查看。').waitFor();assert(await p.getByRole('heading',{name:'她的衣柜 · 只看不拿'}).count());assert(await p.getByRole('heading',{name:'最近的学习脚印'}).count());assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'detail overflow '+width);await p.screenshot({path:`/tmp/nest-detail-${width}.png`,fullPage:true});await p.getByRole('button',{name:'返回好友小窝',exact:true}).click();await p.locator('.eb-nest-friend-card').waitFor();await p.getByRole('button',{name:'去她家 →',exact:true}).first().click();await p.getByText('这是好友的展示空间，角色、衣柜和进度均只能查看。').waitFor();await p.getByRole('button',{name:'返回好友小窝',exact:true}).click();
+  await p.getByRole('button',{name:'删除好友',exact:true}).first().click();await p.getByRole('button',{name:'取消',exact:true}).click();assert.equal(await p.locator('.eb-nest-friend-card').count(),1);
+  await p.screenshot({path:`/tmp/nest-final-${width}.png`,fullPage:true});assert.deepEqual(errors,[]);await p.close();
+ }
+ const p=await browser.newPage();await p.goto(base+'/preview/friends');await p.locator('.eb-nest-friend-card').waitFor();await p.getByRole('button',{name:'接受',exact:true}).click();await p.waitForFunction(()=>document.querySelectorAll('.eb-nest-friend-card').length===2);await p.getByLabel('选择对决好友').selectOption({label:'团团'});await p.locator('.eb-nest-friend-card').filter({has:p.getByRole('heading',{name:/^雪/})}).getByRole('button',{name:'丢臭鸡蛋',exact:true}).click();await p.getByText('已经送达，就算好友离线也能收到喵！').waitFor();
+ const b=await browser.newPage();await b.goto(base+'/preview/friends/1');await b.getByRole('button',{name:'知道啦',exact:true}).waitFor();await b.getByRole('button',{name:'知道啦',exact:true}).click();await b.getByText('已经收拾干净啦。').waitFor();await b.close();await p.close();
+ console.log('PASS real API: 320/390/1366 layouts, assets, invite validation/close, real read-only friend space/wardrobe/events, both visit entries, delete cancel, accept, weekly selector, offline egg delivery and handling; no page errors.');
+ }finally{await browser.close();}})().catch(e=>{console.error(e);process.exit(1)});
