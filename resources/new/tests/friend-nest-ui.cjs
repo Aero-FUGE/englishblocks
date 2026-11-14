@@ -1,4 +1,4 @@
-// Run against tools/preview-friend-nest.cjs: this uses real isolated accounts and API data.
+// Run against tests/helpers/friend-nest-server.cjs: this uses real isolated accounts and API data.
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright'),assert=require('node:assert/strict');
 const base=process.env.EB_UI_URL||'http://127.0.0.1:4174';
 (async()=>{const browser=await chromium.launch({args:['--no-sandbox']});try{
