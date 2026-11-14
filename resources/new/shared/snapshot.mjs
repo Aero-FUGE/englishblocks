@@ -13,6 +13,9 @@ export function validSnapshot(value) {
   if (!c.equipped.mimi || !c.equipped.tuanzhang || Array.isArray(c.equipped) || Array.isArray(c.bestHints)) return false;
   if (![c.equipped.mimi,c.equipped.tuanzhang].every(r=>typeof r==='object' && !Array.isArray(r) && Object.values(r).every(v=>typeof v==='string'))) return false;
   if (!Object.values(c.bestHints).every(safeInteger)) return false;
+  if(c.unlockedThemes!=null&&(!Array.isArray(c.unlockedThemes)||c.unlockedThemes.length>4||!c.unlockedThemes.every(s=>['spring','summer','autumn','winter'].includes(s))))return false;
+  if(c.unlockedAvatars!=null&&(!Array.isArray(c.unlockedAvatars)||c.unlockedAvatars.length>24||!c.unlockedAvatars.every(s=>typeof s==='string'&&/^cat-avatar-(0[1-9]|1[0-9]|2[0-4])$/.test(s))))return false;
+  if(c.selectedSeason!=null&&!['spring','summer','autumn','winter'].includes(c.selectedSeason))return false;
   if(c.studyTasks!=null){
     const tasks=c.studyTasks,date=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s)&&!Number.isNaN(Date.parse(s+'T00:00:00Z'));
     if(typeof tasks!=='object'||Array.isArray(tasks)||!date(tasks.startedOn)||!tasks.days||typeof tasks.days!=='object'||Array.isArray(tasks.days)||!tasks.grants||typeof tasks.grants!=='object'||Array.isArray(tasks.grants))return false;

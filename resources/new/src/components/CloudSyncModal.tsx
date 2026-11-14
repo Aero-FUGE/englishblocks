@@ -1,3 +1,4 @@
+import {BackupPanel} from './BackupPanel';
 import React, { useState, useSyncExternalStore } from 'react';
 import { Cloud, X } from 'lucide-react';
 import { ModalOverlay } from './ModalOverlay';
@@ -10,8 +11,8 @@ export function CloudSyncModal({open,onClose,local}:{open:boolean;onClose:()=>vo
   const remote=state.conflict?.remote;
   const summary=(s:CloudSnapshot|null|undefined)=>s?`昵称 ${s.profile.name} · 已通关 ${s.profile.completedLevelIds.length} 关 · ${s.collection.fish} 小鱼干 · ${s.collection.owned.length} 件装扮`:'暂无云端存档';
   return <ModalOverlay className="fixed inset-0 flex items-center justify-center bg-[var(--theme-text)]/45 backdrop-blur-[3px]">
-    <section role="dialog" aria-modal="true" aria-label="云账号与同步" className="eb-modal-panel eb-modal-cloud flex flex-col bg-[var(--theme-surface)] border-2 border-white shadow-2xl text-[var(--theme-text)]">
-      <header className="flex items-center justify-between gap-3 pb-3 border-b border-[var(--theme-border)]"><h2 className="font-bold flex gap-2 items-center"><Cloud size={22}/>云账号与同步</h2><button type="button" aria-label="关闭云同步" onClick={onClose} className="p-2 rounded-full bg-white"><X size={18}/></button></header>
+    <section role="dialog" aria-modal="true" aria-label="账号同步" className="eb-modal-panel eb-modal-cloud flex flex-col bg-[var(--theme-surface)] border-2 border-white shadow-2xl text-[var(--theme-text)]">
+      <header className="flex items-center justify-between gap-3 pb-3 border-b border-[var(--theme-border)]"><h2 className="font-bold flex gap-2 items-center"><Cloud size={22}/>账号同步</h2><button type="button" aria-label="关闭云同步" onClick={onClose} className="p-2 rounded-full bg-white"><X size={18}/></button></header>
       <div className="eb-modal-body py-3 space-y-4">
         <p role="status" className="text-sm font-semibold">{state.status}</p>
         {state.needsReload&&<button className="eb-cloud-primary w-full" onClick={()=>location.reload()}>刷新并读取最新记录</button>}
@@ -35,6 +36,7 @@ export function CloudSyncModal({open,onClose,local}:{open:boolean;onClose:()=>vo
           </div>:<button disabled={state.busy} onClick={()=>void cloudSync.sync()} className="eb-cloud-primary w-full">立即同步</button>}
         </>}
         {(state.error||fileError)&&<p role="alert" className="rounded-xl border border-[var(--theme-border)] bg-[var(--theme-muted-surface)] p-3 text-xs break-words">{fileError||state.error}</p>}
+        <BackupPanel/>
         <div className="border-t border-[var(--theme-border)] pt-3 space-y-2 text-xs">
           <p className="font-bold">本机回退备份</p><p>同步覆盖前保留最近 3 份记录。恢复备份后会暂停自动上传。</p>
           {state.backups.map((b,index)=><div key={b.at+index} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border p-2"><span>{new Date(b.at).toLocaleString()} · {b.snapshot.profile.completedLevelIds.length} 关</span><button disabled={state.busy} onClick={()=>{try{cloudSync.restore(index);setFileError('');}catch{setFileError('备份恢复失败，请检查浏览器存储空间');}}} className="rounded-lg border bg-white px-2 py-1">恢复到本机</button></div>)}

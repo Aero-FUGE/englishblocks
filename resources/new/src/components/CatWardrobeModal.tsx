@@ -6,6 +6,9 @@ import { PoseDressedCat, type CatExpression, type CatPose, POSE_UNLOCK_TIER } fr
 
 export interface CatCollection {
   fish:number;
+  unlockedThemes?: string[];
+  unlockedAvatars?: string[];
+  selectedSeason?: import('../utils/seasonTheme').Season;
   studyTasks?: import('../utils/studyTasks').StudyTaskProgress;
   activeCat:CatId;
   owned:string[];

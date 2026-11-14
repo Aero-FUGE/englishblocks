@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="zh-CN">
   <head>
-    <script>try{const s=localStorage.getItem('englishblocks_season');document.documentElement.dataset.season=['spring','summer','autumn','winter'].includes(s)?s:'spring';}catch{document.documentElement.dataset.season='spring';}</script>
+    <script>try{const c=JSON.parse(localStorage.getItem('english_blocks_cat_collection_v1')||'{}'),s=c.selectedSeason;document.documentElement.dataset.season=['spring','summer','autumn','winter'].includes(s)&&(s==='summer'||c.unlockedThemes?.includes(s))?s:'summer';}catch{document.documentElement.dataset.season='summer';}</script>
     <link rel="icon" type="image/x-icon" href="./favicon.ico" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <meta charset="UTF-8" />

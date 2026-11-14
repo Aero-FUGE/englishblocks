@@ -1,3 +1,7 @@
+import {ModalOverlay} from './components/ModalOverlay';
+import {CosmeticsContext} from './components/CosmeticsContext';
+import {DEFAULT_AVATAR,ownsCosmetic} from './utils/cosmetics';
+import {setSeason} from './utils/seasonTheme';
 import {DEFAULT_PLAYER_NAME, normalizePlayerName} from './utils/profileName';
 import {TaskCelebrationModal} from './components/TaskCelebrationModal';
 import {StudyTasksModal} from './components/StudyTasksModal';
@@ -41,7 +45,7 @@ import { LayoutEditor, usePublishedLayout, readLayout, isMobilePreview, applyEle
 const DEFAULT_PROFILE: UserProfile = {
   id: 'user_main',
   name: DEFAULT_PLAYER_NAME,
-  avatar: '🐰',
+  avatar: DEFAULT_AVATAR,
   themeColor: 'green',
   currentLevelIndex: 0,
   progressVersion: 3,
@@ -76,6 +80,8 @@ export default function App() {
   });
 
   const [collection,setCollection] = useState<CatCollection>(()=>{try {const raw=localStorage.getItem('english_blocks_cat_collection_v1');return raw?{...EMPTY_COLLECTION,...JSON.parse(raw)}:EMPTY_COLLECTION;}catch{return EMPTY_COLLECTION;}});
+  useEffect(()=>{setProfile(p=>ownsCosmetic(collection,'avatar',p.avatar)?p:{...p,avatar:DEFAULT_AVATAR});},[collection.unlockedAvatars,profile.avatar]);
+  useEffect(()=>{const chosen=collection.selectedSeason;setSeason(chosen&&ownsCosmetic(collection,'theme',chosen)?chosen:'summer');},[collection.selectedSeason,collection.unlockedThemes]);
   const [wardrobeOpen,setWardrobeOpen] = useState(false);
   const [hintCount,setHintCount] = useState(0);
   const [answerRevealed, setAnswerRevealed] = useState(false);
@@ -200,6 +206,7 @@ export default function App() {
 
   // Current learning phase tier (1: 初级, 2: 中级, 3: 高级, 4: 专业)
   const currentTier = currentLevel.tier || 1;
+  const wardrobeUnlocked = useMemo(()=>{const done=new Set(profile.completedLevelIds);return SENTENCE_BANK.filter(l=>l.tier===2).every(l=>done.has(l.id)) || SENTENCE_BANK.some(l=>l.tier>=3&&done.has(l.id));},[profile.completedLevelIds]);
 
   // Tiered Assembly Phase index (for Level 5 super long sentences)
   const [currentPhaseIndex, setCurrentPhaseIndex] = useState<number>(0);
@@ -628,9 +635,10 @@ export default function App() {
   const [replayCelebration, setReplayCelebration] = useState(false);
 
   return (
-    <>
+    <CosmeticsContext.Provider value={{collection,setCollection}}>
     {(inStudy||friendsOpen)&&<SeasonPageBackground/>}
     <SeasonAtmosphere/>
+    {wardrobeOpen && !wardrobeUnlocked && <ModalOverlay className="eb-season-overlay" onClick={e=>{if(e.target===e.currentTarget)setWardrobeOpen(false);}}><section className="eb-season-dialog" role="dialog" aria-modal="true" aria-label="衣柜尚未解锁"><h2>🔒 小猫衣柜</h2><p>完成高中阶段，升入大学后，小猫的衣柜就会打开啦！</p><button onClick={()=>setWardrobeOpen(false)}>继续努力学习 ♡</button></section></ModalOverlay>}
     <div style={friendsOpen||!inStudy?{display:'none'}:undefined} className="eb-game-shell min-h-screen cozy-window-bg relative flex flex-col justify-between overflow-x-hidden p-4 md:p-6 lg:p-7 selection:bg-amber-100 selection:text-amber-950" onClickCapture={(event) => playUiClickForTarget(event.target)}>
       {showSplash && <div id="eb-splash" role="status" aria-label="英语拼块正在启动"><div className="eb-splash-card"><img src="./assets/brand-mimi-a.png" alt="咪咪"/><h1>英语拼块</h1><p>WORD BLOCK GARDEN</p><div className="eb-splash-bar"><span /></div><small>正在准备你的学习花园…</small></div></div>}
       {developerMode && layoutEditorOpen && <LayoutEditor value={layoutDraft} onChange={setLayoutDraft} onClose={() => setLayoutEditorOpen(false)} />}
@@ -693,7 +701,7 @@ export default function App() {
       {taskCelebrationOpen&&pendingTaskAward&&<TaskCelebrationModal fish={pendingTaskAward.fish} awards={pendingTaskAward.awards} onContinue={finishTaskCelebration}/>}
       {tasksOpen&&<StudyTasksModal progress={collection.studyTasks} fish={collection.fish} onClose={()=>setTasksOpen(false)}/>}
       <CloudSyncModal open={isCloudOpen} onClose={()=>setIsCloudOpen(false)} local={{profile,collection}} />
-      <CatWardrobeModal open={wardrobeOpen} onClose={()=>setWardrobeOpen(false)} collection={collection} setCollection={setCollection} unlockedTier={Math.max(currentTier,...SENTENCE_BANK.filter(l=>profile.completedLevelIds.includes(l.id)).map(l=>l.tier))} />
+      <CatWardrobeModal open={wardrobeOpen && wardrobeUnlocked} onClose={()=>setWardrobeOpen(false)} collection={collection} setCollection={setCollection} unlockedTier={Math.max(currentTier,...SENTENCE_BANK.filter(l=>profile.completedLevelIds.includes(l.id)).map(l=>l.tier))} />
       {/* MODALS */}
       {/* Vocabulary Detail Modal */}
       <WordCardModal
@@ -795,12 +803,12 @@ export default function App() {
       {label:'学习进度',icon:'🌿',onClick:()=>setIsProfileModalOpen(true)},
       {label:'好友小窝',icon:'🏡',onClick:openFriends,detail:social.pending?`${social.pending} 封小窝来信`:undefined},
       {label:'音乐设置',icon:'♫',onClick:()=>setIsSoundStudioOpen(true)},
-      {label:'小猫衣柜',icon:'🎀',onClick:()=>setWardrobeOpen(true)},
-      {label:'云端存档',icon:'☁',onClick:()=>setIsCloudOpen(true),detail:cloud.user?cloud.status:'登录并同步'},
+      {label:'小猫衣柜',icon:'🎀',onClick:()=>setWardrobeOpen(true),detail:wardrobeUnlocked?'已解锁':'🔒 大学阶段解锁'},
+      {label:'账号同步',icon:'☁',onClick:()=>setIsCloudOpen(true),detail:cloud.user?cloud.status:'登录并同步'},
       {label:'游戏设置',icon:'⚙',onClick:()=>setIsSettingsOpen(true)}
     ]}/>}
     {friendsOpen&&<FriendsPage selfAvatar={profile.avatar} userId={cloud.user?.id} onBack={closeFriends} onLogin={()=>setIsCloudOpen(true)}/>}
     {!friendsOpen&&!inStudy&&<PrankToast key={cloud.user?.id||'local'} inbox={social.inbox} wallet={social.wallet} open={pranksOpen} onClose={()=>setPranksOpen(false)} onViewAll={openFriends}/>}
-    </>
+    </CosmeticsContext.Provider>
   );
 }

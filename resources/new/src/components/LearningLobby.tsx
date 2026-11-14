@@ -11,7 +11,7 @@ import type {CatCollection} from './CatWardrobeModal';
 import {useSeasonTheme,SEASON_LABELS} from '../utils/seasonTheme';
 import {LEARNING_STAGES} from '../utils/stages';
 type Action={label:string;icon:string;onClick:()=>void;detail?:string};
-const imageIcons:Record<string,string>={'学习进度':'progress','小猫衣柜':'wardrobe','好友小窝':'friends','音乐设置':'music','云端存档':'cloud','游戏设置':'settings','个人档案':'profile','四季主题':'season'};
+const imageIcons:Record<string,string>={'学习进度':'progress','小猫衣柜':'wardrobe','好友小窝':'friends','音乐设置':'music','账号同步':'cloud','游戏设置':'settings','个人档案':'profile','四季主题':'season'};
 export function LearningLobby({avatar,name,collection,level,tier,completed,total,words,filled,expected,onContinue,actions}:{avatar:string;name:string;collection:CatCollection;level:number;tier:number;completed:number;total:number;words:number;filled:number;expected:number;onContinue:()=>void;actions:Action[]}){
  const task=taskSummary(collection.studyTasks,useStudyNow());
  const[season]=useSeasonTheme();const[showSeasons,setShowSeasons]=useState(false);
@@ -30,7 +30,7 @@ export function LearningLobby({avatar,name,collection,level,tier,completed,total
    <section className="eb-lobby-actions eb-garden-actions" aria-label="大厅功能">{Object.entries(imageIcons).map(([label,icon])=>{
     const action=actions.find(a=>a.label===label);
     return <button key={label} className="eb-garden-art-button" onClick={label==='四季主题'?()=>setShowSeasons(v=>!v):label==='个人档案'?stats.onClick:action?.onClick} aria-expanded={label==='四季主题'?showSeasons:undefined} title={action?.detail}>
-     <img className="eb-garden-action-art" src={`./assets/season-icons/${season}/${icon}.png?v=foreground-2`} alt="" aria-hidden="true" draggable={false}/><strong>{label}</strong>{action?.detail?.includes('来信')&&<small>{action.detail}</small>}
+     <img className="eb-garden-action-art" src={`./assets/season-icons/${season}/${icon}.png?v=foreground-2`} alt="" aria-hidden="true" draggable={false}/><strong>{label}</strong>{(action?.detail?.includes('来信')||label==='小猫衣柜')&&<small>{action?.detail}</small>}
     </button>;
    })}</section>
 

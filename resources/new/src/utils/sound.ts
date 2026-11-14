@@ -163,6 +163,23 @@ class SoundManager {
     try{localStorage.setItem('english_blocks_audio_levels_v1',JSON.stringify({sfx:this.sfxVolume,cat:this.catVolume}));}catch{}
   }
   private getEffectsVolume(slotId:string):number {return this.isCatSlot(slotId)?this.catVolume:this.sfxVolume;}
+  private decodedEffects = new Map<string,AudioBuffer>();
+  private decodingEffects = new Set<string>();
+  private prepareEffect(url:string):void {
+    if(this.decodedEffects.has(url)||this.decodingEffects.has(url))return;
+    this.decodingEffects.add(url);
+    this.initCtx();if(!this.ctx){this.decodingEffects.delete(url);return;}
+    const ctx=this.ctx;
+    void fetch(url).then(r=>{if(!r.ok)throw Error('Audio unavailable');return r.arrayBuffer();})
+      .then(data=>ctx.decodeAudioData(data)).then(buffer=>{this.decodedEffects.set(url,buffer);})
+      .catch(()=>{}).finally(()=>this.decodingEffects.delete(url));
+  }
+  private playDecoded(url:string,slot:string):boolean {
+    this.initCtx();const buffer=this.decodedEffects.get(url);if(!buffer||!this.ctx)return false;
+    const source=this.ctx.createBufferSource(),gain=this.ctx.createGain();source.buffer=buffer;
+    gain.gain.value=this.getEffectsVolume(slot);source.connect(gain);gain.connect(this.ctx.destination);
+    source.onended=()=>{source.disconnect();gain.disconnect();};source.start();return true;
+  }
   private bundledPlayers: Record<string,HTMLAudioElement> = {};
   private preloadBundled(slotId: string): void {
     const name = this.bundledSounds[slotId];
@@ -176,6 +193,11 @@ class SoundManager {
     const name=this.bundledSounds[slotId];
     if (!name || typeof window==='undefined') return false;
     try {
+      const url='./assets/audio/sfx/'+encodeURIComponent(name)+'.wav';
+      if(this.playDecoded(url,slotId))return true;
+      this.prepareEffect(url);
+      if(slotId==='block_place'||slotId==='block_remove')return false;
+      if(slotId==='ui_button'||slotId==='ui_open'){this.playKittenPurrPop();return true;}
       let player=this.bundledPlayers[slotId];
       if(!player){this.preloadBundled(slotId);player=this.bundledPlayers[slotId];}
       if (!player) return false;
@@ -234,6 +256,7 @@ class SoundManager {
   private installSpeechWarmupListeners(): void {
     if (typeof window === 'undefined') return;
     const prime = () => {
+      this.initCtx();
       this.primeSpeechEngine();
       window.removeEventListener('pointerdown', prime);
       window.removeEventListener('keydown', prime);
@@ -308,6 +331,7 @@ class SoundManager {
     const previous = this.customSounds[slotId];
     if (previous) { previous.audio.pause(); URL.revokeObjectURL(previous.url); }
     const url = URL.createObjectURL(file);
+    this.prepareEffect(url);
     const audio = new Audio(url);
     audio.preload = 'auto';
     this.customSounds[slotId] = { name, url, audio };
@@ -380,7 +404,7 @@ class SoundManager {
         this.autoReadOnSuccess=speechSettings.autoReadOnSuccess!==false;
         this.speechEnabled=speechSettings.enabled!==false;
       }catch{}
-      this.preloadBundled('ui_button');
+      for(const id of ['ui_button','block_place','block_remove','sentence_victory'])this.prepareEffect('./assets/audio/sfx/'+encodeURIComponent(this.bundledSounds[id])+'.wav');
       this.prepareSpeechVoices();
       this.installSpeechWarmupListeners();
       void this.restoreSavedAudio();
@@ -448,7 +472,7 @@ class SoundManager {
         window.AudioContext ||
         (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtx) {
-        this.ctx = new AudioCtx();
+        this.ctx = new AudioCtx({latencyHint:'interactive'});
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
@@ -501,7 +525,10 @@ class SoundManager {
     // If user uploaded custom audio for this slot, play it!
     if (this.customSounds[slotId]) {
       try {
-        const audio = this.customSounds[slotId].audio;
+        const custom=this.customSounds[slotId];
+        if(this.playDecoded(custom.url,slotId))return;
+        this.prepareEffect(custom.url);
+        const audio = custom.audio;
         audio.volume = this.getEffectsVolume(slotId);
         audio.currentTime = 0;
         audio.play().catch(() => {});
