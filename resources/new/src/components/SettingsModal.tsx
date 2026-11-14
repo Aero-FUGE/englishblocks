@@ -1,3 +1,4 @@
+import {DEFAULT_PLAYER_NAME} from '../utils/profileName';
 import {PlayerAvatar} from './PlayerAvatar';
 import {SeasonPicker} from './SeasonPicker';
 import { ModalOverlay } from './ModalOverlay';
@@ -69,7 +70,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
   const handleSave = () => {
     onUpdateProfile({
-      name: name.trim() || '浮歌',
+      name: name.trim() || DEFAULT_PLAYER_NAME,
       totalWordGoal: Number(wordGoal) || 2004,
       totalSentenceGoal: Number(sentenceGoal) || 1190,
     });

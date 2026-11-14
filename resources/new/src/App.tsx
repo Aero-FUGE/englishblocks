@@ -1,3 +1,4 @@
+import {DEFAULT_PLAYER_NAME, normalizePlayerName} from './utils/profileName';
 import {TaskCelebrationModal} from './components/TaskCelebrationModal';
 import {StudyTasksModal} from './components/StudyTasksModal';
 import {recordStudyTask} from './utils/studyTasks';
@@ -39,7 +40,7 @@ import { LayoutEditor, usePublishedLayout, readLayout, isMobilePreview, applyEle
 
 const DEFAULT_PROFILE: UserProfile = {
   id: 'user_main',
-  name: '浮歌',
+  name: DEFAULT_PLAYER_NAME,
   avatar: '🐰',
   themeColor: 'green',
   currentLevelIndex: 0,
@@ -68,7 +69,7 @@ export default function App() {
       const saved = localStorage.getItem('word_candy_single_profile_v3');
       if (saved) {
         const parsed: UserProfile = {...DEFAULT_PROFILE, ...JSON.parse(saved)};
-        return {...parsed, currentLevelIndex: resumeLevelIndex(parsed, SENTENCE_BANK), progressVersion: 3};
+        return {...parsed, name: normalizePlayerName(parsed.name), currentLevelIndex: resumeLevelIndex(parsed, SENTENCE_BANK), progressVersion: 3};
       }
     } catch {}
     return DEFAULT_PROFILE;
@@ -235,7 +236,7 @@ export default function App() {
 
   // Account sync replaces the anonymous shared LAN save. Local saves remain available offline.
   const cloud = useCloudSync(profile,collection,(snapshot)=>{
-    setProfile({...DEFAULT_PROFILE,...snapshot.profile});
+    setProfile({...DEFAULT_PROFILE,...snapshot.profile,name:normalizePlayerName(snapshot.profile.name)});
     setCollection({...EMPTY_COLLECTION,...snapshot.collection});
     setSoundEnabled(sound.enabled);
     resetClock();setHintCount(0);setAnswerRevealed(false);setIsSuccessModalOpen(false);setPendingTaskAward(null);setTaskCelebrationOpen(false);
@@ -788,6 +789,7 @@ export default function App() {
       />
     </div>
     {!inStudy&&!friendsOpen&&<LearningLobby avatar={profile.avatar} name={profile.name} collection={collection} level={currentLevel.levelNumber} tier={currentTier} filled={slottedWords.filter(Boolean).length} expected={expectedCount} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
+      {label:cloud.user?'账号管理':'登录 / 注册',icon:'user',onClick:()=>setIsCloudOpen(true)},
       {label:'每日任务',icon:'gift',onClick:()=>setTasksOpen(true)},
       {label:'关卡选择',icon:'▦',onClick:()=>setIsLevelSelectorOpen(true)},
       {label:'学习进度',icon:'🌿',onClick:()=>setIsProfileModalOpen(true)},

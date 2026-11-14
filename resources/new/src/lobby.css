@@ -74,3 +74,6 @@ html[data-learning-page=lobby] .eb-season-light {display:none;}
 :root[data-season="winter"] .eb-garden-footer .eb-bgm-pill svg {color:var(--theme-primary);}
 :root[data-season="winter"] .eb-garden-footer .eb-bgm-play {background:var(--theme-primary);color:var(--theme-on-primary);}
 :root[data-season="winter"] .eb-garden-footer .eb-bgm-play svg {color:var(--theme-on-primary);fill:currentColor;}
+
+.eb-garden-account{flex-shrink:0;padding:8px 10px;min-height:40px;border-radius:999px;border:1px solid var(--theme-border);background:var(--theme-surface);color:var(--theme-text);font-size:12px;cursor:pointer;}
+@media(max-width:420px){.eb-garden-profile-top{flex-wrap:wrap}.eb-garden-account{margin-left:auto}}
