@@ -1,7 +1,7 @@
 import {MUSIC_LEXICON} from './music-lexicon.mjs';
 export const MUSIC_CATEGORIES=[{id:'genres',name:'音乐体裁',description:'在体裁与曲式里，听见音乐的来路',symbol:'♫'},{id:'composers',name:'作曲家',description:'走近音乐家的故事与创作世界',symbol:'♬'},{id:'works',name:'音乐作品',description:'翻开经典作品的声音画册',symbol:'♪'}];
 export const MUSIC_MODES=['organize','retrieve'];
-export const MUSIC_MODE_LABELS={organize:'一刷',retrieve:'二刷'};
+export const MUSIC_MODE_LABELS={organize:'正常',retrieve:'反向'};
 const idPattern=/^[a-zA-Z0-9_-]{1,100}$/;
 const fixedPattern=/^[\p{P}\p{S}\s]+$/u;
 const wordSegmenter=new Intl.Segmenter('zh-CN',{granularity:'word'});
@@ -23,9 +23,36 @@ function semanticWords(text){
 }
 export function splitMusicText(text,role){const result=[];for(const match of text.matchAll(/[\p{P}\p{S}\s]+|[^\p{P}\p{S}\s]+/gu)){if(fixedPattern.test(match[0]))result.push({kind:'punctuation',text:match[0],sourceRole:role,pos:'标点'});else for(const word of semanticWords(match[0]))result.push({kind:word.anchor?'anchor':role,text:word.text,sourceRole:role,pos:word.pos});}return result;}
 export function splitLanguage(text){return splitMusicText(text,'language').map(s=>s.text);}
+// Semantic V3 is authored from complete, unmarked source answers. Knowledge
+// spans are atomic: dates, names, works and technical phrases never pass through
+// the POS tokenizer. Framework and knowledge exchange roles between the modes.
+function semanticFramework(text){
+ const result=[];
+ for(const match of text.matchAll(/[\p{P}\p{S}\s]+|[^\p{P}\p{S}\s]+/gu)){
+  const value=match[0];
+  if(fixedPattern.test(value)){result.push({kind:'punctuation',text:value,sourceRole:'language',pos:'标点'});continue;}
+  const chunks=value.length<=16?[value]:value.split(/(?=并|也|通过|成为|形成|体现|提供|推动|促进|发展|运用|表现|具有|采用|属于|来自|源于|使|长期|经过|典型)/u).filter(Boolean);
+  for(const chunk of chunks)result.push({kind:/^[的和与及或]$/u.test(chunk)?'anchor':'language',text:chunk,sourceRole:'language',pos:'表达框架'});
+ }
+ return result;
+}
+function parseSemanticQuestion(input,category){
+ if(typeof input.rawAnswer!=='string'||!Array.isArray(input.semanticParagraphs)||!input.semanticParagraphs.length)throw Error('语义题库需要完整原文与分段');
+ const scorePoints=[];
+ const semanticParagraphs=input.semanticParagraphs.map(parts=>{
+  if(!Array.isArray(parts)||!parts.length)throw Error('语义段落不能为空');
+  return parts.map(part=>{if(!part||!['framework','knowledge'].includes(part.role)||typeof part.text!=='string'||!part.text||/[【】]/u.test(part.text))throw Error('语义片段不正确');
+   if(part.role==='knowledge'&&(!/[^\p{P}\p{S}\s]/u.test(part.text)||/[，。、；：！？《》“”]/u.test(part.text)))throw Error('知识词块必须是完整词语或术语');
+   return {role:part.role,text:part.text};});
+ });
+ const paragraphs=semanticParagraphs.map((parts,pi)=>{const segments=[];for(const part of parts){const pieces=part.role==='knowledge'?[{kind:'score',text:part.text,sourceRole:'score',pos:'知识词块'}]:semanticFramework(part.text);for(const piece of pieces){const segment={...piece,id:`${input.id}-p${pi}-s${segments.length}`};segments.push(segment);if(piece.kind==='score')scorePoints.push(segment);}}if(!segments.some(s=>s.kind==='score')||!segments.some(s=>s.kind==='language'))throw Error('每段均需知识与表达线索');return {id:`${input.id}-p${pi}`,segments};});
+ const rawAnswer=paragraphs.map(p=>p.segments.map(s=>s.text).join('')).join('\n');if(rawAnswer!==input.rawAnswer)throw Error('语义划分不能改变完整原文');
+ return {id:input.id,category,title:input.title,rawAnswer,annotatedAnswer:rawAnswer,tokenizationVersion:3,semanticParagraphs,paragraphs,scorePoints,skeleton:paragraphs.flatMap(p=>p.segments.filter(s=>s.sourceRole==='language')),correctOrder:paragraphs.flatMap(p=>p.segments.map(s=>s.id)),version:contentVersion(['semantic-v3',paragraphs.map(p=>p.segments.map(s=>[s.kind,s.text,s.pos]))])};
+}
 export function parseMusicQuestion(input,category='genres'){
  if(!MUSIC_CATEGORIES.some(c=>c.id===category))throw Error('未知音乐史分类');
  if(!input||typeof input.id!=='string'||!idPattern.test(input.id)||typeof input.title!=='string'||!input.title.trim())throw Error('题目需要稳定的 ID 和名称');
+ if(input.tokenizationVersion===3||input.semanticParagraphs)return parseSemanticQuestion(input,category);
  let sources;
  if(input.tokenizationVersion===2&&typeof input.annotatedAnswer==='string')sources=input.annotatedAnswer.split(/\r?\n/).filter(Boolean);
  else if(Array.isArray(input.paragraphs)&&input.paragraphs.every(p=>p&&Array.isArray(p.segments))){sources=input.paragraphs.map(p=>p.segments.map(s=>{if(!['score','language'].includes(s.kind)||typeof s.text!=='string'||!s.text||/[【】]/u.test(s.text))throw Error('结构化词块格式不正确');return s.kind==='score'?`【${s.text}】`:s.text;}).join(''));}
@@ -40,7 +67,7 @@ export function parseMusicQuestion(input,category='genres'){
  return {id:input.id,category,title:input.title,annotatedAnswer:sources.join('\n'),rawAnswer,tokenizationVersion:2,paragraphs,scorePoints,skeleton:paragraphs.flatMap(p=>p.segments.filter(s=>s.sourceRole==='language')),correctOrder:paragraphs.flatMap(p=>p.segments.map(s=>s.id)),version:contentVersion(paragraphs.map(p=>p.segments.map(s=>[s.kind,s.text,s.pos])))};
 }
 export function importMusicQuestions(input,category){const rows=Array.isArray(input)?input:input?.questions;if(!Array.isArray(rows))throw Error('题库应为数组或 {questions: [...]}');const questions=rows.map(q=>parseMusicQuestion(q,category));if(new Set(questions.map(q=>q.id)).size!==questions.length)throw Error('题目 ID 重复');return questions;}
-export function isMusicMovable(segment,mode){return segment.kind===(mode==='organize'?'language':'score');}
+export function isMusicMovable(segment,mode){return segment.kind===(mode==='organize'?'score':'language');}
 export function nextMusicMode(record){return record?.organizeComplete&&!record?.retrieveComplete?'retrieve':'organize';}
 export function validMusicProgress(value){const integer=n=>Number.isSafeInteger(n)&&n>=0;if(!value||typeof value!=='object'||Array.isArray(value)||value.version!==1||!value.questions||typeof value.questions!=='object'||Array.isArray(value.questions)||Object.keys(value.questions).length>5000)return false;
  return Object.entries(value.questions).every(([id,r])=>idPattern.test(id)&&r&&typeof r==='object'&&!Array.isArray(r)&&['organizeComplete','retrieveComplete'].every(k=>typeof r[k]==='boolean')&&(!r.retrieveComplete||r.organizeComplete)&&integer(r.lastStudiedAt)&&Array.isArray(r.attempts)&&r.attempts.length<=50&&r.attempts.every(a=>a&&MUSIC_MODES.includes(a.mode)&&integer(a.at)&&typeof a.correct==='boolean'&&typeof a.answer==='string'&&a.answer.length<=30000&&typeof a.version==='string')&&(!r.drafts||(typeof r.drafts==='object'&&!Array.isArray(r.drafts)&&Object.entries(r.drafts).every(([mode,d])=>MUSIC_MODES.includes(mode)&&d&&typeof d.version==='string'&&integer(d.paragraph)&&Array.isArray(d.slots)&&d.slots.length<=100&&d.slots.every(row=>Array.isArray(row)&&row.length<=1000&&row.every(s=>s===null||(typeof s==='string'&&s.length<=200)))))));
