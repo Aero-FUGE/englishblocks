@@ -69,6 +69,16 @@ export function parseMusicQuestion(input,category='genres'){
 export function importMusicQuestions(input,category){const rows=Array.isArray(input)?input:input?.questions;if(!Array.isArray(rows))throw Error('题库应为数组或 {questions: [...]}');const questions=rows.map(q=>parseMusicQuestion(q,category));if(new Set(questions.map(q=>q.id)).size!==questions.length)throw Error('题目 ID 重复');return questions;}
 export function isMusicMovable(segment,mode){return segment.kind===(mode==='organize'?'score':'language');}
 export function nextMusicMode(record){return record?.organizeComplete&&!record?.retrieveComplete?'retrieve':'organize';}
+export function validMusicEdits(value){
+ if(!value||typeof value!=='object'||Array.isArray(value)||Object.keys(value).length>5000)return false;
+ return Object.entries(value).every(([id,edit])=>{
+  if(!idPattern.test(id)||!edit||typeof edit!=='object'||!Number.isSafeInteger(edit.updatedAt)||edit.updatedAt<0||!Array.isArray(edit.paragraphs)||!edit.paragraphs.length||edit.paragraphs.length>100)return false;
+  if(!edit.paragraphs.every(parts=>Array.isArray(parts)&&parts.length>0&&parts.length<=1000&&parts.every(p=>p&&['knowledge','framework'].includes(p.role)&&typeof p.text==='string'&&p.text.trim().length>0&&p.text.length<=1000&&!/[\r\n]/u.test(p.text))))return false;
+  const rawAnswer=edit.paragraphs.map(parts=>parts.map(p=>p.text).join('')).join('\n');if(rawAnswer.length>30000)return false;
+  try{parseSemanticQuestion({id,title:'自定义题目',rawAnswer,semanticParagraphs:edit.paragraphs},'genres');return true;}catch{return false;}
+ });
+}
 export function validMusicProgress(value){const integer=n=>Number.isSafeInteger(n)&&n>=0;if(!value||typeof value!=='object'||Array.isArray(value)||value.version!==1||!value.questions||typeof value.questions!=='object'||Array.isArray(value.questions)||Object.keys(value.questions).length>5000)return false;
+ if(value.edits!==undefined&&!validMusicEdits(value.edits))return false;
  return Object.entries(value.questions).every(([id,r])=>idPattern.test(id)&&r&&typeof r==='object'&&!Array.isArray(r)&&['organizeComplete','retrieveComplete'].every(k=>typeof r[k]==='boolean')&&(!r.retrieveComplete||r.organizeComplete)&&integer(r.lastStudiedAt)&&Array.isArray(r.attempts)&&r.attempts.length<=50&&r.attempts.every(a=>a&&MUSIC_MODES.includes(a.mode)&&integer(a.at)&&typeof a.correct==='boolean'&&typeof a.answer==='string'&&a.answer.length<=30000&&typeof a.version==='string')&&(!r.drafts||(typeof r.drafts==='object'&&!Array.isArray(r.drafts)&&Object.entries(r.drafts).every(([mode,d])=>MUSIC_MODES.includes(mode)&&d&&typeof d.version==='string'&&integer(d.paragraph)&&Array.isArray(d.slots)&&d.slots.length<=100&&d.slots.every(row=>Array.isArray(row)&&row.length<=1000&&row.every(s=>s===null||(typeof s==='string'&&s.length<=200)))))));
 }

@@ -1,14 +1,16 @@
 import type {WordBlock} from '../types/game';
 import {newRail,insertFromPool,takeBack,type RailState} from './railState.ts';
-import {isMusicMovable} from '../../shared/music-history.mjs';
+import {isMusicMovable,parseMusicQuestion} from '../../shared/music-history.mjs';
 export type MusicMode='organize'|'retrieve';
 export type MusicCategory='genres'|'composers'|'works';
 export interface MusicSegment {id:string;kind:'score'|'language'|'punctuation'|'anchor';text:string;pos?:string;sourceRole?:'score'|'language';pointId?:string;pointStart?:boolean;pointEnd?:boolean}
-export interface MusicQuestion {id:string;category:MusicCategory;title:string;annotatedAnswer:string;rawAnswer:string;version:string;paragraphs:{id:string;segments:MusicSegment[]}[];scorePoints:MusicSegment[];skeleton:MusicSegment[];correctOrder:string[]}
+export type MusicSemanticPart={role:'framework'|'knowledge';text:string};
+export interface MusicQuestionEdit {paragraphs:MusicSemanticPart[][];updatedAt:number}
+export interface MusicQuestion {id:string;category:MusicCategory;title:string;annotatedAnswer:string;rawAnswer:string;version:string;semanticParagraphs?:MusicSemanticPart[][];paragraphs:{id:string;segments:MusicSegment[]}[];scorePoints:MusicSegment[];skeleton:MusicSegment[];correctOrder:string[]}
 export interface MusicDraft {version:string;paragraph:number;slots:(string|null)[][]}
 export interface MusicAttempt {at:number;mode:MusicMode;correct:boolean;answer:string;version:string;paragraph?:number}
 export interface MusicQuestionProgress {organizeComplete:boolean;retrieveComplete:boolean;lastStudiedAt:number;attempts:MusicAttempt[];drafts?:Partial<Record<MusicMode,MusicDraft>>}
-export interface MusicHistoryProgress {version:1;questions:Record<string,MusicQuestionProgress>}
+export interface MusicHistoryProgress {version:1;questions:Record<string,MusicQuestionProgress>;edits?:Record<string,MusicQuestionEdit>}
 export const emptyMusicProgress=():MusicHistoryProgress=>({version:1,questions:{}});
 export const emptyMusicRecord=():MusicQuestionProgress=>({organizeComplete:false,retrieveComplete:false,lastStudiedAt:0,attempts:[]});
 export const musicWords=(q:MusicQuestion,mode:MusicMode,paragraph:number):WordBlock[]=>q.paragraphs[paragraph].segments.filter(s=>isMusicMovable(s,mode)).map(s=>({id:s.id,text:s.text,cleanWord:s.text,pos:s.pos||'短语',phonetic:'',translation:'',sentenceMeaning:'',colorTheme:s.kind==='score'?'pink':'green'}));
@@ -29,4 +31,18 @@ export function hintMusicBlock(q:MusicQuestion,mode:MusicMode,paragraph:number,b
  const from=board.slots.findIndex((word,i)=>word?.text===text&&word.text!==expected[i]?.text);
  if(from<0)return board;
  const word=board.slots[from]!;return insertFromPool(takeBack(board,from),index,word.id);
+}
+
+/** Recompile both modes together so an edited answer cannot diverge from its rail. */
+export function compileMusicEdit(base:MusicQuestion,paragraphs:MusicSemanticPart[][]):MusicQuestion {
+ if(paragraphs.length!==base.paragraphs.length)throw Error('请保留原来的段落数量');
+ if(!base.semanticParagraphs||paragraphs.some((parts,i)=>parts.length!==base.semanticParagraphs![i].length||parts.some((part,j)=>part.role!==base.semanticParagraphs![i][j].role)))throw Error('请保留原来的知识词块和固定文字结构');
+ if(paragraphs.some(parts=>parts.some(part=>!part.text.trim())))throw Error('文字不能为空，可以修改词语，但请保留每个词块');
+ if(paragraphs.some(parts=>parts.some(part=>part.text.length>1000||/[\r\n]/u.test(part.text))))throw Error('每个词块请使用一行文字，长度不超过1000字');
+ const rawAnswer=paragraphs.map(parts=>parts.map(p=>p.text).join('')).join('\n');if(rawAnswer.length>30000)throw Error('整道题目请控制在30000字以内');
+ return parseMusicQuestion({id:base.id,title:base.title,rawAnswer,semanticParagraphs:paragraphs},base.category) as MusicQuestion;
+}
+export function resolveMusicQuestion(base:MusicQuestion,edit?:MusicQuestionEdit):MusicQuestion {
+ if(!edit)return base;
+ try{return compileMusicEdit(base,edit.paragraphs);}catch{return base;}
 }

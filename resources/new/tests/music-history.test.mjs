@@ -4,7 +4,7 @@ import {readFileSync,existsSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import {parseMusicQuestion,importMusicQuestions,isMusicMovable,nextMusicMode,validMusicProgress} from '../shared/music-history.mjs';
-import {hintMusicBlock,restoreMusicBoards,musicParagraphCorrect,musicAnswer,packMusicDraft,musicWords,emptyMusicRecord} from '../src/utils/musicHistory.ts';
+import {compileMusicEdit,resolveMusicQuestion,hintMusicBlock,restoreMusicBoards,musicParagraphCorrect,musicAnswer,packMusicDraft,musicWords,emptyMusicRecord} from '../src/utils/musicHistory.ts';
 import {insertFromPool,takeBack,moveByInsertion,emptyRail} from '../src/utils/railState.ts';
 const questions=JSON.parse(readFileSync(new URL('../src/data/musicHistory/genres.json',import.meta.url),'utf8'));
 test('37 semantic questions preserve source text without using old bracket annotations',()=>{
@@ -51,4 +51,13 @@ test('hint fills only the earliest empty slot in both modes and conserves mispla
   for(let count=0;count<=expected.length;count++){const empty=board.slots.findIndex(w=>w===null);if(empty<0)break;const before=board;board=hintMusicBlock(q,mode,pi,board);assert.equal(board.slots[empty].text,expected[empty].text);assert.deepEqual(ids(board),original);for(let i=0;i<before.slots.length;i++)if(before.slots[i]?.text===expected[i].text)assert.equal(board.slots[i],before.slots[i]);}
   assert(musicParagraphCorrect(q,mode,pi,board));assert.equal(hintMusicBlock(q,mode,pi,board),board);
  }
+});
+
+test('personal word edits recompile both modes and remain compatible with saved learning records',()=>{
+ const base=questions[0],parts=structuredClone(base.semanticParagraphs);parts[0][0].text='悲剧属于';const knowledge=parts[0].find(p=>p.role==='knowledge');knowledge.text='古希腊时代';const edited=compileMusicEdit(base,parts);
+ assert.notEqual(edited.version,base.version);assert.equal(edited.id,base.id);assert(edited.rawAnswer.startsWith('悲剧属于古希腊时代'));assert.equal(musicWords(edited,'organize',0)[0].text,'古希腊时代');assert.equal(musicWords(edited,'retrieve',0)[0].text,'悲剧属于');
+ for(const mode of ['organize','retrieve']){const boards=restoreMusicBoards(edited,mode);boards.forEach((board,pi)=>{for(const [i,w]of musicWords(edited,mode,pi).entries())board=insertFromPool(board,i,w.id);boards[pi]=board;assert(musicParagraphCorrect(edited,mode,pi,board));});assert.equal(musicAnswer(edited,mode,boards),edited.rawAnswer);}
+ const record={...emptyMusicRecord(),organizeComplete:true},edit={paragraphs:parts,updatedAt:123},saved={version:1,questions:{[base.id]:record},edits:{[base.id]:edit}};assert(validMusicProgress(saved));assert.deepEqual(resolveMusicQuestion(base,edit),edited);assert.equal(saved.questions[base.id].organizeComplete,true);assert.equal(resolveMusicQuestion(base),base);
+ const invalid=structuredClone(parts);invalid[0][0].text='';assert.throws(()=>compileMusicEdit(base,invalid));assert.equal(resolveMusicQuestion(base,{paragraphs:invalid,updatedAt:123}),base);assert(!validMusicProgress({...saved,edits:{[base.id]:{paragraphs:invalid,updatedAt:123}}}));invalid[0][0].text='正常文字';invalid[0][0].role='knowledge';assert.throws(()=>compileMusicEdit(base,invalid));assert(!validMusicProgress({...saved,edits:{[base.id]:{...edit,updatedAt:-1}}}));
+ const originalParts=structuredClone(base.semanticParagraphs);assert.equal(compileMusicEdit(base,originalParts).version,base.version);assert.equal(base.semanticParagraphs[0][0].text,'悲剧是');
 });
