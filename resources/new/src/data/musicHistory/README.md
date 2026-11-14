@@ -72,3 +72,9 @@ PLAYWRIGHT_MODULE=/path/to/playwright node tests/music-feedback-ui.cjs
 ```bash
 PLAYWRIGHT_MODULE=/path/to/playwright node tests/music-content-editor-ui.cjs
 ```
+
+## 关卡切换
+
+题目顶部与通关后提供上一关、下一关，庆祝弹窗可直接跳转。按当前分类顺序切换，首关／末关停用越界按钮，切换前保存拼块草稿，返回时恢复现场。保留当前挑战模式；目标关卡尚未解锁反向时进入正常模式。
+
+`tests/music-navigation-ui.cjs` 覆盖手机和桌面切换、庆祝跳转、边界、草稿与完成记录保留及反向未解锁的回退。

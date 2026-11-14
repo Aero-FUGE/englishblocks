@@ -1,3 +1,13 @@
+## 增补：上一关／下一关（2026-11-14）
+
+最新更新包包含下方全部功能，并新增音乐史关卡导航与通关弹窗跳转。执行：
+
+```bash
+curl --http1.1 -fL --retry 5 --retry-all-errors https://github.com/Aero-FUGE/englishblocks/releases/download/ui-20261114-music-navigation/apply-music-navigation.sh -o /home/ubuntu/update-englishblocks-ui.sh && bash /home/ubuntu/update-englishblocks-ui.sh
+```
+
+约 3.5MB，沿用相同备份与失败回退，保留账号、存档及 API 配置。成功后访问 https://englishblocks.cn/?v=music-navigation1 。
+
 ## 最新增量更新：音乐史与主页布局（2026-11-14）
 
 适用于已经运行的 `englishblocks` 游戏容器，无需重建镜像或重新输入密钥。约 3.5MB，包含最新正常／反向音乐史题库、提示、个人修改入口、紧凑词块和每日挑战布局。执行：
