@@ -2,7 +2,7 @@ const {findAvatar}=require('../shared/avatars.mjs');
 const {randomBytes,randomUUID}=require('node:crypto');
 const catalog=require('./social-catalog.json');
 const levels=new Map(catalog.levels.map(l=>[l.id,l]));
-const labels=['初中基础','高中进阶','大学英语','考研冲刺'];
+const labels=['初中基础','高中进阶','大学英语','考研冲刺','考研长难句精练'];
 const bad=(message,status=400)=>Object.assign(new Error(message),{status});
 const clean=s=>s.toLowerCase().replace(/[,.?!]|[’']$/g,'');
 const code=()=>randomBytes(6).toString('hex').toUpperCase();
@@ -43,7 +43,7 @@ function createSocial(db,{now=Date.now,minStudyMs=3000}={}){
   for(const [slot,id]of Object.entries(c.equipped?.[cat]||{}))if(owned.some(i=>i.id===id&&i.slot===slot&&i.cats.includes(cat)))equipped[slot]=id;
   const total=Number(get('SELECT COUNT(*) AS n FROM learning_completions WHERE user_id=?',id).n);
   const last=get('SELECT last_active FROM social_profiles WHERE user_id=?',id).last_active;
-  return {id,avatar:findAvatar(p.avatar)?.id||null,name:typeof p.name==='string'?p.name.slice(0,40):'学习小伙伴',cat,equipped,pose:['peek','half','stand','sit'].includes(c.poses?.[cat])?c.poses[cat]:'peek',expression:['smile','focus','proud','shy'].includes(c.expressions?.[cat])?c.expressions[cat]:'smile',level:1+Math.floor(total/10),stage:labels[Math.min(3,Math.max(0,selected.tier-1))],currentLevel:selected.levelNumber,completed:total,totalLevels:catalog.levels.length,today:count(id,dayAt(now()),dayAt(now())),week:count(id,weekAt(now()),dayAt(now())),online:now()-last<180000,owned:owned.map(i=>({id:i.id,name:i.name})),lastActive:last||null};
+  return {id,avatar:findAvatar(p.avatar)?.id||null,name:typeof p.name==='string'?p.name.slice(0,40):'学习小伙伴',cat,equipped,pose:['peek','half','stand','sit'].includes(c.poses?.[cat])?c.poses[cat]:'peek',expression:['smile','focus','proud','shy'].includes(c.expressions?.[cat])?c.expressions[cat]:'smile',level:1+Math.floor(total/10),stage:labels[Math.min(labels.length-1,Math.max(0,selected.tier-1))],currentLevel:selected.levelNumber,completed:total,totalLevels:catalog.levels.length,today:count(id,dayAt(now()),dayAt(now())),week:count(id,weekAt(now()),dayAt(now())),online:now()-last<180000,owned:owned.map(i=>({id:i.id,name:i.name})),lastActive:last||null};
  }
  function incoming(id){return all('SELECT * FROM pranks WHERE receiver=? AND handled_at IS NULL ORDER BY created_at,id LIMIT 30',id).map(p=>({id:p.id,senderId:p.sender,senderName:publicProfile(p.sender).name,item:p.item,sentAt:p.created_at,seen:!!p.seen_at,handled:false,canCounter:friends(id,p.sender)}));}
  function dashboard(id){ensure(id);const ids=all('SELECT CASE WHEN low_id=? THEN high_id ELSE low_id END AS id FROM friendships WHERE low_id=? OR high_id=?',id,id,id);
@@ -125,7 +125,7 @@ function createSocial(db,{now=Date.now,minStudyMs=3000}={}){
    if(!finished)return {ok:true,nextPhase:data.phase+1,readyAt:now()+Math.min(1000,minStudyMs)};
    const inserted=run('INSERT OR IGNORE INTO learning_completions VALUES(?,?,?,?)',id,level.id,now(),dayAt(now())).changes;
    if(inserted){
-    const total=Number(get('SELECT COUNT(*) n FROM learning_completions WHERE user_id=?',id).n);event(id,'complete',`完成第${level.levelNumber}关 · ${labels[Math.min(3,level.tier-1)]}`);
+    const total=Number(get('SELECT COUNT(*) n FROM learning_completions WHERE user_id=?',id).n);event(id,'complete',`完成第${level.levelNumber}关 · ${labels[Math.min(labels.length-1,level.tier-1)]}`);
     if(total%10===0)event(id,'level',`学习等级提升到 Lv.${1+Math.floor(total/10)}`);
     if([1,10,30,100,300,1000].includes(total))event(id,'achievement',`获得成就：累计完成${total}道有效题目`);
     const today=count(id,dayAt(now()),dayAt(now()));

@@ -1,3 +1,4 @@
+import {FishIcon} from './FishIcon';
 import {PlayerAvatar} from './PlayerAvatar';
 import {AvatarPicker} from './AvatarPicker';
 import { ModalOverlay } from './ModalOverlay';
@@ -102,7 +103,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
               : <div className="flex items-center gap-2 mt-1"><h4 className="font-bold text-xl text-[var(--theme-text)] truncate">{profile.name}</h4><button onClick={handleStartEditName} className="text-[11px] rounded-full border border-[var(--theme-border)] px-2 py-1 bg-white/90 text-[var(--theme-muted)] font-bold hover:bg-white">✎ 修改</button></div>}
               <div className="mt-2 flex flex-wrap gap-1.5"><span className="px-2.5 py-1 rounded-full bg-white/85 text-[11px] font-bold text-[var(--theme-text)]">{stageForLevel(currentLevel).label}</span><span className="px-2.5 py-1 rounded-full bg-[var(--theme-primary)] text-[11px] font-bold text-white">LEVEL {currentLevel.levelNumber}</span></div>
             </div>
-            <div className="rounded-2xl border border-[var(--theme-border)] bg-white/90 px-3 py-2 text-right shadow-sm"><div className="text-[10px] text-[var(--theme-muted)]">小鱼干余额</div><div className="font-bold text-xl text-[var(--theme-muted)]">🐟 {fishCount}</div></div>
+            <div className="rounded-2xl border border-[var(--theme-border)] bg-white/90 px-3 py-2 text-right shadow-sm"><div className="text-[10px] text-[var(--theme-muted)]">小鱼干余额</div><div className="font-bold text-xl text-[var(--theme-muted)]"><FishIcon/> {fishCount}</div></div>
           </div>
           <div className="relative mt-4 border-t border-[var(--theme-border)] pt-3"><p className="text-[11px] text-[var(--theme-muted)] font-bold mb-2">成长路线</p><div className="flex gap-1.5">{LEARNING_STAGES.map(stage=><div key={stage.tier} className={`flex-1 text-center px-1 py-2 rounded-xl text-[10px] sm:text-xs font-semibold ${currentLevel.tier===stage.tier?'bg-[var(--theme-primary)] text-white shadow-sm':'bg-white/70 text-[var(--theme-muted)]'}`}><div className="flex justify-center mb-1"><StageEmblem tier={stage.tier} size={36}/></div>{stage.label}</div>)}</div></div>
         </div>

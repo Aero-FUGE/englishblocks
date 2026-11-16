@@ -1,3 +1,4 @@
+import {FishIcon} from './FishIcon';
 import React,{useEffect,useRef} from 'react';
 import confetti from 'canvas-confetti';
 import {Sparkles,ArrowRight} from 'lucide-react';
@@ -11,7 +12,7 @@ export function TaskCelebrationModal({fish,awards,onContinue}:{fish:number;award
  <div className="eb-award-rays" aria-hidden="true"/><span className="eb-award-ribbon"><Sparkles size={16}/>挑战大成功！<Sparkles size={16}/></span>
  <div className="eb-award-mascot"><span aria-hidden="true">✦</span><img src="./assets/mimi-translator/half.png" alt="咪咪为你庆祝"/><span aria-hidden="true">✧</span></div>
  <h2>努力的小猫，宝藏是你的！</h2><p>这份奖励，专属于刚刚坚持的你 ♡</p>
- <div className="eb-award-fish">🐟 <strong>+{fish}</strong><span>额外小鱼干已到账</span></div>
+ <div className="eb-award-fish"><FishIcon/> <strong>+{fish}</strong><span>额外小鱼干已到账</span></div>
  <ul>{awards.map(id=><li key={id}>🏅 {taskTitle(id)}</li>)}</ul>
  <button ref={button} onClick={onContinue}>收好奖励，继续冒险 <ArrowRight size={17}/></button>
  </section></ModalOverlay>;

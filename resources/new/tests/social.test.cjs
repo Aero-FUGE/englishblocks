@@ -58,3 +58,9 @@ test('China midnight and Monday boundaries, attendance and expiry',async t=>{
  setAvatar('cat-avatar-01');assert.equal((await f.api('alice','/social')).friends[0].avatar,'cat-avatar-01');
  for(const unsafe of ['https://example.com/private.png','javascript:alert(1)','cat-avatar-25','🐰']){setAvatar(unsafe);assert.equal((await f.api('alice','/social/friends/bob')).player.avatar,null);}
  });
+
+test('fifth-stage lessons are server-verified and friend profiles display the new stage',async t=>{
+ const f=fixture(t);await makeFriends(f);const level=catalog.levels.find(l=>l.tier===5);assert.ok(level);const index=catalog.levels.findIndex(l=>l.id===level.id);
+ f.db.prepare('INSERT INTO saves VALUES(?,?)').run('alice',JSON.stringify({profile:{name:'长句学习者',currentLevelIndex:index},collection:{}}));
+ const result=await solve(f,'alice',level);assert.equal(result.result.counted,true);const self=(await f.api('alice','/social')).self;assert.equal(self.completed,1);assert.equal(self.today,1);assert.equal(self.stage,'考研长难句精练');assert.equal((await f.api('bob','/social/friends/alice')).player.stage,'考研长难句精练');
+});

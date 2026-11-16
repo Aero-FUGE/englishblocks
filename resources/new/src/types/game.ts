@@ -41,6 +41,7 @@ export interface LevelData {
     comment: string;
     emotion: MascotEmotion;
   }[];
+  kaoyan?: {id:string;setId:string;setName:string;points:string[];analysis:string;tips:string;topic:string;difficulty:number};
   grammarExplanation: string;
   tieredAssembly?: {
     phases: Phase[];

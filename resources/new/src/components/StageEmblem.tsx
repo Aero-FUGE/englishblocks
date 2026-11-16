@@ -4,6 +4,7 @@ const stages=[
  {file:'senior',label:'高中进阶'},
  {file:'university',label:'大学英语'},
  {file:'postgraduate',label:'考研冲刺'},
+ {file:'postgraduate',label:'考研长难句精练'},
 ];
 /** The same supplied artwork appears in stage selection, profiles and study badges. */
 export function StageEmblem({tier,size=68,className=''}:{tier:number;size?:number;className?:string}){

@@ -1,0 +1,339 @@
+{
+  "meta": {
+    "title": "考研英语阅读理解长难句精练题库",
+    "subtitle": "基于近年命题规律原创编写",
+    "version": "1.0",
+    "question_count": 30,
+    "set_count": 6,
+    "disclaimer": "本题库所有英文句子均为原创编写，依据考研英语阅读理解高频语法考点设计，非任何年份真题原文复制。中文译文亦为原创。",
+    "design_basis": {
+      "note": "考点频次依据近十年考研英语真题逐句统计的公开汇总",
+      "top_points": [
+        { "name": "定语从句", "annual_frequency": 42, "share": "第一高频", "subpoints": ["关系词选择", "先行词判断", "非限定性用法", "介词提前", "隔裂结构", "并列定语从句"] },
+        { "name": "非谓语动词", "annual_frequency": 28, "share": "第二高频", "subpoints": ["逻辑主语一致", "doing/done 功能辨析", "完成式分词"] },
+        { "name": "名词性从句", "annual_frequency": 15, "share": "第三高频", "subpoints": ["宾语从句", "同位语从句", "what/whether 从句"] },
+        { "name": "状语从句", "annual_frequency": 12, "share": "第四高频", "subpoints": ["while/although/whereas 让步与对比", "once/even if 条件让步"] },
+        { "name": "虚拟语气", "annual_frequency": 5, "share": "区分度高", "subpoints": ["without/but for 含蓄条件", "were/had 倒装"] },
+        { "name": "倒装结构", "annual_frequency": 4, "share": "区分度高", "subpoints": ["only 前置", "not only...but also", "虚拟条件倒装"] },
+        { "name": "强调句与比较结构", "annual_frequency": 4, "share": "易混淆", "subpoints": ["It is...that", "比较对象 those/that 指代", "省略还原"] },
+        { "name": "熟词僻义", "annual_frequency": "不定", "share": "词汇陷阱", "subpoints": ["简单词非常用义"] }
+      ],
+      "emerging_trend": "近年非限定性定语从句中 which 指代整句、并列定语从句的出现频率上升约 40%，本题库已重点覆盖。"
+    },
+    "how_to_use": "游戏侧取每题的 zh 作为提示，将 en 按 chunks（或复用现有切块逻辑）打散为词块供玩家拼回。玩家完成后可展开 analysis 与 tips 查看结构拆解与考点说明。"
+  },
+  "sets": [
+    {
+      "id": "set1",
+      "name": "定语从句专题",
+      "focus": "关系词选择、先行词判断、介词提前、隔裂与并列结构、which 指代整句",
+      "questions": [
+        {
+          "id": "q001", "index": 1, "topic": "经济与环境", "difficulty": 4,
+          "en": "The findings, which were published in a leading journal last month, challenge the long-held assumption that economic growth inevitably comes at the expense of environmental quality.",
+          "zh": "这些发现于上月发表在一家顶级期刊上，它们挑战了一个长期以来的假设，即经济增长必然以牺牲环境质量为代价。",
+          "points": ["非限定性定语从句", "同位语从句"],
+          "analysis": "主干为 The findings challenge the assumption。which were published... 是非限定性定语从句，补充说明 findings；that economic growth... 是同位语从句，解释 assumption 的具体内容，that 在从句中不充当成分。",
+          "tips": "区分 which 定语从句（which 作成分、修饰名词）与 that 同位语从句（that 不作成分、解释抽象名词）。先行词 assumption 是抽象名词，其后的 that 从句为同位语而非定语。",
+          "chunks": ["The findings", "which were published", "in a leading journal", "last month", "challenge the long-held assumption", "that economic growth", "inevitably comes", "at the expense of", "environmental quality"]
+        },
+        {
+          "id": "q002", "index": 2, "topic": "教育与学术", "difficulty": 4,
+          "en": "The academic freedom for which the university has long been known is now being eroded by increasing pressure from donors and government agencies.",
+          "zh": "这所大学长期以此闻名的学术自由，如今正受到来自捐赠者和政府机构日益增加的压力的侵蚀。",
+          "points": ["介词提前的定语从句", "现在进行时被动"],
+          "analysis": "主干为 The academic freedom is now being eroded。for which the university has long been known 是介词提前的定语从句，修饰 freedom，还原为 the university has long been known for the freedom；is being eroded 是现在进行时的被动语态。",
+          "tips": "“介词 + which”中的介词来自从句短语动词的搭配（be known for）。判断介词要看从句谓语与先行词的逻辑关系，不可凭中文直觉选择。",
+          "chunks": ["The academic freedom", "for which", "the university", "has long been known", "is now being eroded", "by increasing pressure", "from donors", "and government agencies"]
+        },
+        {
+          "id": "q003", "index": 3, "topic": "社会与治理", "difficulty": 3,
+          "en": "The committee announced a new guideline on Tuesday that would require all public agencies to disclose their spending data.",
+          "zh": "该委员会于周二宣布了一项新准则，该准则将要求所有公共机构公开其支出数据。",
+          "points": ["隔裂定语从句", "不定式作宾补"],
+          "analysis": "主干为 The committee announced a new guideline。that would require... 是定语从句，修饰 guideline，但被时间状语 on Tuesday 隔开，形成“隔裂”；require sb. to do 中不定式作宾语补足语。",
+          "tips": "定语从句通常紧跟先行词，但可被状语或介词短语隔开。要判断 that 从句修饰 guideline 而非 Tuesday——依据是语义逻辑：准则能“要求”，周二不能。",
+          "chunks": ["The committee announced", "a new guideline", "on Tuesday", "that would require", "all public agencies", "to disclose", "their spending data"]
+        },
+        {
+          "id": "q004", "index": 4, "topic": "科技与学术", "difficulty": 5,
+          "en": "The theory, which has gained considerable attention in recent years and which many scholars believe will reshape the field, remains largely untested in real-world settings.",
+          "zh": "这一理论近年来获得了相当多的关注，并且许多学者认为它将重塑该领域，但它在现实环境中基本未经检验。",
+          "points": ["并列定语从句", "插入语"],
+          "analysis": "主干为 The theory remains largely untested。两个 which 从句并列，均修饰 theory：which has gained...attention 与 which many scholars believe will reshape...。第二个从句中 many scholars believe 是插入语，去掉后为 which will reshape the field。",
+          "tips": "并列定语从句由 and 连接，两个 which 指向同一先行词；近年该结构出现频率显著上升。识别插入语 many scholars believe 后，从句主干“which will reshape”才清晰。",
+          "chunks": ["The theory", "which has gained", "considerable attention", "in recent years", "and which many scholars believe", "will reshape the field", "remains largely untested", "in real-world settings"]
+        },
+        {
+          "id": "q005", "index": 5, "topic": "环境与科学", "difficulty": 4,
+          "en": "Several species have begun to migrate to higher altitudes, which scientists interpret as a clear response to rising global temperatures.",
+          "zh": "一些物种已开始向更高海拔地区迁移，科学家们将此解读为对全球气温上升的明确回应。",
+          "points": ["which 指代整句", "interpret...as..."],
+          "analysis": "主干为 Several species have begun to migrate。which scientists interpret as... 是非限定性定语从句，which 指代前面整个主句内容（物种向高处迁移这件事），而非某个名词。interpret A as B 意为“把 A 解读为 B”。",
+          "tips": "当 which 前有逗号且从句谓语（interpret）逻辑上需要“一件事”作宾语时，which 指代整个主句，常译为“这……”。需与 which 指代邻近名词的情况区分。",
+          "chunks": ["Several species", "have begun to migrate", "to higher altitudes", "which scientists interpret", "as a clear response", "to rising global temperatures"]
+        }
+      ]
+    },
+    {
+      "id": "set2",
+      "name": "非谓语动词专题",
+      "focus": "动名词作主语、分词作状语的逻辑主语、后置定语、with 复合结构",
+      "questions": [
+        {
+          "id": "q006", "index": 6, "topic": "教育与测评", "difficulty": 4,
+          "en": "Relying exclusively on standardized tests to measure educational outcomes overlooks the more subtle dimensions of learning that cannot be captured by a single score.",
+          "zh": "仅仅依靠标准化考试来衡量教育成果，忽视了学习中更为微妙的、无法用单一分数捕捉的维度。",
+          "points": ["动名词作主语", "定语从句", "被动语态"],
+          "analysis": "主干为 Relying exclusively on standardized tests overlooks the dimensions。Relying... 是动名词短语作主语；to measure educational outcomes 为目的状语；that cannot be captured... 为定语从句修饰 dimensions。",
+          "tips": "句首 -ing 形式若后接谓语动词（此处 overlooks），则为动名词作主语而非分词。主句谓语用单数，因为主语是一个整体行为。",
+          "chunks": ["Relying exclusively", "on standardized tests", "to measure", "educational outcomes", "overlooks the more subtle", "dimensions of learning", "that cannot be captured", "by a single score"]
+        },
+        {
+          "id": "q007", "index": 7, "topic": "社会与心理", "difficulty": 3,
+          "en": "Exposed to constant advertising from an early age, children may develop materialistic values that persist well into adulthood.",
+          "zh": "由于从小接触持续的广告，儿童可能形成物质主义价值观，而这种价值观会一直持续到成年。",
+          "points": ["过去分词作状语", "逻辑主语一致", "定语从句"],
+          "analysis": "主干为 children may develop materialistic values。Exposed to... 是过去分词短语作原因状语，其逻辑主语是 children（children are exposed to advertising）；that persist... 为定语从句修饰 values。",
+          "tips": "分词作状语时，其逻辑主语必须与主句主语一致。Exposed 是过去分词，表被动（儿童“被暴露于”广告）。若主句主语不是 children，则构成悬垂结构错误。",
+          "chunks": ["Exposed to", "constant advertising", "from an early age", "children may develop", "materialistic values", "that persist", "well into adulthood"]
+        },
+        {
+          "id": "q008", "index": 8, "topic": "学术与科研", "difficulty": 3,
+          "en": "Having reviewed the evidence carefully, the committee concluded that the original hypothesis was untenable.",
+          "zh": "在仔细审查了证据之后，委员会得出结论认为最初的假设是站不住脚的。",
+          "points": ["现在分词完成式作状语", "宾语从句"],
+          "analysis": "主干为 the committee concluded that...。Having reviewed... 是现在分词完成式作时间状语，表示动作先于谓语 concluded 发生，逻辑主语为 the committee；that the original hypothesis was untenable 为宾语从句。",
+          "tips": "Having done 强调分词动作先于主句谓语发生，其逻辑主语须与主句主语一致——是“委员会”审查证据，而非“证据”自己被审查。",
+          "chunks": ["Having reviewed", "the evidence carefully", "the committee concluded", "that the original hypothesis", "was untenable"]
+        },
+        {
+          "id": "q009", "index": 9, "topic": "环境与治理", "difficulty": 3,
+          "en": "The proposals submitted by the research team address concerns raised by local residents about the project's environmental impact.",
+          "zh": "研究团队提交的提案回应了当地居民对项目环境影响的关切。",
+          "points": ["过去分词作后置定语", "多层修饰"],
+          "analysis": "主干为 The proposals address concerns。submitted by the research team 为过去分词短语作后置定语修饰 proposals（相当于 which were submitted）；raised by local residents 同样作后置定语修饰 concerns；about... 为介词短语作后置定语。",
+          "tips": "名词后的过去分词短语通常相当于被动语态的定语从句。连续出现多个后置定语时，先抓主干，再逐层挂靠修饰成分。",
+          "chunks": ["The proposals", "submitted by", "the research team", "address concerns", "raised by", "local residents", "about the project's", "environmental impact"]
+        },
+        {
+          "id": "q010", "index": 10, "topic": "政治与治理", "difficulty": 4,
+          "en": "With public confidence in institutions declining steadily, policymakers face mounting pressure to restore transparency and accountability.",
+          "zh": "随着公众对机构的信心持续下降，决策者面临越来越大的压力，需要恢复透明度和问责制。",
+          "points": ["with 复合结构", "不定式作定语"],
+          "analysis": "主干为 policymakers face mounting pressure。With public confidence... declining steadily 是 with 复合结构作伴随/原因状语，其中 confidence 是宾语，declining 是现在分词作宾补（主动关系）；to restore... 为不定式作定语修饰 pressure。",
+          "tips": "with 复合结构中，宾补用现在分词表主动（信心自己下降），用过去分词表被动。此处不能用 declined，因为 decline 是不及物动词，无被动含义。",
+          "chunks": ["With public confidence", "in institutions", "declining steadily", "policymakers face", "mounting pressure", "to restore transparency", "and accountability"]
+        }
+      ]
+    },
+    {
+      "id": "set3",
+      "name": "名词性从句专题",
+      "focus": "同位语从句与定语从句辨析、whether/what 从句、关系词省略",
+      "questions": [
+        {
+          "id": "q011", "index": 11, "topic": "社会与职业", "difficulty": 5,
+          "en": "The belief that hard work alone guarantees success has been challenged by mounting evidence of the role that social networks play in career advancement.",
+          "zh": "那种认为仅靠努力工作就能保证成功的观念，已经受到越来越多证据的挑战，这些证据表明社会网络在职业发展中发挥作用。",
+          "points": ["同位语从句", "定语从句", "被动语态"],
+          "analysis": "主干为 The belief has been challenged。that hard work alone guarantees success 是同位语从句解释 belief；that social networks play 是定语从句修饰 the role（play a role in...）；in career advancement 作状语。",
+          "tips": "两个 that 从句功能不同：第一个是从句不缺成分的同位语从句（解释抽象名词 belief），第二个是 that 作 play 宾语的定语从句（修饰 role）。这是考研经典对比考点。",
+          "chunks": ["The belief", "that hard work alone", "guarantees success", "has been challenged by", "mounting evidence", "of the role", "that social networks play", "in career advancement"]
+        },
+        {
+          "id": "q012", "index": 12, "topic": "科学与环境", "difficulty": 4,
+          "en": "Researchers have yet to determine whether the observed decline in bee populations is driven primarily by habitat loss or by the widespread use of pesticides.",
+          "zh": "研究人员尚未确定，所观察到的蜂群数量下降主要是由栖息地丧失造成的，还是由杀虫剂的广泛使用造成的。",
+          "points": ["whether 引导宾语从句", "or 并列", "被动语态"],
+          "analysis": "主干为 Researchers have yet to determine whether...。whether...or... 引导宾语从句作 determine 的宾语；is driven by...or by... 是两个并列的被动状语；observed 为过去分词作定语修饰 decline。",
+          "tips": "have yet to do 意为“尚未做某事”。whether...or... 表示“是……还是……”，引导宾语从句时通常不可用 if 替换，尤其与 or 直接连用之时。",
+          "chunks": ["Researchers have yet to determine", "whether the observed decline", "in bee populations", "is driven primarily", "by habitat loss", "or by the widespread", "use of pesticides"]
+        },
+        {
+          "id": "q013", "index": 13, "topic": "科技与伦理", "difficulty": 4,
+          "en": "It remains controversial whether the benefits of genetic engineering outweigh the ethical concerns it raises among the general public.",
+          "zh": "基因工程的好处是否超过它在公众中引发的伦理担忧，这仍然存有争议。",
+          "points": ["it 形式主语", "whether 主语从句", "关系词省略的定语从句"],
+          "analysis": "It 为形式主语，whether the benefits...outweigh... 是真正的主语从句；it raises 是定语从句修饰 concerns，省略了关系代词 that/which（在从句中作 raises 的宾语）。",
+          "tips": "it 作形式主语时，真正的主语从句后置。定语从句中关系代词作宾语时可省略——it raises (that/which) concerns，此处 that 被省略，容易误读为新句子。",
+          "chunks": ["It remains controversial", "whether the benefits", "of genetic engineering", "outweigh the ethical concerns", "it raises", "among the general public"]
+        },
+        {
+          "id": "q014", "index": 14, "topic": "语言与认知", "difficulty": 4,
+          "en": "What distinguishes human language from animal communication is the capacity to recombine a finite set of elements into an infinite variety of meanings.",
+          "zh": "人类语言区别于动物交流之处在于，人类具备将有限的元素集合重新组合成无限多样意义的能力。",
+          "points": ["what 引导主语从句", "不定式作定语"],
+          "analysis": "What distinguishes human language from animal communication 是 what 引导的主语从句（what 在从句中作主语，意为“……的事物”）；is the capacity 为主干；to recombine... 为不定式作定语修饰 capacity。",
+          "tips": "what 引导名词性从句时，本身在从句中充当成分（此处作主语），相当于 the thing that。区别于 that 引导主语从句时 that 不充当任何成分。",
+          "chunks": ["What distinguishes", "human language", "from animal communication", "is the capacity", "to recombine", "a finite set of elements", "into an infinite variety", "of meanings"]
+        },
+        {
+          "id": "q015", "index": 15, "topic": "科技与社会", "difficulty": 5,
+          "en": "The notion that technology is neutral has been questioned by scholars who argue that every artifact embodies the values of its creators.",
+          "zh": "技术是中立的这一观念，已经受到一些学者的质疑，他们认为每一件人工制品都体现了其创造者的价值观。",
+          "points": ["同位语从句", "定语从句", "宾语从句"],
+          "analysis": "主干为 The notion has been questioned。that technology is neutral 是同位语从句解释 notion；who argue that... 是定语从句修饰 scholars；that every artifact embodies... 是 argue 的宾语从句。",
+          "tips": "三层从句嵌套：同位语从句（that）+ 定语从句（who）+ 宾语从句（that）。阅读时先找主干，再逐层展开，不要被连续的 that 干扰。",
+          "chunks": ["The notion", "that technology is neutral", "has been questioned by", "scholars who argue", "that every artifact", "embodies the values", "of its creators"]
+        }
+      ]
+    },
+    {
+      "id": "set4",
+      "name": "状语从句与让步对比专题",
+      "focus": "while/although/whereas 让步与对比、even if 虚拟让步、once 条件与主将从现",
+      "questions": [
+        {
+          "id": "q016", "index": 16, "topic": "社会与政策", "difficulty": 3,
+          "en": "While the new regulation has been praised for its ambition, critics argue that its vague wording will make enforcement difficult in practice.",
+          "zh": "尽管这项新法规因其雄心而受到赞扬，但批评者认为其措辞模糊将使实际执行变得困难。",
+          "points": ["while 让步状语从句", "宾语从句", "make + 宾 + 宾补"],
+          "analysis": "While the new regulation has been praised... 是让步状语从句；主干为 critics argue that...；that its vague wording will make enforcement difficult 是宾语从句，其中 make + 宾语 + 形容词作宾语补足语。",
+          "tips": "while 除表“当……时”和“然而”外，还表让步“尽管”，相当于 although。判断依据是主从句语义相反——被赞扬与被批评形成对照。",
+          "chunks": ["While the new regulation", "has been praised", "for its ambition", "critics argue", "that its vague wording", "will make enforcement", "difficult in practice"]
+        },
+        {
+          "id": "q017", "index": 17, "topic": "经济与社会", "difficulty": 3,
+          "en": "Although the economic indicators have improved markedly, the benefits of the recovery have not been distributed evenly across different segments of society.",
+          "zh": "尽管经济指标已显著改善，但经济复苏的好处并未在社会不同群体之间平均分配。",
+          "points": ["although 让步状语从句", "被动语态"],
+          "analysis": "Although the economic indicators have improved markedly 是让步状语从句；主干为 the benefits have not been distributed evenly；across different segments of society 为介词短语作状语。",
+          "tips": "although 引导让步从句时，主句不可再用 but（英语中 although 与 but 不能连用），但可用 yet/still。这是中国学生常见错误。",
+          "chunks": ["Although the economic indicators", "have improved markedly", "the benefits of the recovery", "have not been distributed", "evenly across", "different segments", "of society"]
+        },
+        {
+          "id": "q018", "index": 18, "topic": "商业与科技", "difficulty": 3,
+          "en": "Whereas traditional retailers have struggled to adapt to changing consumer habits, online platforms have continued to expand their market share.",
+          "zh": "传统零售商一直在努力适应不断变化的消费习惯，而在线平台则持续扩大其市场份额。",
+          "points": ["whereas 对比状语从句"],
+          "analysis": "Whereas traditional retailers have struggled... 是对比状语从句；主干为 online platforms have continued to expand their market share。whereas 表示“而、然而”，用于对比两方情况。",
+          "tips": "whereas 强调两事物的鲜明对比，不同于 while 的多义。句中 struggled（挣扎求存）与 continued to expand（持续扩张）形成对照，是判断让步/对比义的语义线索。",
+          "chunks": ["Whereas traditional retailers", "have struggled", "to adapt to", "changing consumer habits", "online platforms", "have continued to expand", "their market share"]
+        },
+        {
+          "id": "q019", "index": 19, "topic": "教育与政策", "difficulty": 4,
+          "en": "Even if the government were to increase funding substantially, the shortage of qualified teachers in rural areas would persist for years.",
+          "zh": "即使政府大幅增加资金，农村地区合格教师的短缺仍将持续多年。",
+          "points": ["even if 让步", "were to do 虚拟语气"],
+          "analysis": "Even if the government were to increase funding substantially 是 even if 引导的让步状语从句，用 were to do 表示与将来事实相反的假设；主句 would persist 为虚拟语气的主句形式。",
+          "tips": "even if 从句可用虚拟语气表示假设情况。were to do 表示对将来的假设，主句用 would/could + 动词原形。此处并非真实条件，而是假设性让步。",
+          "chunks": ["Even if the government", "were to increase", "funding substantially", "the shortage of", "qualified teachers", "in rural areas", "would persist", "for years"]
+        },
+        {
+          "id": "q020", "index": 20, "topic": "社会与改革", "difficulty": 3,
+          "en": "Once the initial enthusiasm for the reform has faded, the real test of its effectiveness will begin.",
+          "zh": "一旦对这项改革最初的热情消退，对其成效的真正考验就将开始。",
+          "points": ["once 条件状语从句", "主将从现"],
+          "analysis": "Once the initial enthusiasm for the reform has faded 是 once 引导的条件状语从句；主干为 the real test will begin。从句用现在完成时表将来，主句用一般将来时，符合“主将从现”原则。",
+          "tips": "once 意为“一旦……就……”，引导条件状语从句。在时间/条件状语从句中用现在时态表示将来，主句才用将来时——不能说 once the enthusiasm will fade。",
+          "chunks": ["Once the initial enthusiasm", "for the reform", "has faded", "the real test", "of its effectiveness", "will begin"]
+        }
+      ]
+    },
+    {
+      "id": "set5",
+      "name": "虚拟语气与倒装专题",
+      "focus": "含蓄虚拟条件、虚拟倒装、only 前置倒装、not only...but also 倒装",
+      "questions": [
+        {
+          "id": "q021", "index": 21, "topic": "科技与创新", "difficulty": 4,
+          "en": "Without sustained investment in basic research, the country would struggle to maintain its competitive edge in emerging technologies.",
+          "zh": "如果没有对基础研究的持续投资，这个国家将难以在新兴技术领域保持其竞争优势。",
+          "points": ["without 含蓄虚拟条件", "would + 动词原形"],
+          "analysis": "Without sustained investment in basic research 是介词短语表示的含蓄虚拟条件，相当于 If the country did not have...；主句 would struggle 为虚拟语气，表示与现在/将来事实相反的假设结果。",
+          "tips": "without / but for / with 等介词短语可表示含蓄虚拟条件，主句仍用 would/could/might + 动词原形。看到 without + 名词 + would，应立即识别为虚拟结构。",
+          "chunks": ["Without sustained investment", "in basic research", "the country would struggle", "to maintain", "its competitive edge", "in emerging technologies"]
+        },
+        {
+          "id": "q022", "index": 22, "topic": "环境与保护", "difficulty": 4,
+          "en": "But for the intervention of a dedicated group of conservationists, the wetland would have been destroyed by commercial development.",
+          "zh": "要不是一群尽职的自然保护主义者的干预，这片湿地早已被商业开发破坏了。",
+          "points": ["but for 含蓄虚拟", "would have done 被动"],
+          "analysis": "But for the intervention... 是含蓄虚拟条件，相当于 If it had not been for...；主句 would have been destroyed 是 would have done 的被动形式，表示与过去事实相反的假设结果。",
+          "tips": "but for 意为“要不是”，引出与事实相反的假设。对过去的虚拟，主句用 would have + 过去分词；此处结合被动语态为 would have been + 过去分词。",
+          "chunks": ["But for the intervention", "of a dedicated group", "of conservationists", "the wetland", "would have been destroyed", "by commercial development"]
+        },
+        {
+          "id": "q023", "index": 23, "topic": "社会与应急", "difficulty": 5,
+          "en": "Only when the full extent of the damage became apparent did the authorities acknowledge the need for immediate action.",
+          "zh": "只有当损失的全部程度变得明显时，当局才承认需要立即采取行动。",
+          "points": ["only + 状语置于句首的部分倒装"],
+          "analysis": "Only when the full extent of the damage became apparent 是 only + 时间状语从句置于句首；主句用部分倒装 did the authorities acknowledge（助动词 did 提前），正常语序为 the authorities acknowledged。",
+          "tips": "only + 状语（副词/介词短语/状语从句）置于句首时，主句须部分倒装。注意倒装的是主句而非从句——从句 when... became apparent 语序正常。",
+          "chunks": ["Only when the full extent", "of the damage", "became apparent", "did the authorities", "acknowledge the need", "for immediate action"]
+        },
+        {
+          "id": "q024", "index": 24, "topic": "政策与改革", "difficulty": 4,
+          "en": "Not only does the policy address immediate concerns, but it also lays the groundwork for long-term structural reform.",
+          "zh": "这项政策不仅解决了眼前的担忧，而且为长期的结构性改革奠定了基础。",
+          "points": ["not only...but also 部分倒装"],
+          "analysis": "Not only does the policy address... 是否定词置于句首引起的部分倒装（助动词 does 提前）；but it also lays... 为主句正常语序。两个分句由 not only...but also 连接。",
+          "tips": "not only 置于句首时，其所在分句倒装，but also 所在分句不倒装。lay the groundwork for 意为“为……奠定基础”。",
+          "chunks": ["Not only does the policy", "address immediate concerns", "but it also lays", "the groundwork", "for long-term", "structural reform"]
+        },
+        {
+          "id": "q025", "index": 25, "topic": "商业与危机", "difficulty": 5,
+          "en": "Had the company acted more decisively in the early stages of the crisis, the financial losses could have been considerably reduced.",
+          "zh": "如果这家公司在危机早期采取更果断的行动，财务损失本可以大幅减少。",
+          "points": ["虚拟条件句省略 if 的倒装", "could have done 被动"],
+          "analysis": "Had the company acted... 是虚拟条件句省略 if 后将 had 提前的倒装，还原为 If the company had acted...；主句 could have been reduced 是 could have done 的被动形式，表示与过去事实相反的结果。",
+          "tips": "虚拟条件句中若含 had / were / should，可省略 if 并将这些词提前构成倒装。看到句首 Had/Were/Should，应还原为 if 从句理解。此处是对过去的虚拟。",
+          "chunks": ["Had the company acted", "more decisively", "in the early stages", "of the crisis", "the financial losses", "could have been", "considerably reduced"]
+        }
+      ]
+    },
+    {
+      "id": "set6",
+      "name": "强调、比较与熟词僻义专题",
+      "focus": "It is...that 强调句辨析、比较对象的 those/that 指代与省略还原、简单词非常用义",
+      "questions": [
+        {
+          "id": "q026", "index": 26, "topic": "科技与信息", "difficulty": 4,
+          "en": "It is not the availability of information but the ability to evaluate it critically that determines how well individuals can navigate the digital world.",
+          "zh": "决定个体能在多大程度上驾驭数字世界的，不是信息的可获得性，而是批判性地评估信息的能力。",
+          "points": ["It is...that 强调句", "not...but 结构", "宾语从句"],
+          "analysis": "It is not...but...that determines... 是强调句型，强调的是主语部分 not the availability...but the ability...；去掉 It is 与 that 后，剩余部分仍为完整句子；how well... 是 determines 的宾语从句。",
+          "tips": "强调句的判别方法：去掉 It is/was 与 that/who 后，剩余部分能还原为完整句子。不要与 it 作形式主语的句型混淆——形式主语的 it 无法这样还原。",
+          "chunks": ["It is not the availability", "of information", "but the ability", "to evaluate it critically", "that determines", "how well individuals", "can navigate", "the digital world"]
+        },
+        {
+          "id": "q027", "index": 27, "topic": "经济与就业", "difficulty": 4,
+          "en": "The working conditions in small firms are often no better, and in some respects worse, than those in large corporations.",
+          "zh": "小公司的工作条件往往并不更好，而且在某些方面比大公司更差。",
+          "points": ["比较结构", "those 指代", "省略还原"],
+          "analysis": "主干为 The working conditions are no better, and worse, than those...。no better than 意为“不比……好”；than those in large corporations 中 those 指代 working conditions；in some respects worse 为插入的比较成分。",
+          "tips": "比较结构中用 those 指代前面提到的复数名词（working conditions）。还原为：the working conditions in small firms are worse than the working conditions in large corporations。no better than 含否定意味。",
+          "chunks": ["The working conditions", "in small firms", "are often no better", "and in some respects worse", "than those", "in large corporations"]
+        },
+        {
+          "id": "q028", "index": 28, "topic": "社会与城市化", "difficulty": 3,
+          "en": "The rate of urbanization in developing countries is far higher than that of developed nations at a comparable stage of development.",
+          "zh": "发展中国家的城市化速度远高于处于类似发展阶段的发达国家。",
+          "points": ["比较结构 that 指代", "介词短语作定语"],
+          "analysis": "主干为 The rate is far higher than that...。than that of developed nations 中 that 指代 the rate（单数）；at a comparable stage of development 为介词短语作定语修饰 developed nations。",
+          "tips": "比较结构常用 that（指代单数）/ those（指代复数）避免重复。that of = the rate of。判断单复数看被指代名词——rate 是单数故用 that。",
+          "chunks": ["The rate of urbanization", "in developing countries", "is far higher", "than that of", "developed nations", "at a comparable stage", "of development"]
+        },
+        {
+          "id": "q029", "index": 29, "topic": "语言与词汇", "difficulty": 4,
+          "en": "In its original sense, the word 'economy' referred to the careful management of household resources, a meaning that is largely lost in modern usage.",
+          "zh": "就其最初的意义而言，“economy”一词指的是对家庭资源的精心管理，这一含义在现代用法中已基本丧失。",
+          "points": ["熟词僻义", "同位语", "定语从句"],
+          "analysis": "主干为 the word 'economy' referred to the management。In its original sense 为介词短语作状语；a meaning that is largely lost... 是同位语，补充说明 the careful management，其中 that 引导定语从句修饰 a meaning。",
+          "tips": "economy 常见义为“经济”，此处为僻义“节约、管理”（源自希腊语 oikonomia 家政管理）。考研阅读常考简单词的非常用义，需结合语境判断。",
+          "chunks": ["In its original sense", "the word 'economy'", "referred to", "the careful management", "of household resources", "a meaning", "that is largely lost", "in modern usage"]
+        },
+        {
+          "id": "q030", "index": 30, "topic": "经济与金融", "difficulty": 4,
+          "en": "The new regulations are designed to check the unchecked expansion of speculative lending that contributed to the financial crisis.",
+          "zh": "这些新法规旨在遏制那些曾导致金融危机的投机性贷款的无序扩张。",
+          "points": ["熟词僻义 check", "过去分词作定语", "定语从句"],
+          "analysis": "主干为 The new regulations are designed to check the expansion。check 在此为动词“抑制、遏制”（僻义）；unchecked 为过去分词作定语修饰 expansion（含否定前缀 un-）；that contributed to the financial crisis 是定语从句修饰 speculative lending。",
+          "tips": "check 常见义为“检查”，此处为僻义“遏制、阻止”。unchecked = 未受遏制的。同一词根 check/unchecked 在句中形成对比，是考研词汇题的典型设计。",
+          "chunks": ["The new regulations", "are designed", "to check", "the unchecked expansion", "of speculative lending", "that contributed to", "the financial crisis"]
+        }
+      ]
+    }
+  ]
+}

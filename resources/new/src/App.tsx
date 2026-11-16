@@ -1,6 +1,4 @@
-import {MusicHistoryPage} from './components/MusicHistoryPage';
-import {emptyMusicProgress} from './utils/musicHistory';
-import {validMusicProgress} from '../shared/music-history.mjs';
+import {FishIcon} from './components/FishIcon';
 import {WardrobeLockedDialog} from './components/WardrobeLockedDialog';
 import {CosmeticsContext} from './components/CosmeticsContext';
 import {DEFAULT_AVATAR,ownsCosmetic} from './utils/cosmetics';
@@ -62,7 +60,7 @@ const DEFAULT_PROFILE: UserProfile = {
   soundEnabled: true,
   speechEnabled: true,
   totalWordGoal: 2004,
-  totalSentenceGoal: 1190,
+  totalSentenceGoal: SENTENCE_BANK.length,
   timingRecords: {},
 };
 
@@ -82,7 +80,7 @@ export default function App() {
     return DEFAULT_PROFILE;
   });
 
-  const [collection,setCollection] = useState<CatCollection>(()=>{try {const raw=localStorage.getItem('english_blocks_cat_collection_v1');if(!raw)return EMPTY_COLLECTION;const parsed=JSON.parse(raw);return {...EMPTY_COLLECTION,...parsed,musicHistory:validMusicProgress(parsed.musicHistory)?parsed.musicHistory:undefined};}catch{return EMPTY_COLLECTION;}});
+  const [collection,setCollection] = useState<CatCollection>(()=>{try {const raw=localStorage.getItem('english_blocks_cat_collection_v1');if(!raw)return EMPTY_COLLECTION;const parsed=JSON.parse(raw);delete parsed.musicHistory;return {...EMPTY_COLLECTION,...parsed};}catch{return EMPTY_COLLECTION;}});
   useEffect(()=>{setProfile(p=>ownsCosmetic(collection,'avatar',p.avatar)?p:{...p,avatar:DEFAULT_AVATAR});},[collection.unlockedAvatars,profile.avatar]);
   useEffect(()=>{const chosen=collection.selectedSeason;setSeason(chosen&&ownsCosmetic(collection,'theme',chosen)?chosen:'summer');},[collection.selectedSeason,collection.unlockedThemes]);
   const [wardrobeOpen,setWardrobeOpen] = useState(false);
@@ -98,8 +96,6 @@ export default function App() {
   const [isSoundStudioOpen, setIsSoundStudioOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isCloudOpen,setIsCloudOpen]=useState(false);
-  const [musicOpen,setMusicOpen]=useState(false);
-  const openMusic=()=>{setMusicOpen(true);setInStudy(false);setFriendsOpen(false);setIsLevelSelectorOpen(false);pauseClock();window.scrollTo({top:0});};
   const [inStudy,setInStudy]=useState(false);
   const [mimiVisible,setMimiVisible]=useState(true);
   const [tasksOpen,setTasksOpen]=useState(false);
@@ -249,7 +245,8 @@ export default function App() {
   // Account sync replaces the anonymous shared LAN save. Local saves remain available offline.
   const cloud = useCloudSync(profile,collection,(snapshot)=>{
     setProfile({...DEFAULT_PROFILE,...snapshot.profile,name:normalizePlayerName(snapshot.profile.name)});
-    setCollection({...EMPTY_COLLECTION,...snapshot.collection});
+    const incoming={...snapshot.collection} as CatCollection & {musicHistory?:unknown};delete incoming.musicHistory;
+    setCollection({...EMPTY_COLLECTION,...incoming});
     setSoundEnabled(sound.enabled);
     resetClock();setHintCount(0);setAnswerRevealed(false);setIsSuccessModalOpen(false);setPendingTaskAward(null);setTaskCelebrationOpen(false);
     completedIdsRef.current=snapshot.profile.completedLevelIds;
@@ -258,10 +255,17 @@ export default function App() {
     setCurrentLevelIndex(resumeLevelIndex(snapshot.profile, SENTENCE_BANK));
     setCurrentPhaseIndex(0);
     setIsLevelSelectorOpen(false);
-    setMusicOpen(false);
-  },()=>musicOpen||clock.current.begun&&!clock.current.finished);
+  },()=>clock.current.begun&&!clock.current.finished);
 
   const social=useSocialActivity(cloud.user?.id,currentLevel.id);
+
+  // Preserve completion records from the earlier standalone preview without granting rewards again.
+  useEffect(()=>{
+    let completed:string[]=[];
+    try{const old=JSON.parse(localStorage.getItem('kaoyan_chunks_progress:'+(cloud.user?.id||'local'))||'{}');if(Array.isArray(old.completed))completed=old.completed;}catch{}
+    const imported=SENTENCE_BANK.filter(l=>l.kaoyan&&completed.includes(l.kaoyan.id)).map(l=>l.id);
+    setProfile(p=>{const missing=imported.filter(id=>!p.completedLevelIds.includes(id));return missing.length||p.totalSentenceGoal!==SENTENCE_BANK.length?{...p,totalSentenceGoal:SENTENCE_BANK.length,completedLevelIds:[...p.completedLevelIds,...missing]}:p;});
+  },[cloud.user?.id,profile.completedLevelIds.length,profile.totalSentenceGoal]);
 
   // Shuffle helper function
   const shuffleArray = <T,>(arr: T[]): T[] => {
@@ -301,7 +305,7 @@ export default function App() {
       const owner=cloudSync.getState().user?.id||'local';
       boardContext.current={level:level.id,phase:phaseIdx,owner};
       setBoard(previouslyCompleted ? filledAnswerBoard(fresh, level, phaseIdx) :
-        replaying ? fresh : restoreBoard(owner,level.id,phaseIdx,targetWords)||fresh);
+        replaying ? fresh : restoreBoard(owner,level.id,phaseIdx,targetWords)||(level.kaoyan?restoreBoard('kaoyan:'+owner,level.id,phaseIdx,targetWords):null)||fresh);
     },
     // Completion list is intentionally read on level entry only.
     []
@@ -642,10 +646,10 @@ export default function App() {
 
   return (
     <CosmeticsContext.Provider value={{collection,setCollection}}>
-    {(inStudy||friendsOpen||musicOpen)&&<SeasonPageBackground/>}
+    {(inStudy||friendsOpen)&&<SeasonPageBackground/>}
     <SeasonAtmosphere/>
     {wardrobeOpen && !wardrobeUnlocked && <WardrobeLockedDialog onClose={()=>setWardrobeOpen(false)}/>}
-    <div style={musicOpen||friendsOpen||!inStudy?{display:'none'}:undefined} className="eb-game-shell min-h-screen cozy-window-bg relative flex flex-col justify-between overflow-x-hidden p-4 md:p-6 lg:p-7 selection:bg-amber-100 selection:text-amber-950" onClickCapture={(event) => playUiClickForTarget(event.target)}>
+    <div style={friendsOpen||!inStudy?{display:'none'}:undefined} className="eb-game-shell min-h-screen cozy-window-bg relative flex flex-col justify-between overflow-x-hidden p-4 md:p-6 lg:p-7 selection:bg-amber-100 selection:text-amber-950" onClickCapture={(event) => playUiClickForTarget(event.target)}>
       {showSplash && <div id="eb-splash" role="status" aria-label="英语拼块正在启动"><div className="eb-splash-card"><img src="./assets/brand-mimi-a.png" alt="咪咪"/><h1>英语拼块</h1><p>WORD BLOCK GARDEN</p><div className="eb-splash-bar"><span /></div><small>正在准备你的学习花园…</small></div></div>}
       {developerMode && layoutEditorOpen && <LayoutEditor value={layoutDraft} onChange={setLayoutDraft} onClose={() => setLayoutEditorOpen(false)} />}
       {/* ATMOSPHERIC BACKGROUND DECORATIONS (Sunlit leaves & wooden window details) */}
@@ -662,7 +666,7 @@ export default function App() {
           {reviewMode && <div className="mt-3 rounded-2xl border border-[var(--theme-border)] bg-[var(--theme-muted-surface)] px-4 py-2 text-sm text-[var(--theme-text)]">自由复习中 · 不计时、不积分、不覆盖原成绩</div>}
           <div data-eb-edit="status" className="mt-3 flex flex-wrap justify-end gap-3 text-xs text-[var(--theme-text)]">
             {social.learningError&&<span role="status">{social.learningError}<button className="underline" onClick={social.retryRecord}>重试确认</button></span>}
-            <span>提示 {hintCount}/3 · 本关预计 +{completedView || reviewMode || answerRevealed ? 0 : rewardForHints(hintCount)} 🐟</span>
+            <span>提示 {hintCount}/3 · 本关预计 +{completedView || reviewMode || answerRevealed ? 0 : rewardForHints(hintCount)} <FishIcon/></span>
           </div>
           {hintFeedback&&<p role="status" className="eb-study-hint-feedback">{hintFeedback}</p>}
           {/* MAIN STUDY BOARD CARD (Matching Screenshot with Mimi peeking) */}
@@ -758,7 +762,6 @@ export default function App() {
       {/* Level Selector Modal (Anti-spoiler: Hides English in Unfinished levels) */}
       <LevelSelectorModal
         isOpen={isLevelSelectorOpen}
-        onOpenMusic={openMusic}
         currentLevelId={currentLevel.id}
         completedLevelIds={profile.completedLevelIds}
         onSelectLevel={handleJumpToLevel}
@@ -803,7 +806,7 @@ export default function App() {
         }}
       />
     </div>
-    {!musicOpen&&!inStudy&&!friendsOpen&&<LearningLobby avatar={profile.avatar} name={profile.name} collection={collection} level={currentLevel.levelNumber} tier={currentTier} filled={slottedWords.filter(Boolean).length} expected={expectedCount} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
+    {!inStudy&&!friendsOpen&&<LearningLobby avatar={profile.avatar} name={profile.name} collection={collection} level={currentLevel.levelNumber} tier={currentTier} filled={slottedWords.filter(Boolean).length} expected={expectedCount} completed={profile.completedLevelIds.length} total={SENTENCE_BANK.length} words={masteredWordsCount} onContinue={()=>{setInStudy(true);window.scrollTo({top:0});}} actions={[
       {label:cloud.user?'账号管理':'登录 / 注册',icon:'user',onClick:()=>setIsCloudOpen(true)},
       {label:'每日任务',icon:'gift',onClick:()=>setTasksOpen(true)},
       {label:'关卡选择',icon:'▦',onClick:()=>setIsLevelSelectorOpen(true)},
@@ -814,9 +817,8 @@ export default function App() {
       {label:'账号同步',icon:'☁',onClick:()=>setIsCloudOpen(true),detail:cloud.user?cloud.status:'登录并同步'},
       {label:'游戏设置',icon:'⚙',onClick:()=>setIsSettingsOpen(true)}
     ]}/>}
-    {!musicOpen&&friendsOpen&&<FriendsPage onEditProfile={()=>setIsProfileModalOpen(true)} selfAvatar={profile.avatar} userId={cloud.user?.id} onBack={closeFriends} onLogin={()=>setIsCloudOpen(true)}/>}
-    {!musicOpen&&!friendsOpen&&!inStudy&&<PrankToast key={cloud.user?.id||'local'} inbox={social.inbox} wallet={social.wallet} open={pranksOpen} onClose={()=>setPranksOpen(false)} onViewAll={openFriends}/>}
-    {musicOpen&&<MusicHistoryPage key={cloud.user?.id||'local'} progress={collection.musicHistory||emptyMusicProgress()} onProgressChange={update=>setCollection(c=>({...c,musicHistory:update(c.musicHistory||emptyMusicProgress())}))} onBack={()=>{setMusicOpen(false);window.scrollTo({top:0});}}/>}
+    {friendsOpen&&<FriendsPage onEditProfile={()=>setIsProfileModalOpen(true)} selfAvatar={profile.avatar} userId={cloud.user?.id} onBack={closeFriends} onLogin={()=>setIsCloudOpen(true)}/>}
+    {!friendsOpen&&!inStudy&&<PrankToast key={cloud.user?.id||'local'} inbox={social.inbox} wallet={social.wallet} open={pranksOpen} onClose={()=>setPranksOpen(false)} onViewAll={openFriends}/>}
     </CosmeticsContext.Provider>
   );
 }

@@ -1,3 +1,4 @@
+import {FishIcon} from './FishIcon';
 import { ModalOverlay } from './ModalOverlay';
 import React, { useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, Gift, RotateCcw, Save, Sparkles, X } from 'lucide-react';
@@ -6,7 +7,6 @@ import { PoseDressedCat, type CatExpression, type CatPose, POSE_UNLOCK_TIER } fr
 
 export interface CatCollection {
   fish:number;
-  musicHistory?: import('../utils/musicHistory').MusicHistoryProgress;
   unlockedThemes?: string[];
   unlockedAvatars?: string[];
   selectedSeason?: import('../utils/seasonTheme').Season;
@@ -102,7 +102,7 @@ export const CatWardrobeModal:React.FC<{open:boolean;onClose:()=>void;collection
  if(!open)return null;
  return <ModalOverlay className="fixed inset-0 z-[80] bg-[var(--theme-text)]/50 backdrop-blur-[5px] flex items-center justify-center p-3 sm:p-5" onClick={onClose}>
  <section role="dialog" aria-modal="true" aria-label="咪咪衣柜" className="eb-modal-panel eb-modal-wardrobe w-full max-w-[1240px] max-h-[94vh] overflow-y-auto bg-[var(--theme-surface)] border-2 border-white shadow-2xl rounded-[30px] p-4 sm:p-6 text-[var(--theme-text)]" onClick={e=>e.stopPropagation()}>
- <header className="flex flex-wrap items-center gap-3 justify-between border-b border-[var(--theme-border)] pb-4 mb-4"><h2 className="text-2xl font-bold tracking-wider">咪咪衣柜 <span className="text-[var(--theme-muted)]">♡</span></h2><div className="flex items-center gap-2"><button onClick={()=>setMode('single')} className={'rounded-full px-4 py-2 text-sm font-bold '+(mode==='single'?'bg-[var(--theme-primary)] text-white':'bg-white border border-[var(--theme-border)]')}>单品装扮</button><button onClick={()=>setMode('sets')} className={'rounded-full px-4 py-2 text-sm font-bold '+(mode==='sets'?'bg-[var(--theme-primary)] text-white':'bg-white border border-[var(--theme-border)]')}>套装组合</button></div><div className="flex items-center gap-2"><span className="rounded-full bg-white border border-[var(--theme-border)] px-4 py-2 text-sm font-bold text-[var(--theme-text)]">🐟 {collection.fish} 小鱼干</span><button aria-label="关闭衣柜" onClick={onClose} className="p-2 rounded-full bg-white hover:bg-[var(--theme-muted-surface)]"><X size={20}/></button></div></header>
+ <header className="flex flex-wrap items-center gap-3 justify-between border-b border-[var(--theme-border)] pb-4 mb-4"><h2 className="text-2xl font-bold tracking-wider">咪咪衣柜 <span className="text-[var(--theme-muted)]">♡</span></h2><div className="flex items-center gap-2"><button onClick={()=>setMode('single')} className={'rounded-full px-4 py-2 text-sm font-bold '+(mode==='single'?'bg-[var(--theme-primary)] text-white':'bg-white border border-[var(--theme-border)]')}>单品装扮</button><button onClick={()=>setMode('sets')} className={'rounded-full px-4 py-2 text-sm font-bold '+(mode==='sets'?'bg-[var(--theme-primary)] text-white':'bg-white border border-[var(--theme-border)]')}>套装组合</button></div><div className="flex items-center gap-2"><span className="rounded-full bg-white border border-[var(--theme-border)] px-4 py-2 text-sm font-bold text-[var(--theme-text)]"><FishIcon/> {collection.fish} 小鱼干</span><button aria-label="关闭衣柜" onClick={onClose} className="p-2 rounded-full bg-white hover:bg-[var(--theme-muted-surface)]"><X size={20}/></button></div></header>
  <div className="eb-modal-body eb-wardrobe-body"><div className="eb-wardrobe-grid grid grid-cols-1 gap-4">
  <div className="min-w-0">
  <div className="bg-white/80 rounded-[24px] border border-[var(--theme-border)] p-4 mb-4">

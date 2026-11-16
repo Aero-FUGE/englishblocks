@@ -5,6 +5,7 @@ export const LEARNING_STAGES = [
   {tier: 2, label: '高中进阶', subtitle: '从句结构 · 语法突破', emoji: '🌸', tone: 'peach', tagline: '复杂句子也能一点点拆开'},
   {tier: 3, label: '大学英语', subtitle: '四六级 · 长句训练', emoji: '📚', tone: 'sky', tagline: '走进更丰富的表达世界'},
   {tier: 4, label: '考研冲刺', subtitle: '长难句 · 高阶阅读', emoji: '🎓', tone: 'violet', tagline: '挑战结构与逻辑的极限'},
+  {tier: 5, label: '考研长难句精练', subtitle: '六大专题 · 语法精练', emoji: '📖', tone: 'violet', tagline: '拼懂长句，读懂结构与考点'},
 ] as const;
 export function stageForLevel(level: Pick<LevelData, 'tier'>) {
   return LEARNING_STAGES.find(stage => stage.tier === level.tier) ?? LEARNING_STAGES[3];

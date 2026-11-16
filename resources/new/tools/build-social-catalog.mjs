@@ -1,6 +1,9 @@
 import fs from 'node:fs';
+import {createKaoyanLevels} from '../shared/kaoyan-levels.mjs';
 import {SHOP_ITEMS} from '../src/data/catShop.ts';
-const levels=JSON.parse(fs.readFileSync(new URL('../src/data/allLevels.json',import.meta.url)));
+const original=JSON.parse(fs.readFileSync(new URL('../src/data/allLevels.json',import.meta.url)));
+const bank=JSON.parse(fs.readFileSync(new URL('../src/data/kaoyan/kaoyan_long_sentences.json',import.meta.url)));
+const levels=[...original,...createKaoyanLevels(bank,original.length)];
 if(new Set(levels.map(l=>l.id)).size!==levels.length)throw Error('Duplicate lesson IDs');
 for(const l of levels)if(new Set(l.words.map(w=>w.id)).size!==l.words.length||l.words.some(w=>typeof w.cleanWord!=='string'))throw Error('Invalid lesson word IDs: '+l.id);
 const catalog={levels:levels.map(l=>({id:l.id,tier:l.tier,levelNumber:l.levelNumber,words:l.words.map(w=>({id:w.id,text:w.text,clean:w.cleanWord})),sequence:l.correctSequence,phases:l.tieredAssembly?.phases.map(p=>p.wordIds)})),items:SHOP_ITEMS.map(({id,name,slot,price,unlockTier,cats})=>({id,name,slot,price,unlockTier,cats}))};

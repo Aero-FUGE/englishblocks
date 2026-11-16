@@ -111,7 +111,8 @@ export const SuccessCelebrationModal: React.FC<SuccessCelebrationModalProps> = (
           </div>
 
           {/* Grammar explanation tip */}
-          {level.grammarExplanation && (
+          {level.kaoyan&&<details className="text-left rounded-2xl bg-[var(--theme-muted-surface)] border border-[var(--theme-border)] p-4 my-3"><summary className="cursor-pointer font-bold">查看长难句考点与解析</summary><p className="mt-3 text-sm whitespace-pre-wrap">{level.targetEnglish}</p><p className="mt-3 text-xs">{level.kaoyan.setName} · {level.kaoyan.topic} · 难度 {level.kaoyan.difficulty}/5</p><p className="mt-3 text-sm">考点：{level.kaoyan.points.join(' · ')}</p><h3 className="font-bold mt-3">结构拆解</h3><p className="text-sm whitespace-pre-wrap">{level.kaoyan.analysis}</p><h3 className="font-bold mt-3">易错提示</h3><p className="text-sm whitespace-pre-wrap">{level.kaoyan.tips}</p></details>}
+          {!level.kaoyan&&level.grammarExplanation && (
             <div className="mt-3 pt-2 border-t border-emerald-200/60 text-xs text-slate-600 leading-relaxed">
               <span className="font-bold text-emerald-700">语法点拨：</span>
               {level.grammarExplanation}

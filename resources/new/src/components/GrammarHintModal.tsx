@@ -1,7 +1,8 @@
+import {FishIcon} from './FishIcon';
 import { ModalOverlay } from './ModalOverlay';
 import React from 'react';
 import { LevelData } from '../types/game';
-import { X, Lightbulb, Sparkles, Eye, CheckCircle2, Fish, ArrowRight } from 'lucide-react';
+import { X, Lightbulb, Sparkles, Eye, CheckCircle2, ArrowRight } from 'lucide-react';
 import {phraseHints} from '../utils/phraseHints';
 import { expectedSequence } from '../utils/answer';
 
@@ -55,7 +56,7 @@ export const GrammarHintModal: React.FC<GrammarHintModalProps> = ({
           <button onClick={onRevealAnswer} className="w-full rounded-2xl py-3 bg-[var(--theme-muted-surface)] border border-[var(--theme-border-strong)] text-[var(--theme-text)] font-bold text-sm hover:bg-[var(--theme-muted-surface)] flex items-center justify-center gap-2"><Eye className="w-4 h-4"/> 直接查看完整答案 <span className="text-xs font-normal">（放弃本题小鱼干）</span></button>
         )}
         {!answerRevealed&&<p className="eb-task-note">第二、三次提示各补一个尚未填写的位置，不会替换已填好的词块。若所需词块放错位置，会先把它移到正确空格。</p>}
-        <button onClick={onClose} className="w-full mt-3 py-2.5 text-sm font-semibold text-[var(--theme-muted)] hover:text-[var(--theme-text)] flex items-center justify-center gap-2">{answerRevealed ? '我想自己再试试' : '继续自己拼'} <Fish className="w-3.5 h-3.5" /></button>
+        <button onClick={onClose} className="w-full mt-3 py-2.5 text-sm font-semibold text-[var(--theme-muted)] hover:text-[var(--theme-text)] flex items-center justify-center gap-2">{answerRevealed ? '我想自己再试试' : '继续自己拼'} <FishIcon/></button>
       </section>
     </ModalOverlay>
   );
